@@ -596,7 +596,7 @@ input.field::placeholder { color:#C0BECF; font-weight:500; }
       <!-- JOKE BOX — changes every 60 sec -->
       <div class="joke-box">
         <span class="joke-counter" id="jokeCounter">1 / 50</span>
-        <div class="joke-tag">Eid Roast</div>
+        <div class="joke-tag">Eid Motivation</div>
         <div class="joke-text" id="jokeText">Loading...</div>
         <div class="joke-progress"><div class="joke-progress-bar" id="progressBar"></div></div>
       </div>
@@ -709,64 +709,64 @@ input.field::placeholder { color:#C0BECF; font-weight:500; }
 </div>
 
 <script>
-/* ══ 50 ROAST MESSAGES ══ */
-const MOTIVATION = [
-  "Chhota start bhi powerful hota hai, bas rukna nahi chahiye. Har din thoda sa effort add karo, yahi chhoti consistency bada result deti hai.",
-  "Consistency wo cheez hai jo average ko bhi successful bana deti hai. Talent se zyada daily kaam matter karta hai, rukne wala hi peeche reh jata hai.",
-  "Aaj ki mehnat hi kal ki freedom banati hai. Jo aaj struggle lag raha hai wahi kal comfort banega, isliye aaj full focus se kaam karo.",
-  "Jo log risk nahi lete wo safe zone mein hi reh jaate hain. Growth hamesha comfort zone ke bahar hoti hai, darr ko todna hi jeet ki shuruaat hai.",
-  "Focus itna strong karo ke distractions khud door ho jayein. Jab goal clear hota hai to raasta bhi mil jata hai, bas nazar target par rakho.",
-  "Har din ek naya chance hai better banne ka. Kal ki mistakes ko aaj improve karo, roz ka 1 step bhi progress hai.",
-  "Tumhara future tumhari aaj ki habits se banta hai. Jo roz repeat hota hai wahi result deta hai, isliye habits strong banao.",
-  "Hard work kabhi waste nahi jata. Agar result late aaye to bhi wo aa raha hota hai, trust the process aur lage raho.",
-  "Excuses chhodo aur execution shuru karo. Perfect time kabhi nahi aata, jo start karta hai wahi aage badhta hai.",
-  "Jo log wait karte hain unko utna hi milta hai. Try karne wale opportunities create karte hain, action lena hi difference hai.",
-  "Success unko milti hai jo rukte nahi. Thak jao to slow ho jao lekin band mat karo, consistency hi jeet dilati hai.",
-  "Apne goals ko itna bada banao ke chhoti problems insignificant lagne lagein. Vision strong hoga to focus automatic aayega.",
-  "Discipline motivation se zyada powerful hai. Motivation aati jati rehti hai, discipline roz kaam karwata hai.",
-  "Har struggle tumhe strong bana raha hai. Aaj ka pressure kal ki strength banega, bas himmat mat haaro.",
-  "Comparison chhodo aur apni race jeeto. Har kisi ka time aur journey alag hoti hai, apni speed pe focus karo.",
-  "Agar tum believe karte ho to achieve bhi kar sakte ho. Self-belief sab se pehla step hai, apne aap par trust rakho.",
-  "Comfort zone se bahar hi growth hoti hai. Jahan darr lagta hai wahi improvement hoti hai, risk lena zaroori hai.",
-  "Time waste karna sab se mehnga loss hai. Paise wapas aa sakte hain, lekin waqt kabhi wapas nahi aata.",
-  "Jo aaj mushkil lag raha hai kal wahi tumhari strength banega. Isliye give up mat karo aur aage badhte raho.",
-  "Self-belief sab se bada weapon hai. Agar tum khud pe doubt karoge to koi help nahi karega, confidence build karo.",
-  "Har din 1% better banna kaafi hai. Chhoti growth bhi long term mein huge hoti hai, consistency rakho.",
+/* ══ 50 MOTIVATION LINES ══ */
+const JOKES = [
+  "Chhota start bhi powerful hota hai — bas rukna nahi chahiye. Chhoti consistency bada result deti hai.",
+  "Talent se zyada daily kaam matter karta hai. Consistency hi average ko bhi successful bana deti hai.",
+  "Aaj ki mehnat kal ki freedom banati hai. Jo aaj struggle lag raha hai wahi kal comfort banega.",
+  "Growth hamesha comfort zone ke bahar hoti hai. Darr ko todna hi jeet ki shuruaat hai.",
+  "Focus itna strong karo ke distractions khud door ho jayein. Nazar sirf target par rakho.",
+  "Har din ek naya chance hai better banne ka. Roz ka ek step bhi progress hai, rukna nahi.",
+  "Tumhara future tumhari aaj ki habits se banta hai. Jo roz repeat hota hai wahi result deta hai.",
+  "Hard work kabhi waste nahi jata. Result late aaye to bhi aa raha hota hai — trust the process.",
+  "Perfect time kabhi nahi aata. Jo start karta hai wahi aage badhta hai — abhi shuru karo.",
+  "Try karne wale opportunities create karte hain. Action lena hi asli difference hai.",
+  "Thak jao to slow ho jao lekin band mat karo. Consistency hi jeet dilati hai — rukna nahi.",
+  "Vision strong hoga to focus automatic aayega. Goals ko itna bada banao ke chhoti problems chhhoti lagein.",
+  "Motivation aati jaati rehti hai lekin discipline roz kaam karwata hai. Discipline zyada powerful hai.",
+  "Aaj ka pressure kal ki strength banega. Har struggle tumhe strong bana raha hai — himmat mat haaro.",
+  "Har kisi ka time aur journey alag hoti hai. Comparison chhodo aur apni race jeeto.",
+  "Self-belief sab se pehla step hai. Agar tum believe karte ho to achieve bhi kar sakte ho.",
+  "Jahan darr lagta hai wahi improvement hoti hai. Comfort zone se bahar hi asli growth hoti hai.",
+  "Paise wapas aa sakte hain lekin waqt kabhi wapas nahi aata. Time waste karna sab se mehnga loss hai.",
+  "Jo aaj mushkil lag raha hai kal wahi tumhari strength banega. Give up mat karo.",
+  "Agar tum khud pe doubt karoge to koi help nahi karega. Confidence build karo — self-belief weapon hai.",
+  "Chhoti growth bhi long term mein huge hoti hai. Har din 1% better banna hi kaafi hai.",
   "Dreams tab tak kaam nahi karte jab tak tum un par kaam nahi karte. Action hi sab kuch hai.",
-  "Negative logon se distance bhi zaroori hai. Environment tumhe shape karta hai, positive logon ke sath raho.",
-  "Patience rakho sab kuch time par milta hai. Jaldi ka result temporary hota hai, slow growth strong hoti hai.",
-  "Action ke bina plan sirf ek khwab hota hai. Sochne se kuch nahi hota, karne se sab hota hai.",
-  "Jo tum sochte ho waise hi ban jaate ho. Mindset hi reality create karta hai, isliye positive socho.",
+  "Environment tumhe shape karta hai. Negative logon se door raho aur positive logon ke saath raho.",
+  "Jaldi ka result temporary hota hai, slow growth strong hoti hai. Patience rakho sab milta hai.",
+  "Sochne se kuch nahi hota, karne se sab hota hai. Action ke bina plan sirf ek khwab hota hai.",
+  "Mindset hi reality create karta hai. Jo tum sochte ho waise hi ban jaate ho — positive socho.",
   "Failure tumhe rokne nahi aata, wo tumhe sikhane aata hai. Lesson lo aur aage badho.",
-  "Consistency motivation se zyada important hai. Roz kaam karna hi success ka raaz hai, skip mat karo.",
-  "Har din ek step aage badho. Chhota step bhi progress hai, rukna sab se bada loss hai.",
-  "Mindset change karo life change ho jayegi. Soch badlegi to results bhi badlenge, andar se start karo.",
-  "Sacrifice ke bina success nahi milti. Kuch chhodna padta hai kuch paane ke liye, focus strong rakho.",
-  "Apne aap ko underestimate mat karo. Tum mein potential hai, bas use karna shuru karo.",
-  "Zindagi easy nahi hogi, tumhe strong banna padega. Fight karna seekho aur aage badho.",
-  "Kaam itna karo ke results bolen. Logon ko explain karne ki zarurat na pade, proof apne aap dikhe.",
-  "Darr ke aage growth hai. Jo cheez tumhe darati hai wahi tumhe strong banati hai.",
-  "Jo aaj start karega wahi kal jeetega. Delay karna sab se bada loss hai, abhi shuru karo.",
-  "Khud par invest karna best investment hai. Skills aur knowledge kabhi waste nahi hoti, seekhte raho.",
-  "Raat ki mehnat subah ka result banati hai. Log sirf success dekhte hain, mehnat nahi.",
-  "Aaj ka pain kal ka power hai. Struggle temporary hota hai, result permanent hota hai.",
-  "Log hasenge phir taaliyan bhi bajayenge. Bas tum rukna mat aur consistency dikhao.",
-  "Apni value samjho. Jab tum khud ko respect doge to duniya bhi degi.",
-  "Small wins bhi celebrate karo. Yahi motivation banati hain aur growth dikhati hain.",
-  "Seekhna band kiya to jeetna band ho gaya. Growth continuous process hai, roz seekho.",
-  "Goals likho warna wo sirf soch reh jaate hain. Clear direction zaroori hai tabhi focus aata hai.",
-  "Har problem ek opportunity hoti hai. Bas dekhne ka nazariya chahiye, positive socho.",
-  "Stay hungry aur focused raho. Jab tak goal achieve na ho chain se mat baitho.",
-  "Jo ruk gaya wo har gaya. Movement hi life hai, aage badhte raho.",
-  "Apni story khud likho. Dusron ke rules follow mat karo, apna path banao.",
-  "Aaj mehnat karo kal rahat milegi. Aaj sacrifice kal comfort, choice tumhari hai.",
-  "Never give up yehi asli game hai. Jo last tak tikta hai wahi jeetta hai, himmat mat haaro."
+  "Roz kaam karna hi success ka raaz hai. Consistency motivation se zyada important hai — skip mat karo.",
+  "Chhota step bhi progress hai. Har din ek step aage badho — rukna sab se bada loss hai.",
+  "Soch badlegi to results bhi badlenge. Mindset change karo life change ho jayegi — andar se start karo.",
+  "Kuch chhodna padta hai kuch paane ke liye. Sacrifice ke bina success nahi milti — focus strong rakho.",
+  "Tum mein potential hai, bas use karna shuru karo. Apne aap ko underestimate mat karo kabhi bhi.",
+  "Zindagi easy nahi hogi, tumhe strong banna padega. Fight karna seekho aur aage badhte raho.",
+  "Logon ko explain karne ki zarurat na pade — proof apne aap dikhe. Kaam itna karo ke results bolen.",
+  "Jo cheez tumhe darati hai wahi tumhe strong banati hai. Darr ke aage hi growth hoti hai.",
+  "Delay karna sab se bada loss hai. Jo aaj start karega wahi kal jeetega — abhi shuru karo.",
+  "Skills aur knowledge kabhi waste nahi hoti. Khud par invest karna best investment hai.",
+  "Log sirf success dekhte hain, mehnat nahi. Raat ki mehnat hi subah ka result banati hai.",
+  "Struggle temporary hota hai, result permanent hota hai. Aaj ka pain kal ka power hai.",
+  "Bas tum rukna mat aur consistency dikhao. Log hasenge phir taaliyan bhi bajayenge.",
+  "Jab tum khud ko respect doge to duniya bhi degi. Apni value samjho aur khud se pyar karo.",
+  "Yahi motivation banati hain aur growth dikhati hain. Small wins bhi celebrate karo hamesha.",
+  "Growth continuous process hai — roz seekho. Seekhna band kiya to jeetna band ho gaya.",
+  "Clear direction zaroori hai tabhi focus aata hai. Goals likho warna wo sirf soch reh jaate hain.",
+  "Bas dekhne ka nazariya chahiye — positive socho. Har problem ek opportunity hoti hai.",
+  "Jab tak goal achieve na ho chain se mat baitho. Stay hungry aur focused raho hamesha.",
+  "Movement hi life hai — aage badhte raho. Jo ruk gaya wo haar gaya, rukna mat kabhi.",
+  "Dusron ke rules follow mat karo — apna path banao. Apni story khud likho, khud decide karo.",
+  "Aaj sacrifice kal comfort — choice tumhari hai. Aaj mehnat karo kal rahat milegi.",
+  "Jo last tak tikta hai wahi jeetta hai. Never give up — yehi asli game hai, himmat mat haaro.",
 ];
 
 /* ══ TICKER SETUP ══ */
 const tickerMsgs = [
-  "Eid Mubarak", "Khushiyan ho", "Barkat ho",
-  "Mubarak Ho", "Eid ka din", "Khushiyan banto",
+  "Eid Mubarak", "Never Give Up", "Stay Focused",
+  "Work Hard", "Dream Big", "Keep Going",
 ];
 function buildTicker(){
   const inner = document.getElementById('tickerInner');
