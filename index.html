@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💸 1000 Rupay Eidi Claim Karo!</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --p:      #5B4FE8;
+  --p-mid:  #7B6FF0;
+  --p-soft: #EEECff;
+  --b:      #2F80ED;
+  --b-soft: #EBF3FF;
+  --bg:     #F7F6FF;
+  --card:   #FFFFFF;
+  --text:   #16152B;
+  --sub:    #6A6886;
+  --border: rgba(91,79,232,0.12);
+  --glow:   rgba(91,79,232,0.18);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--bg);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* mesh bg */
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background:
+    radial-gradient(ellipse 55% 55% at 18% 18%, rgba(91,79,232,0.11) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 55% at 82% 82%, rgba(47,128,237,0.09) 0%, transparent 65%),
+    radial-gradient(ellipse 35% 35% at 65% 12%, rgba(123,111,240,0.07) 0%, transparent 55%);
+  pointer-events:none; z-index:0;
+}
+
+/* animated blobs */
+.blob {
+  position:fixed; border-radius:50%;
+  filter:blur(80px); pointer-events:none; z-index:0;
+  animation: drift ease-in-out infinite;
+}
+.b1 { width:380px;height:380px; background:rgba(91,79,232,0.09); top:-100px;left:-100px; animation-duration:14s; }
+.b2 { width:300px;height:300px; background:rgba(47,128,237,0.08); bottom:-80px;right:-80px; animation-duration:17s;animation-delay:-6s; }
+.b3 { width:200px;height:200px; background:rgba(123,111,240,0.07); top:40%;left:60%; animation-duration:11s;animation-delay:-3s; }
+@keyframes drift {
+  0%,100%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(25px,18px) scale(1.07)}
+}
+
+/* ── FORM CARD ── */
+.card {
+  background: var(--card);
+  border-radius: 28px;
+  padding: 52px 40px 44px;
+  max-width: 400px; width:100%;
+  position:relative; z-index:1;
+  border: 1px solid var(--border);
+  box-shadow:
+    0 2px 6px rgba(91,79,232,0.05),
+    0 12px 40px rgba(91,79,232,0.10),
+    0 40px 80px rgba(91,79,232,0.06);
+  animation: slideUp .55s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes slideUp {
+  from{opacity:0;transform:translateY(32px) scale(.97)}
+  to  {opacity:1;transform:translateY(0) scale(1)}
+}
+
+/* gradient top bar */
+.card::after, .result-card::after {
+  content:'';
+  position:absolute;
+  top:0;left:28px;right:28px;height:3px;
+  background:linear-gradient(90deg,var(--p),var(--b));
+  border-radius:0 0 6px 6px;
+}
+
+/* icon */
+.icon {
+  width:68px;height:68px;
+  background:linear-gradient(135deg,var(--p-soft),var(--b-soft));
+  border:1.5px solid var(--border);
+  border-radius:18px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.9rem;
+  margin:0 auto 28px;
+  animation:bob 3s ease-in-out infinite;
+}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+
+/* badge */
+.badge {
+  display:inline-flex;align-items:center;gap:5px;
+  background:linear-gradient(135deg,rgba(91,79,232,.07),rgba(47,128,237,.07));
+  border:1px solid var(--border);
+  border-radius:100px;
+  padding:5px 14px;
+  font-size:.75rem;font-weight:700;
+  color:var(--p);letter-spacing:.5px;
+  text-transform:uppercase;
+  margin-bottom:18px;
+}
+
+h1 {
+  font-family:'Fraunces',serif;
+  font-size:1.9rem;font-weight:600;
+  color:var(--text);line-height:1.25;
+  margin-bottom:10px;
+  text-align:center;
+}
+h1 em {
+  font-style:italic;font-weight:300;
+  background:linear-gradient(135deg,var(--p),var(--b));
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.sub {
+  font-size:.88rem;color:var(--sub);
+  text-align:center;margin-bottom:32px;
+  line-height:1.65;font-weight:500;
+}
+
+/* input */
+input.field {
+  width:100%;
+  padding:14px 20px;
+  border:1.5px solid rgba(91,79,232,.15);
+  border-radius:14px;
+  font-size:.97rem;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-weight:600;color:var(--text);
+  background:#FAFAFE;
+  outline:none;transition:all .22s;
+  text-align:center;
+  letter-spacing:.15px;
+  margin-bottom:14px;
+}
+input.field:focus {
+  border-color:var(--p);
+  background:#fff;
+  box-shadow:0 0 0 4px rgba(91,79,232,.10);
+}
+input.field::placeholder{color:#C0BECF;font-weight:500;}
+
+/* button */
+.btn-primary {
+  width:100%;padding:15px;
+  background:linear-gradient(135deg,var(--p) 0%,var(--b) 100%);
+  color:#fff;border:none;border-radius:14px;
+  font-size:.97rem;font-weight:700;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  cursor:pointer;letter-spacing:.2px;
+  box-shadow:0 4px 22px rgba(91,79,232,.30);
+  transition:all .22s;position:relative;overflow:hidden;
+}
+.btn-primary::before {
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.15),transparent);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(91,79,232,.38);}
+.btn-primary:active{transform:translateY(0);}
+
+/* ── RESULT OVERLAY ── */
+#result {
+  display:none;position:fixed;inset:0;z-index:200;
+  align-items:center;justify-content:center;padding:24px;
+  background:rgba(247,246,255,.90);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+}
+#result.show{display:flex;}
+
+.result-card {
+  background:var(--card);
+  border-radius:28px;
+  padding:52px 36px 44px;
+  max-width:380px;width:100%;
+  text-align:center;
+  border:1px solid var(--border);
+  box-shadow:
+    0 2px 6px rgba(91,79,232,.05),
+    0 16px 56px rgba(91,79,232,.13),
+    0 48px 96px rgba(91,79,232,.08);
+  animation:popIn .5s cubic-bezier(.22,1,.36,1) both;
+  position:relative;
+}
+@keyframes popIn{
+  from{opacity:0;transform:scale(.85) translateY(24px)}
+  to  {opacity:1;transform:scale(1) translateY(0)}
+}
+
+.moon-em {
+  font-size:2.8rem;display:block;
+  margin-bottom:16px;
+  animation:bob 3s ease-in-out infinite;
+}
+
+/* name chip */
+.name-chip {
+  display:inline-block;
+  background:linear-gradient(135deg,var(--p),var(--b));
+  color:#fff;font-size:1.05rem;font-weight:700;
+  padding:7px 28px;border-radius:100px;
+  margin-bottom:20px;
+  box-shadow:0 4px 18px rgba(91,79,232,.28);
+  letter-spacing:.2px;
+}
+
+.eid-line {
+  font-family:'Fraunces',serif;
+  font-size:2.1rem;font-weight:600;
+  color:var(--text);margin-bottom:6px;line-height:1.2;
+}
+.eid-line span {
+  font-style:italic;font-weight:300;
+  background:linear-gradient(135deg,var(--p),var(--b));
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.dua {
+  font-size:.82rem;color:var(--sub);
+  font-style:italic;margin-bottom:28px;
+  font-weight:500;
+}
+
+/* divider */
+.hr {
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--border),transparent);
+  margin:0 -4px 24px;
+}
+
+/* prank box */
+.prank {
+  background:linear-gradient(135deg,rgba(91,79,232,.05),rgba(47,128,237,.05));
+  border:1.5px solid rgba(91,79,232,.12);
+  border-radius:18px;
+  padding:22px 20px;
+  margin-bottom:24px;
+}
+.prank-emoji{font-size:1.6rem;display:block;margin-bottom:10px;}
+.prank-msg {
+  font-size:.95rem;font-weight:700;
+  color:var(--p);line-height:1.7;
+  margin-bottom:7px;
+}
+.prank-note {
+  font-size:.78rem;color:var(--sub);
+  line-height:1.55;font-weight:500;
+}
+
+/* action row */
+.actions{display:flex;flex-direction:column;gap:10px;}
+
+.btn-wa {
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:13px;background:#22C55E;color:#fff;
+  border:none;border-radius:13px;
+  font-size:.93rem;font-weight:700;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  cursor:pointer;
+  box-shadow:0 3px 14px rgba(34,197,94,.26);
+  transition:all .2s;
+}
+.btn-wa:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(34,197,94,.36);}
+
+.btn-ghost {
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:11px;background:transparent;
+  border:1.5px solid rgba(91,79,232,.18);
+  border-radius:13px;
+  font-size:.87rem;font-weight:600;color:var(--sub);
+  font-family:'Plus Jakarta Sans',sans-serif;
+  cursor:pointer;transition:all .2s;
+}
+.btn-ghost:hover{border-color:var(--p);color:var(--p);background:rgba(91,79,232,.04);}
+
+/* confetti */
+.cf{position:fixed;top:-16px;pointer-events:none;z-index:600;animation:cfFall linear forwards;}
+@keyframes cfFall{to{transform:translateY(110vh) rotate(540deg);opacity:0;}}
+
+/* fw canvas */
+#fwc{position:fixed;inset:0;pointer-events:none;z-index:500;}
+
+@media(max-width:420px){
+  .card,.result-card{padding:38px 22px 34px;}
+  h1,.eid-line{font-size:1.65rem;}
+}
+</style>
+</head>
+<body>
+
+<div class="b1 blob"></div>
+<div class="b2 blob"></div>
+<div class="b3 blob"></div>
+<canvas id="fwc"></canvas>
+
+<!-- ── FORM ── -->
+<div class="card">
+  <div class="icon">💸</div>
+
+  <div style="text-align:center;margin-bottom:16px;">
+    <span class="badge">🌙 Eid ul Fitr 2025</span>
+  </div>
+
+  <h1>Apna Naam Likho<br><em>1000 Rupay Eidi</em><br>Hasil Karo!</h1>
+  <p class="sub">Seedha tumhare liye — sirf naam chahiye 👇</p>
+
+  <input class="field" id="nameIn" type="text" placeholder="Apna naam yahan likhein..." maxlength="22" autocomplete="off">
+  <button class="btn-primary" onclick="go()">Eidi Claim Karo &nbsp;→</button>
+</div>
+
+<!-- ── RESULT ── -->
+<div id="result">
+  <div class="result-card">
+    <span class="moon-em">🌙</span>
+    <div class="name-chip" id="rName">—</div>
+    <div class="eid-line"><span>Eid Mubarak!</span> ☪️</div>
+    <p class="dua">Taqabbal Allahu minna wa minkum 🤲</p>
+    <div class="hr"></div>
+    <div class="prank">
+      <span class="prank-emoji">😂</span>
+      <p class="prank-msg">Bhai main mazaaq kar raha tha!<br>1000 rupay waali koi baat nahi 😅</p>
+      <p class="prank-note">Bas tumhe Eid Mubarak kehna tha — yeh prank karna tha. Maaf karna! 🙈</p>
+    </div>
+    <div class="actions">
+      <button class="btn-wa" onclick="shareWA()">📱 Doston Ko Bhi Prank Karo</button>
+      <button class="btn-ghost" onclick="reset()">↩ &nbsp;Wapas Jao</button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById('nameIn').addEventListener('keydown', e => {
+  if (e.key === 'Enter') go();
+});
+
+function go() {
+  const n = document.getElementById('nameIn').value.trim() || 'Dost';
+  document.getElementById('rName').textContent = n;
+  document.getElementById('result').classList.add('show');
+  fireworks();
+  confetti();
+}
+
+/* fireworks */
+const cv = document.getElementById('fwc');
+const cx = cv.getContext('2d');
+let sp = [];
+function rsz() { cv.width = innerWidth; cv.height = innerHeight; }
+rsz(); window.addEventListener('resize', rsz);
+
+const COLS = ['#5B4FE8','#7B6FF0','#2F80ED','#A99FFF','#60A5FA','#C4B5FD','#93C5FD','#818CF8'];
+
+class Spark {
+  constructor(x, y, c) {
+    this.x=x;this.y=y;this.c=c;
+    const a=Math.random()*Math.PI*2, s=2+Math.random()*6;
+    this.vx=Math.cos(a)*s;this.vy=Math.sin(a)*s;
+    this.life=1;this.d=.016+Math.random()*.018;this.r=1.6+Math.random()*2.8;
+  }
+  tick(){this.x+=this.vx;this.y+=this.vy;this.vy+=.09;this.life-=this.d;}
+  draw(){cx.globalAlpha=this.life*this.life;cx.fillStyle=this.c;cx.beginPath();cx.arc(this.x,this.y,this.r*this.life,0,Math.PI*2);cx.fill();}
+}
+
+function fireworks() {
+  let n=0;
+  const iv=setInterval(()=>{
+    const x=cv.width*(.12+Math.random()*.76);
+    const y=cv.height*(.08+Math.random()*.42);
+    const c=COLS[Math.floor(Math.random()*COLS.length)];
+    for(let i=0;i<58;i++) sp.push(new Spark(x,y,c));
+    if(++n>=10) clearInterval(iv);
+  },260);
+  (function loop(){
+    cx.clearRect(0,0,cv.width,cv.height);
+    sp=sp.filter(s=>s.life>0);
+    sp.forEach(s=>{s.tick();s.draw();});
+    cx.globalAlpha=1;
+    if(sp.length>0) requestAnimationFrame(loop);
+    else cx.clearRect(0,0,cv.width,cv.height);
+  })();
+}
+
+function confetti() {
+  const CC=['#5B4FE8','#7B6FF0','#2F80ED','#A99FFF','#60A5FA','#C4B5FD','#93C5FD','#E0E7FF','#BFDBFE'];
+  for(let i=0;i<95;i++){
+    setTimeout(()=>{
+      const el=document.createElement('div');
+      el.className='cf';
+      const sz=5+Math.random()*8;
+      el.style.cssText=`left:${Math.random()*100}vw;width:${sz}px;height:${sz}px;background:${CC[Math.floor(Math.random()*CC.length)]};border-radius:${Math.random()>.5?'50%':'2px'};animation-duration:${2.8+Math.random()*2.4}s;animation-delay:${Math.random()*.5}s;opacity:.88;`;
+      document.body.appendChild(el);
+      setTimeout(()=>el.remove(),6500);
+    },i*20);
+  }
+}
+
+function shareWA() {
+  const url=window.location.href.split('?')[0];
+  const msg=`😂 Yaar! Main tumhe Eid par 1000 rupay Eidi de raha hoon!\n\nSirf apna naam likho aur le lo 👇\n\n💸 ${url}\n\n(Kholo toh sahi... 😏 Eid Mubarak!)`;
+  window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+}
+
+function reset() {
+  document.getElementById('result').classList.remove('show');
+  document.getElementById('nameIn').value='';
+  setTimeout(()=>document.getElementById('nameIn').focus(),150);
+}
+</script>
+</body>
+</html>
