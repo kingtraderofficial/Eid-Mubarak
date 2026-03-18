@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<meta name="description" content="Eid Mubarak 2025 — 1000 Rupay Eidi Claim Karo!">
+<meta name="description" content="Eid Mubarak 2026 — 1000 Rupay Eidi Claim Karo!">
 <title>Eid Gift — 1000 Rupay Sirf Tumhare Liye</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,700&display=swap" rel="stylesheet">
 
@@ -13,9 +13,6 @@
 <script src="https://pl28935632.effectivegatecpm.com/c2/dd/17/c2dd1719282ebcf0983cad8c63aff4e6.js"></script>
 
 <style>
-/* ═══════════════════════════════
-   VARIABLES
-═══════════════════════════════ */
 :root {
   --p:      #5B4FE8;
   --p2:     #7B6FF0;
@@ -29,9 +26,6 @@
   --mist:   #EAE8FF;
 }
 
-/* ═══════════════════════════════
-   RESET & BASE
-═══════════════════════════════ */
 *,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
 html { -webkit-text-size-adjust:100%; }
 
@@ -44,9 +38,6 @@ body {
   overflow-x: hidden;
 }
 
-/* ═══════════════════════════════
-   BG ORBS
-═══════════════════════════════ */
 .orb {
   position: fixed; border-radius: 50%;
   pointer-events: none; z-index: 0;
@@ -60,9 +51,7 @@ body {
   50%{transform:translate(24px,18px)}
 }
 
-/* ═══════════════════════════════
-   POPUP SCREEN
-═══════════════════════════════ */
+/* ══ POPUP ══ */
 #popup {
   position: fixed; inset: 0; z-index: 100;
   display: flex; flex-direction: column;
@@ -76,7 +65,6 @@ body {
 
 .popup-spacer { flex: 1; min-height: 12px; }
 
-/* card */
 .p-card {
   background: var(--card);
   border-radius: 24px;
@@ -96,7 +84,6 @@ body {
   to   { opacity:1; transform:translateY(0) scale(1); }
 }
 
-/* shimmer top bar */
 .p-card::before {
   content:'';
   position: absolute; top:0; left:0; right:0; height:3px;
@@ -106,7 +93,6 @@ body {
 }
 @keyframes shimBar { 0%{background-position:0%} 100%{background-position:300%} }
 
-/* moon */
 .moon-box {
   width: 82px; height: 82px;
   margin: 0 auto 20px;
@@ -123,7 +109,6 @@ body {
   50%     { filter: drop-shadow(0 0 20px rgba(91,79,232,1.0))  drop-shadow(0 0 40px rgba(47,128,237,0.70)); transform:translateY(-5px); }
 }
 
-/* badge */
 .p-badge {
   display: inline-flex; align-items: center; gap: 6px;
   background: var(--mist); border: 1px solid var(--border);
@@ -160,7 +145,6 @@ body {
   text-align: center; line-height: 1.6;
 }
 
-/* input */
 .p-inp {
   width: 100%; padding: 14px 18px;
   border: 1.5px solid rgba(91,79,232,.15);
@@ -178,7 +162,6 @@ body {
 }
 .p-inp::placeholder { color: #C0BECF; font-weight: 500; }
 
-/* CTA */
 .p-cta {
   width: 100%; padding: 15px;
   background: linear-gradient(135deg, var(--p), var(--b));
@@ -197,7 +180,6 @@ body {
 }
 .p-cta:active { transform:scale(.98); }
 
-/* popup ad */
 .p-ad {
   width:100%; max-width:400px;
   display:flex; flex-direction:column;
@@ -208,9 +190,7 @@ body {
   letter-spacing:1px; text-transform:uppercase; font-weight:700;
 }
 
-/* ═══════════════════════════════
-   RESULT PAGE
-═══════════════════════════════ */
+/* ══ RESULT PAGE ══ */
 #result {
   display: none;
   flex-direction: column;
@@ -239,60 +219,149 @@ body {
   transform: rotate(45deg); opacity: .7; flex-shrink:0;
 }
 
-/* hero */
-.r-hero {
+/* ══ EID GREETING HERO — FULL SCREEN CENTER ══ */
+.eid-hero {
   width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   background: linear-gradient(145deg, var(--p) 0%, #4840D4 50%, var(--b) 100%);
-  padding: 48px 20px 68px;
-  text-align: center; position: relative; overflow: hidden;
+  padding: 40px 20px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
 }
-.r-hero::before {
+
+.eid-hero::before {
   content:''; position:absolute; inset:-50px;
   background: repeating-conic-gradient(rgba(255,255,255,.025) 0deg 1deg, transparent 1deg 24deg);
   animation: heroSpin 50s linear infinite;
 }
 @keyframes heroSpin { to{transform:rotate(360deg)} }
-.r-hero::after {
-  content:''; position:absolute;
-  bottom:-1px; left:0; right:0; height:40px;
-  background: var(--bg);
-  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+
+/* Stars decoration */
+.star-field {
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+}
+.star {
+  position: absolute; border-radius: 50%;
+  background: rgba(255,255,255,.6);
+  animation: starTwinkle ease-in-out infinite;
+}
+@keyframes starTwinkle {
+  0%,100%{opacity:.3;transform:scale(1)}
+  50%{opacity:1;transform:scale(1.4)}
 }
 
-.r-label {
-  font-size:.72rem; font-weight:700; letter-spacing:2px;
-  text-transform:uppercase; color:rgba(255,255,255,.55);
-  margin-bottom:10px; position:relative; z-index:1;
+.eid-inner {
+  position: relative; z-index: 2;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 0;
 }
-.r-name {
+
+/* Big moon on result */
+.eid-moon {
+  width: 100px; height: 100px;
+  margin-bottom: 24px;
+  animation: moonFloat 3s ease-in-out infinite;
+  filter:
+    drop-shadow(0 0 20px rgba(255,255,255,0.5))
+    drop-shadow(0 0 40px rgba(91,79,232,0.8));
+}
+@keyframes moonFloat {
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-10px)}
+}
+
+.eid-label {
+  font-size: .75rem; font-weight: 800;
+  letter-spacing: 4px; text-transform: uppercase;
+  color: rgba(255,255,255,.55);
+  margin-bottom: 8px;
+}
+
+.eid-name {
   font-family: 'Fraunces', serif;
-  font-size: clamp(2.2rem,8vw,3rem);
+  font-size: clamp(2.4rem, 9vw, 3.5rem);
   font-weight: 700; color: #fff;
-  line-height: 1.1; margin-bottom: 12px;
-  position: relative; z-index: 1;
-  text-shadow: 0 2px 16px rgba(0,0,0,.15);
+  line-height: 1.1; margin-bottom: 6px;
+  text-shadow: 0 2px 20px rgba(0,0,0,.2);
+  animation: nameGlow 2s ease-in-out infinite;
 }
-.r-eid-pill {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(255,255,255,.14);
-  border: 1px solid rgba(255,255,255,.22);
-  border-radius: 100px; padding: 8px 20px;
-  font-size: .88rem; font-weight: 700; color: #fff;
-  position: relative; z-index: 1;
+@keyframes nameGlow {
+  0%,100%{text-shadow:0 2px 20px rgba(0,0,0,.2)}
+  50%{text-shadow:0 2px 40px rgba(255,255,255,.3), 0 0 80px rgba(255,255,255,.1)}
 }
-.r-eid-dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: #38BDF8; box-shadow: 0 0 8px #38BDF8;
+
+.eid-mubarak-text {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(1.8rem, 7vw, 2.8rem);
+  font-weight: 700;
+  background: linear-gradient(135deg, #FFD700, #FFF176, #FFD700);
+  background-size: 200% 100%;
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: goldShine 3s linear infinite;
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+@keyframes goldShine {
+  0%{background-position:0%}
+  100%{background-position:200%}
+}
+
+.eid-pill {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: rgba(255,255,255,.15);
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: 100px; padding: 10px 24px;
+  font-size: .92rem; font-weight: 700; color: #fff;
+  backdrop-filter: blur(8px);
+  margin-bottom: 32px;
+}
+.eid-pill-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #38BDF8; box-shadow: 0 0 10px #38BDF8;
   animation: dotPulse 1.4s ease-in-out infinite;
 }
 
-/* content wrap */
+/* Scroll hint */
+.scroll-hint {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 8px;
+  color: rgba(255,255,255,.5);
+  font-size: .72rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  animation: hintBounce 2s ease-in-out infinite;
+  cursor: pointer;
+}
+.scroll-arrow {
+  width: 28px; height: 28px;
+  border: 2px solid rgba(255,255,255,.3);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.scroll-arrow::after {
+  content: '';
+  width: 8px; height: 8px;
+  border-right: 2px solid rgba(255,255,255,.5);
+  border-bottom: 2px solid rgba(255,255,255,.5);
+  transform: rotate(45deg) translateY(-2px);
+}
+@keyframes hintBounce {
+  0%,100%{transform:translateY(0);opacity:.5}
+  50%{transform:translateY(6px);opacity:1}
+}
+
+/* ══ CONTENT BELOW HERO ══ */
 .r-content {
   width: 100%; max-width: 420px;
-  padding: 0 16px;
+  padding: 28px 16px 0;
   display: flex; flex-direction: column;
   gap: 14px; position:relative; z-index:1;
-  margin-top: -32px;
 }
 
 /* motivation card */
@@ -348,7 +417,6 @@ body {
   border: 1px solid var(--border);
   text-align: center;
 }
-/* CSS laugh face */
 .laugh {
   width: 44px; height: 44px; border-radius: 50%;
   background: linear-gradient(135deg, var(--p), var(--b));
@@ -424,9 +492,7 @@ body {
 }
 .btn-back:active { border-color:var(--p); color:var(--p); }
 
-/* ═══════════════════════════════
-   ADS SECTION — sabse neeche
-═══════════════════════════════ */
+/* ads section */
 .ads-sec {
   width:100%; margin-top:auto;
   padding: 28px 16px 40px;
@@ -445,9 +511,7 @@ body {
   align-items:center; gap:4px;
 }
 
-/* ═══════════════════════════════
-   CONFETTI & FIREWORKS
-═══════════════════════════════ */
+/* confetti & fireworks */
 .cf {
   position:fixed; top:-16px;
   pointer-events:none; z-index:900;
@@ -456,13 +520,11 @@ body {
 @keyframes cfFall { to{transform:translateY(110vh) rotate(540deg);opacity:0;} }
 #fwc { position:fixed; inset:0; pointer-events:none; z-index:800; }
 
-/* ═══════════════════════════════
-   MOBILE OVERRIDES
-═══════════════════════════════ */
 @media(max-width:390px){
   .p-card { padding:32px 18px 30px; }
   .p-title { font-size:1.5rem; }
-  .r-name  { font-size:1.9rem; }
+  .eid-name  { font-size:1.9rem; }
+  .eid-mubarak-text { font-size:1.5rem; }
   .mot-card,.prank-card,.share-card { padding:20px 16px; }
 }
 </style>
@@ -473,15 +535,11 @@ body {
 <div class="orb orb2"></div>
 <canvas id="fwc"></canvas>
 
-<!-- ════════════════════════════════════════
-     POPUP SCREEN
-════════════════════════════════════════ -->
+<!-- ════ POPUP ════ -->
 <div id="popup">
   <div class="popup-spacer"></div>
 
   <div class="p-card">
-
-    <!-- moon SVG -->
     <div class="moon-box">
       <svg viewBox="0 0 82 82" xmlns="http://www.w3.org/2000/svg">
         <defs>
@@ -494,13 +552,10 @@ body {
             <circle cx="52" cy="30" r="25" fill="black"/>
           </mask>
         </defs>
-        <!-- outer glow ring -->
         <circle cx="36" cy="44" r="28" fill="none"
           stroke="rgba(91,79,232,0.20)" stroke-width="5"/>
-        <!-- crescent -->
         <circle cx="36" cy="44" r="28"
           fill="url(#mg)" mask="url(#cm)"/>
-        <!-- star near tip -->
         <g transform="translate(58,14) scale(0.42)">
           <polygon
             points="10,0 12.9,7.6 21,7.6 14.5,12.3 17.3,20 10,15.2 2.7,20 5.5,12.3 -1,7.6 7.1,7.6"
@@ -509,11 +564,10 @@ body {
       </svg>
     </div>
 
-    <!-- badge -->
     <div style="text-align:center;margin-bottom:14px;">
       <span class="p-badge">
         <span class="p-dot"></span>
-        Eid ul Fitr 2025
+        Eid ul Fitr 2026
       </span>
     </div>
 
@@ -534,7 +588,6 @@ body {
     </button>
   </div>
 
-  <!-- 1 banner ad below card — no redirect -->
   <div class="p-ad">
     <span class="ad-lbl">Advertisement</span>
     <script>
@@ -552,9 +605,7 @@ body {
   <div class="popup-spacer"></div>
 </div>
 
-<!-- ════════════════════════════════════════
-     RESULT PAGE
-════════════════════════════════════════ -->
+<!-- ════ RESULT PAGE ════ -->
 <div id="result">
 
   <!-- ticker -->
@@ -562,17 +613,53 @@ body {
     <div class="ticker-track" id="tickEl"></div>
   </div>
 
-  <!-- hero band -->
-  <div class="r-hero">
-    <p class="r-label">Mubarak Ho</p>
-    <h1 class="r-name" id="rName">—</h1>
-    <span class="r-eid-pill">
-      <span class="r-eid-dot"></span>
-      Eid Mubarak 2025
-    </span>
+  <!-- ════ EID GREETING HERO — FULL SCREEN ════ -->
+  <div class="eid-hero" id="eidHero">
+    <!-- animated stars -->
+    <div class="star-field" id="starField"></div>
+
+    <div class="eid-inner">
+      <!-- Moon -->
+      <svg class="eid-moon" viewBox="0 0 82 82" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="mg2" x1="20%" y1="10%" x2="90%" y2="90%">
+            <stop offset="0%"   stop-color="#FFFFFF"/>
+            <stop offset="100%" stop-color="#D6D0FF"/>
+          </linearGradient>
+          <mask id="cm2">
+            <rect width="82" height="82" fill="white"/>
+            <circle cx="52" cy="30" r="25" fill="black"/>
+          </mask>
+        </defs>
+        <circle cx="36" cy="44" r="28" fill="none"
+          stroke="rgba(255,255,255,0.25)" stroke-width="5"/>
+        <circle cx="36" cy="44" r="28"
+          fill="url(#mg2)" mask="url(#cm2)"/>
+        <g transform="translate(58,14) scale(0.42)">
+          <polygon
+            points="10,0 12.9,7.6 21,7.6 14.5,12.3 17.3,20 10,15.2 2.7,20 5.5,12.3 -1,7.6 7.1,7.6"
+            fill="white" opacity="0.9"/>
+        </g>
+      </svg>
+
+      <p class="eid-label">Mubarak Ho</p>
+      <h1 class="eid-name" id="rName">—</h1>
+      <div class="eid-mubarak-text">Eid Mubarak! 🌙</div>
+
+      <span class="eid-pill">
+        <span class="eid-pill-dot"></span>
+        Eid ul Fitr 2026
+      </span>
+
+      <!-- scroll down hint -->
+      <div class="scroll-hint" onclick="scrollDown()">
+        <span>Neeche dekho</span>
+        <div class="scroll-arrow"></div>
+      </div>
+    </div>
   </div>
 
-  <!-- cards -->
+  <!-- ════ CARDS BELOW ════ -->
   <div class="r-content">
 
     <!-- motivation -->
@@ -613,10 +700,8 @@ body {
 
   </div>
 
-  <!-- ══ ADS — SABSE NEECHE ══ -->
+  <!-- ══ ADS ══ -->
   <div class="ads-sec">
-
-    <!-- 728x90 leaderboard -->
     <div class="ads-row">
       <div class="ad-unit">
         <span class="ad-lbl">Advertisement</span>
@@ -633,7 +718,6 @@ body {
       </div>
     </div>
 
-    <!-- native ad -->
     <div class="ads-row">
       <div class="ad-unit">
         <span class="ad-lbl">Advertisement</span>
@@ -644,7 +728,6 @@ body {
       </div>
     </div>
 
-    <!-- 300x250 + 160x300 -->
     <div class="ads-row">
       <div class="ad-unit">
         <span class="ad-lbl">Advertisement</span>
@@ -674,7 +757,6 @@ body {
       </div>
     </div>
 
-    <!-- 160x600 -->
     <div class="ads-row">
       <div class="ad-unit">
         <span class="ad-lbl">Advertisement</span>
@@ -691,7 +773,6 @@ body {
       </div>
     </div>
 
-    <!-- 320x50 mobile -->
     <div class="ads-row">
       <div class="ad-unit">
         <span class="ad-lbl">Advertisement</span>
@@ -707,13 +788,9 @@ body {
         <script src="https://www.highperformanceformat.com/6f544652133ff2804e6ee984429addb8/invoke.js"></script>
       </div>
     </div>
-
   </div>
 </div>
 
-<!-- ════════════════════════════════════════
-     JAVASCRIPT
-════════════════════════════════════════ -->
 <script>
 /* ── TICKER ── */
 (function(){
@@ -725,6 +802,31 @@ body {
   });
   el.innerHTML=h;
 })();
+
+/* ── STARS ── */
+function makeStars(){
+  const sf=document.getElementById('starField');
+  sf.innerHTML='';
+  for(let i=0;i<30;i++){
+    const s=document.createElement('div');
+    s.className='star';
+    const sz=1+Math.random()*3;
+    s.style.cssText=`
+      width:${sz}px;height:${sz}px;
+      top:${Math.random()*100}%;
+      left:${Math.random()*100}%;
+      animation-duration:${1.5+Math.random()*3}s;
+      animation-delay:${Math.random()*3}s;
+    `;
+    sf.appendChild(s);
+  }
+}
+
+/* ── SCROLL DOWN ── */
+function scrollDown(){
+  const content=document.querySelector('.r-content');
+  if(content) content.scrollIntoView({behavior:'smooth'});
+}
 
 /* ── 50 MOTIVATION LINES ── */
 const LINES=[
@@ -800,7 +902,7 @@ function showLine(animate=true){
     el.textContent=LINES[order[idx]];
     ct.textContent=(idx+1)+' / '+LINES.length;
     bar.style.animation='none';
-    bar.offsetHeight; // reflow
+    bar.offsetHeight;
     bar.style.animation='barFill 60s linear forwards';
     if(animate) el.classList.remove('fade');
     idx=(idx+1)%LINES.length;
@@ -818,23 +920,19 @@ function go(){
   const n=document.getElementById('nameIn').value.trim()||'Dost';
   document.getElementById('rName').textContent=n;
 
-  // hide popup
   document.getElementById('popup').style.display='none';
 
-  // scroll reset
   window.scrollTo(0,0);
   document.documentElement.scrollTop=0;
   document.body.scrollTop=0;
 
-  // show result
   document.getElementById('result').classList.add('show');
+  makeStars();
 
-  // start motivation rotation
   showLine(false);
   if(rotTimer) clearInterval(rotTimer);
   rotTimer=setInterval(showLine,60000);
 
-  // celebrate
   setTimeout(fireworks,200);
   setTimeout(confetti,360);
 }
@@ -846,7 +944,7 @@ let sparks=[];
 function rsz(){cv.width=window.innerWidth;cv.height=window.innerHeight;}
 rsz(); window.addEventListener('resize',rsz);
 
-const FW=['#5B4FE8','#7B6FF0','#2F80ED','#A99FFF','#60A5FA','#C4B5FD','#93C5FD','#38BDF8'];
+const FW=['#5B4FE8','#7B6FF0','#2F80ED','#A99FFF','#60A5FA','#C4B5FD','#93C5FD','#38BDF8','#FFD700','#FFF176'];
 class Spark{
   constructor(x,y,c){
     this.x=x;this.y=y;this.c=c;
@@ -864,8 +962,8 @@ function fireworks(){
     const y=cv.height*(.05+Math.random()*.4);
     const c=FW[~~(Math.random()*FW.length)];
     for(let i=0;i<60;i++) sparks.push(new Spark(x,y,c));
-    if(++n>=10) clearInterval(iv);
-  },240);
+    if(++n>=12) clearInterval(iv);
+  },220);
   (function loop(){
     cx.clearRect(0,0,cv.width,cv.height);
     sparks=sparks.filter(s=>s.life>0);
@@ -877,9 +975,9 @@ function fireworks(){
 }
 
 /* ── CONFETTI ── */
-const CC=['#5B4FE8','#7B6FF0','#2F80ED','#A99FFF','#60A5FA','#C4B5FD','#93C5FD','#E0E7FF','#38BDF8','#BFDBFE'];
+const CC=['#5B4FE8','#7B6FF0','#2F80ED','#A99FFF','#60A5FA','#C4B5FD','#93C5FD','#E0E7FF','#38BDF8','#BFDBFE','#FFD700'];
 function confetti(){
-  for(let i=0;i<100;i++){
+  for(let i=0;i<120;i++){
     setTimeout(()=>{
       const el=document.createElement('div');
       el.className='cf';
