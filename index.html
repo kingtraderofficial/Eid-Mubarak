@@ -85,15 +85,17 @@ body::before {
 #popup {
   position: fixed; inset:0; z-index:300;
   display: flex; flex-direction:column;
-  align-items: center; justify-content: center;
-  padding: 24px;
+  align-items: center; justify-content: flex-start;
+  padding: 20px 20px 30px;
   background: var(--bg);
+  overflow-y: auto;
+  gap: 16px;
 }
 
 .popup-card {
   background: var(--card);
   border-radius: 28px;
-  padding: 48px 36px 42px;
+  padding: 48px 36px 48px;
   max-width: 400px; width: 100%;
   position: relative;
   border: 1px solid var(--border);
@@ -103,7 +105,8 @@ body::before {
     0 40px 80px rgba(91,79,232,0.08);
   animation: cardIn .6s cubic-bezier(.22,1,.36,1) both;
   z-index: 1;
-  overflow: hidden;
+  overflow: visible;
+  margin-top: auto;
 }
 @keyframes cardIn {
   from { opacity:0; transform:translateY(28px) scale(.96); }
@@ -131,31 +134,27 @@ body::before {
   pointer-events: none;
 }
 
-/* moon icon — CSS crescent */
+/* moon icon — white crescent with purple-blue glow */
 .moon-icon {
-  width: 64px; height: 64px;
+  width: 90px; height: 90px;
   margin: 0 auto 24px;
-  position: relative;
+  display: flex; align-items: center; justify-content: center;
 }
-.moon-icon::before {
-  content:'';
-  position:absolute; inset:0;
-  border-radius:50%;
-  background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 100%);
-  box-shadow: 0 4px 20px rgba(245,166,35,0.35);
+.moon-icon svg {
+  width: 90px; height: 90px;
+  filter:
+    drop-shadow(0 0 8px rgba(91,79,232,0.70))
+    drop-shadow(0 0 20px rgba(47,128,237,0.50))
+    drop-shadow(0 6px 24px rgba(91,79,232,0.35));
   animation: moonGlow 2.5s ease-in-out infinite;
 }
-.moon-icon::after {
-  content:'';
-  position:absolute;
-  top:6px; left:12px;
-  width:52px; height:52px;
-  border-radius:50%;
-  background: var(--card);
-}
 @keyframes moonGlow {
-  0%,100%{ box-shadow:0 4px 20px rgba(245,166,35,0.35); }
-  50%     { box-shadow:0 4px 36px rgba(245,166,35,0.60); }
+  0%,100%{
+    filter: drop-shadow(0 0 8px rgba(91,79,232,0.70)) drop-shadow(0 0 20px rgba(47,128,237,0.50));
+  }
+  50%{
+    filter: drop-shadow(0 0 16px rgba(91,79,232,1)) drop-shadow(0 0 36px rgba(47,128,237,0.80)) drop-shadow(0 0 52px rgba(123,111,240,0.40));
+  }
 }
 
 /* badge */
@@ -241,7 +240,7 @@ input.field::placeholder { color:#C0BECF; font-weight:500; }
 .popup-ad {
   max-width:400px; width:100%;
   display:flex; flex-direction:column; align-items:center; gap:6px;
-  margin-top:18px;
+  margin-bottom: auto;
   animation: cardIn .7s .1s cubic-bezier(.22,1,.36,1) both;
 }
 .ad-label {
@@ -316,6 +315,12 @@ input.field::placeholder { color:#C0BECF; font-weight:500; }
   background:linear-gradient(90deg,var(--p),var(--gold),var(--pb),var(--gold),var(--p));
   background-size:300% 100%;
   animation:barShimmer 3s linear infinite;
+}
+
+/* result top — name + eid mubarak hero */
+.result-top {
+  text-align: center;
+  padding: 8px 0 16px;
 }
 
 /* name chip */
@@ -543,7 +548,28 @@ input.field::placeholder { color:#C0BECF; font-weight:500; }
 <div id="popup">
   <div class="popup-card">
     <div class="card-bar"></div>
-    <div class="moon-icon"></div>
+    <div class="moon-icon">
+      <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="mg" cx="40%" cy="35%" r="60%" gradientUnits="userSpaceOnUse">
+            <stop offset="0%"   stop-color="#FFFFFF"/>
+            <stop offset="100%" stop-color="#D4CFFF"/>
+          </radialGradient>
+          <!-- mask: big circle visible, inner offset circle hides = crescent -->
+          <mask id="cm">
+            <rect width="80" height="80" fill="white"/>
+            <circle cx="50" cy="28" r="24" fill="black"/>
+          </mask>
+        </defs>
+        <!-- glow ring behind -->
+        <circle cx="34" cy="42" r="26" fill="none"
+          stroke="rgba(91,79,232,0.18)" stroke-width="8"/>
+        <!-- crescent shape -->
+        <circle cx="34" cy="42" r="26"
+          fill="url(#mg)"
+          mask="url(#cm)"/>
+      </svg>
+    </div>
     <div style="text-align:center;margin-bottom:16px;">
       <span class="badge"><span class="badge-dot"></span>Eid ul Fitr 2025</span>
     </div>
@@ -581,8 +607,10 @@ input.field::placeholder { color:#C0BECF; font-weight:500; }
     <div class="result-card">
       <div class="card-bar"></div>
 
-      <div class="name-chip" id="rName">—</div>
-      <div class="eid-line"><span>Eid Mubarak!</span></div>
+      <div class="result-top">
+        <div class="name-chip" id="rName">—</div>
+        <div class="eid-line"><span>Eid Mubarak!</span></div>
+      </div>
 
       <!-- celebration dots -->
       <div class="cel-strip">
@@ -821,13 +849,18 @@ document.getElementById('nameIn').addEventListener('keydown', e=>{
 function go(){
   const n = document.getElementById('nameIn').value.trim() || 'Dost';
   document.getElementById('rName').textContent = n;
+  // hide popup first
   document.getElementById('popup').style.display = 'none';
+  // instantly scroll to top before showing
+  window.scrollTo(0, 0);
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+  // now show main page
   document.getElementById('mainPage').classList.add('show');
   showJoke(false);
   setInterval(showJoke, 60000);
-  window.scrollTo({top:0, behavior:'smooth'});
-  setTimeout(fireworks, 300);
-  setTimeout(confetti, 500);
+  setTimeout(fireworks, 200);
+  setTimeout(confetti, 350);
 }
 
 /* ══ FIREWORKS ══ */
