@@ -531,194 +531,197 @@ body {
   .mot-card,.prank-card,.share-card { padding:20px 16px; }
 }
 
-/* ══ FLOATING BALLOON ADS — EID CELEBRATION ══ */
-
-/* Balloon float animations — alag alag */
-@keyframes balloonFloat1 {
-  0%,100%{ transform:translateY(0)   rotate(-2deg) scale(1);   }
-  25%    { transform:translateY(-10px) rotate(1.5deg) scale(1.02); }
-  75%    { transform:translateY(-5px)  rotate(-1deg) scale(0.99); }
+/* ══════════════════════════════════════════
+   SYSTEM 1: LEFT/RIGHT SQUARE AD FRAMES
+   ══════════════════════════════════════════ */
+@keyframes lrFloat {
+  0%,100%{ transform:translateY(0) rotate(-1deg); }
+  50%    { transform:translateY(-8px) rotate(1deg); }
 }
-@keyframes balloonFloat2 {
-  0%,100%{ transform:translateY(0)    rotate(2deg)  scale(1);   }
-  30%    { transform:translateY(-12px) rotate(-2deg) scale(1.03);}
-  70%    { transform:translateY(-4px)  rotate(1deg)  scale(0.98);}
+@keyframes lrGlow {
+  0%,100%{ box-shadow:0 4px 18px rgba(245,166,35,0.3),0 0 0 1.5px rgba(245,166,35,0.2); }
+  50%    { box-shadow:0 8px 28px rgba(245,166,35,0.6),0 0 0 1.5px rgba(245,166,35,0.5); }
 }
-@keyframes balloonFloat3 {
-  0%,100%{ transform:translateY(0)   rotate(-1deg) scale(1);   }
-  40%    { transform:translateY(-8px)  rotate(2.5deg) scale(1.02);}
-  80%    { transform:translateY(-6px)  rotate(-1.5deg)scale(0.99);}
-}
-@keyframes balloonFloat4 {
-  0%,100%{ transform:translateY(0)    rotate(1.5deg) scale(1);  }
-  35%    { transform:translateY(-11px) rotate(-1deg)  scale(1.01);}
-  65%    { transform:translateY(-3px)  rotate(2deg)   scale(1.02);}
-}
-@keyframes balloonFloat5 {
-  0%,100%{ transform:translateY(0)   rotate(-2.5deg)scale(1);  }
-  45%    { transform:translateY(-9px)  rotate(1deg)   scale(1.03);}
-  85%    { transform:translateY(-7px)  rotate(-2deg)  scale(0.98);}
-}
-@keyframes balloonPop {
-  0%  { transform:scale(1);   opacity:1; }
-  50% { transform:scale(1.3); opacity:0.7; }
-  100%{ transform:scale(0);   opacity:0; }
+@keyframes ribbonMove {
+  0%  { background-position:0% 50%; }
+  100%{ background-position:300% 50%; }
 }
 @keyframes shimLoad {
   0%  { background-position:-200% 0; }
   100%{ background-position: 200% 0; }
 }
-@keyframes sparkle {
-  0%,100%{ opacity:0; transform:scale(0) rotate(0deg);   }
-  50%     { opacity:1; transform:scale(1) rotate(180deg); }
+@keyframes lrSpark {
+  0%,100%{ opacity:0; transform:scale(0) rotate(0deg); }
+  50%    { opacity:1; transform:scale(1) rotate(180deg); }
 }
 
-/* ── Wrap — the whole balloon unit ── */
-.float-ad-wrap {
-  position: fixed;
-  z-index: 950;
-  pointer-events: auto;
-  opacity: 0;
-  transition: opacity 0.6s cubic-bezier(.22,1,.36,1);
-  /* float anim set by JS */
+/* Wrap */
+.lr-ad-wrap {
+  position:fixed;
+  z-index:950;
+  pointer-events:auto;
+  opacity:0;
+  transition:opacity 0.5s cubic-bezier(.22,1,.36,1);
 }
-.float-ad-wrap.fad-visible  { opacity:1; }
-.float-ad-wrap.fad-hiding   { opacity:0; }
+.lr-ad-wrap.lr-visible { opacity:1; }
+.lr-ad-wrap.lr-hiding  { opacity:0; }
 
-/* ── String below balloon ── */
-.bal-string {
-  width: 2px;
-  height: 18px;
-  margin: 0 auto;
-  border-radius: 1px;
-  /* color set by JS per balloon */
-  position: relative;
-  z-index: 2;
-}
-.bal-string::after {
-  content:'';
-  position:absolute;
-  bottom:0; left:50%;
-  transform:translateX(-50%);
-  width:5px; height:5px;
-  border-radius:50%;
-  /* dot color also set by JS */
-  background:inherit;
-  opacity:0.5;
-}
-
-/* ── Balloon SVG wrapper ── */
-.bal-svg-wrap {
-  position:relative;
-  width:70px;
-  height:85px;
-  margin:0 auto;
-  cursor:pointer;
-}
-.bal-svg-wrap svg {
-  width:70px;
-  height:85px;
-  display:block;
-  filter: drop-shadow(0 6px 16px rgba(0,0,0,0.22));
-}
-
-/* Sparkle stars on balloon */
-.bal-spark {
-  position:absolute;
-  font-size:8px;
-  pointer-events:none;
-  animation: sparkle 2s ease-in-out infinite;
-}
-
-/* ── Emoji on balloon ── */
-.bal-emoji {
-  position:absolute;
-  top:18px; left:50%;
-  transform:translateX(-50%);
-  font-size:16px;
-  line-height:1;
-  z-index:5;
-  pointer-events:none;
-  filter:drop-shadow(0 1px 2px rgba(0,0,0,0.3));
-}
-
-/* ── Ad inside balloon — clipped circle ── */
-.bal-ad-clip {
-  position:absolute;
-  top:8px; left:50%;
-  transform:translateX(-50%);
-  width:54px; height:54px;
-  border-radius:50%;
+/* The celebration frame box */
+.lr-ad-inner {
+  width:68px;
+  border-radius:12px;
   overflow:hidden;
-  z-index:3;
-  /* celebration bg shown when ad not loaded */
+  display:flex;
+  flex-direction:column;
+  position:relative;
+  animation:lrGlow 3s ease-in-out infinite;
+  border:1.5px solid rgba(255,255,255,0.3);
+}
+/* Animated rainbow ribbon on top */
+.lr-ad-inner::before {
+  content:'';
+  display:block;
+  height:3px;
+  flex-shrink:0;
+  background:linear-gradient(90deg,#FFD700,#FF6B9D,#A78BFA,#38BDF8,#FFD700,#FF6B9D,#A78BFA);
+  background-size:300% 100%;
+  animation:ribbonMove 2.5s linear infinite;
+}
+/* Animated rainbow ribbon on bottom */
+.lr-ad-inner::after {
+  content:'';
+  display:block;
+  height:3px;
+  flex-shrink:0;
+  background:linear-gradient(90deg,#38BDF8,#A78BFA,#FF6B9D,#FFD700,#38BDF8,#A78BFA,#FF6B9D);
+  background-size:300% 100%;
+  animation:ribbonMove 2.5s linear infinite reverse;
+}
+
+/* Celebration bg + ad content area */
+.lr-ad-content {
+  width:68px;
+  height:58px;
+  overflow:hidden;
+  position:relative;
+  flex-shrink:0;
+}
+/* Celebration gradient bg — always visible even if no ad */
+.lr-ad-content .lr-cel-bg {
+  position:absolute;
+  inset:0; z-index:0;
   display:flex;
   align-items:center;
   justify-content:center;
+  font-size:22px;
 }
-/* Celebration pattern fallback */
-.bal-ad-clip::before {
-  content:'';
+/* Shimmer */
+.lr-ad-content .lr-shimmer {
   position:absolute;
-  inset:0;
-  border-radius:50%;
-  z-index:0;
-  /* set by JS per balloon */
-}
-/* Shimmer over ad while loading */
-.bal-ad-clip::after {
-  content:'';
-  position:absolute;
-  inset:0;
-  border-radius:50%;
-  background:linear-gradient(90deg,
-    transparent 0%,
-    rgba(255,255,255,0.55) 50%,
-    transparent 100%);
+  inset:0; z-index:2;
+  background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.5) 50%,transparent 100%);
   background-size:200% 100%;
-  animation:shimLoad 1.6s ease-in-out infinite;
-  z-index:4;
+  animation:shimLoad 1.8s ease-in-out infinite;
   pointer-events:none;
 }
-.bal-ad-inner {
+/* Ad slot */
+.lr-ad-content .lr-ad-slot {
   position:absolute;
-  inset:0;
-  border-radius:50%;
+  inset:0; z-index:1;
   overflow:hidden;
-  z-index:2;
 }
-.bal-ad-inner > div {
+.lr-ad-content .lr-ad-slot > div {
   position:absolute;
   top:0; left:0;
   z-index:1;
 }
 
-/* ── Close button ── */
-.bal-close {
+/* Sparkles on corners */
+.lr-spark {
   position:absolute;
-  top:2px; right:2px;
-  width:14px; height:14px;
-  border-radius:50%;
-  background:rgba(0,0,0,0.35);
-  border:1.5px solid rgba(255,255,255,0.5);
-  color:#fff;
   font-size:7px;
-  font-weight:900;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:10;
-  transition:background .15s, transform .15s;
-  padding:0; line-height:1;
-}
-.bal-close:hover {
-  background:rgba(220,50,50,0.9);
-  transform:scale(1.25);
+  pointer-events:none;
+  z-index:6;
+  animation:lrSpark 2s ease-in-out infinite;
 }
 
-/* ── Pop animation on close ── */
-.bal-svg-wrap.popping { animation:balloonPop 0.35s ease-out forwards; }
+/* Close X */
+.lr-close {
+  position:absolute;
+  top:5px; right:4px;
+  width:12px; height:12px;
+  border-radius:50%;
+  background:rgba(0,0,0,0.3);
+  border:1px solid rgba(255,255,255,0.4);
+  color:#fff;
+  font-size:6px; font-weight:900;
+  cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  z-index:10; padding:0; line-height:1;
+  transition:background .15s, transform .15s;
+}
+.lr-close:hover { background:rgba(220,50,50,0.9); transform:scale(1.2); }
+
+/* Float animation per slot */
+.lr-float { animation:lrFloat 3s ease-in-out infinite; }
+
+/* ══════════════════════════════════════════
+   SYSTEM 2: CENTER FLYING BALLOONS
+   ══════════════════════════════════════════ */
+@keyframes flyUp {
+  0%  { transform:translateY(0)   rotate(var(--rot)) scale(0.8); opacity:0; }
+  8%  { opacity:1; }
+  92% { opacity:1; }
+  100%{ transform:translateY(-110vh) rotate(calc(var(--rot)*-1)) scale(1); opacity:0; }
+}
+@keyframes balSway {
+  0%,100%{ margin-left:0; }
+  25%    { margin-left:8px; }
+  75%    { margin-left:-8px; }
+}
+@keyframes bSpark {
+  0%,100%{ opacity:0; transform:scale(0); }
+  50%    { opacity:1; transform:scale(1); }
+}
+
+.fly-balloon {
+  position:fixed;
+  bottom:-120px;
+  z-index:940;
+  pointer-events:none;
+  animation:
+    flyUp var(--dur) linear var(--delay) forwards,
+    balSway calc(var(--dur)*0.3) ease-in-out var(--delay) infinite;
+}
+.fly-balloon .fb-body {
+  position:relative;
+  width:52px;
+  height:64px;
+}
+.fly-balloon .fb-body svg {
+  width:52px; height:64px;
+  display:block;
+  filter:drop-shadow(0 4px 12px rgba(0,0,0,0.25));
+}
+.fly-balloon .fb-emoji {
+  position:absolute;
+  top:50%; left:50%;
+  transform:translate(-50%,-58%);
+  font-size:14px;
+  pointer-events:none;
+}
+.fly-balloon .fb-string {
+  width:1.5px;
+  height:14px;
+  margin:0 auto;
+  border-radius:1px;
+  opacity:0.7;
+}
+.fly-balloon .fb-spark {
+  position:absolute;
+  font-size:7px;
+  animation:bSpark 1.5s ease-in-out infinite;
+}
 </style>
 </head>
 <body>
@@ -1367,29 +1370,25 @@ function reset(){
   setTimeout(()=>document.getElementById('nameIn').focus(),200);
 }
 
-/* ════════════════════════════════════════════
-   BALLOON AD SYSTEM — COMPLETE
-   ════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════
+   SYSTEM 1: LEFT/RIGHT SQUARE CELEBRATION AD FRAMES
+   — 5 left + 5 right, hamesha show, celebration frame
+   ════════════════════════════════════════════════════ */
 
-// 10 vibrant balloon colors
-const BAL_COLORS = [
-  { main:'#FF6B6B', dark:'#CC4444', shine:'rgba(255,255,255,0.45)', str:'#FF6B6B', bg:'linear-gradient(135deg,#FF6B6B,#FF8E53)' },
-  { main:'#A78BFA', dark:'#6D4FC2', shine:'rgba(255,255,255,0.4)',  str:'#A78BFA', bg:'linear-gradient(135deg,#A78BFA,#EC4899)' },
-  { main:'#34D399', dark:'#059669', shine:'rgba(255,255,255,0.45)', str:'#34D399', bg:'linear-gradient(135deg,#34D399,#059669)' },
-  { main:'#FBBF24', dark:'#D97706', shine:'rgba(255,255,255,0.5)',  str:'#FBBF24', bg:'linear-gradient(135deg,#FBBF24,#F59E0B)' },
-  { main:'#38BDF8', dark:'#0284C7', shine:'rgba(255,255,255,0.45)', str:'#38BDF8', bg:'linear-gradient(135deg,#38BDF8,#818CF8)' },
-  { main:'#F472B6', dark:'#BE185D', shine:'rgba(255,255,255,0.4)',  str:'#F472B6', bg:'linear-gradient(135deg,#F472B6,#FB7185)' },
-  { main:'#FB923C', dark:'#C2410C', shine:'rgba(255,255,255,0.45)', str:'#FB923C', bg:'linear-gradient(135deg,#FB923C,#FBBF24)' },
-  { main:'#C084FC', dark:'#7E22CE', shine:'rgba(255,255,255,0.4)',  str:'#C084FC', bg:'linear-gradient(135deg,#C084FC,#38BDF8)' },
-  { main:'#4ADE80', dark:'#16A34A', shine:'rgba(255,255,255,0.45)', str:'#4ADE80', bg:'linear-gradient(135deg,#4ADE80,#34D399)' },
-  { main:'#F87171', dark:'#B91C1C', shine:'rgba(255,255,255,0.45)', str:'#F87171', bg:'linear-gradient(135deg,#F87171,#C084FC)' },
+const LR_COLORS = [
+  { bg:'linear-gradient(135deg,#FF6B6B,#FF8E53)', border:'#FF6B6B', em:'🌙' },
+  { bg:'linear-gradient(135deg,#A78BFA,#EC4899)', border:'#A78BFA', em:'⭐' },
+  { bg:'linear-gradient(135deg,#34D399,#059669)', border:'#34D399', em:'🎁' },
+  { bg:'linear-gradient(135deg,#FBBF24,#F59E0B)', border:'#FBBF24', em:'✨' },
+  { bg:'linear-gradient(135deg,#38BDF8,#818CF8)', border:'#38BDF8', em:'🪔' },
+  { bg:'linear-gradient(135deg,#F472B6,#FB7185)', border:'#F472B6', em:'🌟' },
+  { bg:'linear-gradient(135deg,#FB923C,#FBBF24)', border:'#FB923C', em:'🎀' },
+  { bg:'linear-gradient(135deg,#C084FC,#38BDF8)', border:'#C084FC', em:'💫' },
+  { bg:'linear-gradient(135deg,#4ADE80,#34D399)', border:'#4ADE80', em:'🕌' },
+  { bg:'linear-gradient(135deg,#F87171,#C084FC)', border:'#F87171', em:'🎊' },
 ];
-const BAL_EMOJIS = ['🌙','⭐','🎁','✨','🪔','🌟','🎀','💫','🕌','🎊'];
-const BAL_FLOATS = ['balloonFloat1','balloonFloat2','balloonFloat3','balloonFloat4','balloonFloat5','balloonFloat2','balloonFloat1','balloonFloat3','balloonFloat4','balloonFloat5'];
-const BAL_SPEEDS = [3.4,2.8,3.8,2.6,3.2,3.0,3.6,2.9,3.3,2.7];
 
-// Ad keys
-const FAD_ADS = [
+const LR_ADS = [
   { key:'7e9bc2066805e8a5ac72b38d41bb663c', w:468, h:60,  src:'https://www.highperformanceformat.com/7e9bc2066805e8a5ac72b38d41bb663c/invoke.js' },
   { key:'6f544652133ff2804e6ee984429addb8', w:320, h:50,  src:'https://www.highperformanceformat.com/6f544652133ff2804e6ee984429addb8/invoke.js' },
   { key:'67c38abd8c480ddae3650164b24e73a5', w:300, h:250, src:'https://www.highperformanceformat.com/67c38abd8c480ddae3650164b24e73a5/invoke.js' },
@@ -1402,142 +1401,226 @@ const FAD_ADS = [
   { key:'5eb43a7cd09c34bf77353a2c8b638efc', w:160, h:600, src:'https://www.highperformanceformat.com/5eb43a7cd09c34bf77353a2c8b638efc/invoke.js' },
 ];
 
-// Positions — 5 left + 5 right evenly spaced
-function getFadPositions() {
-  const H = window.innerHeight;
-  const step = (H - 120) / 5;
-  const pos = [];
+let lrSlots=[], lrTimers=[], lrActive=false;
+
+function getLRPositions(){
+  const H=window.innerHeight;
+  const step=(H-100)/5;
+  const pos=[];
   for(let i=0;i<5;i++){
-    const top = Math.round(30 + i * step) + 'px';
-    pos.push({ top, left:'2px'  });
-    pos.push({ top, right:'2px' });
+    const top=Math.round(30+i*step)+'px';
+    pos.push({top,left:'2px'});
+    pos.push({top,right:'2px'});
   }
   return pos;
 }
 
-// Balloon SVG
-function makeBalloonSVG(c) {
-  const id = c.main.replace('#','');
-  return `<svg viewBox="0 0 70 90" xmlns="http://www.w3.org/2000/svg" style="width:70px;height:90px;display:block;">
-    <defs>
-      <radialGradient id="rg${id}" cx="36%" cy="30%" r="60%">
-        <stop offset="0%"  stop-color="white" stop-opacity="0.55"/>
-        <stop offset="60%" stop-color="${c.main}" stop-opacity="0"/>
-      </radialGradient>
-    </defs>
-    <ellipse cx="35" cy="38" rx="28" ry="34" fill="${c.main}"/>
-    <ellipse cx="35" cy="38" rx="28" ry="34" fill="url(#rg${id})"/>
-    <path d="M31 71 Q35 78 39 71 Q37 75 35 76 Q33 75 31 71Z" fill="${c.dark}"/>
-    <line x1="35" y1="76" x2="35" y2="89" stroke="${c.str}" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
-  </svg>`;
-}
+function buildLRSlot(i, positions){
+  const wrap=document.createElement('div');
+  wrap.className='lr-ad-wrap';
+  const pos=positions[i];
+  Object.keys(pos).forEach(k=>wrap.style[k]=pos[k]);
 
-let FAD_POSITIONS = [];
-let fadSlots   = [];
-let fadTimers  = [];
-let fadActive  = false;
+  const c=LR_COLORS[i%LR_COLORS.length];
+  const spd=(3+i*0.2).toFixed(1);
+  const dly=(i*0.25).toFixed(1);
 
-function buildFloatSlot(i) {
-  const wrap = document.createElement('div');
-  wrap.className = 'float-ad-wrap';
+  // Sparkles on corners
+  const sparks=[
+    {t:'-4px',l:'-4px',d:'0s'},{t:'-4px',r:'-4px',d:'0.6s'},
+    {t:'auto',b:'-4px',l:'-4px',d:'1.2s'},{t:'auto',b:'-4px',r:'-4px',d:'1.8s'}
+  ].map((s,si)=>{
+    let style=`top:${s.t};`;
+    if(s.l) style+=`left:${s.l};`; else style+=`right:${s.r||'-4px'};`;
+    if(s.b) style+=`bottom:${s.b};`;
+    style+=`animation-delay:${s.d};color:${c.border};`;
+    return `<span class="lr-spark" style="${style}">✦</span>`;
+  }).join('');
 
-  const pos = FAD_POSITIONS[i];
-  Object.keys(pos).forEach(k => wrap.style[k] = pos[k]);
-
-  const c   = BAL_COLORS[i % BAL_COLORS.length];
-  const spd = BAL_SPEEDS[i % BAL_SPEEDS.length];
-  const dly = (i * 0.3).toFixed(1);
-  const fl  = BAL_FLOATS[i % BAL_FLOATS.length];
-  const em  = BAL_EMOJIS[i % BAL_EMOJIS.length];
-
-  // Sparkles
-  const sp = [
-    {t:'6px', l:'50px', d:'0s'},
-    {t:'22px',l:'58px', d:'0.8s'},
-    {t:'40px',l:'56px', d:'1.5s'},
-  ].map(s=>`<span class="bal-spark" style="top:${s.t};left:${s.l};animation-delay:${s.d};color:${c.main};">✦</span>`).join('');
-
-  wrap.innerHTML = `
-    <div class="bal-svg-wrap" style="animation:${fl} ${spd}s ease-in-out ${dly}s infinite;">
-      ${makeBalloonSVG(c)}
-      ${sp}
-      <div class="bal-ad-clip">
-        <div style="position:absolute;inset:0;border-radius:50%;background:${c.bg};z-index:0;"></div>
-        <div style="position:absolute;inset:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;z-index:1;">${em}</div>
-        <div class="bal-ad-inner" id="fad-content-${i}"></div>
+  wrap.innerHTML=`
+    <div class="lr-ad-inner lr-float"
+      style="background:${c.bg};animation-duration:${spd}s;animation-delay:${dly}s;box-shadow:0 4px 20px ${c.border}44;">
+      ${sparks}
+      <button class="lr-close" onclick="closeLRSlot(${i})">&#x2715;</button>
+      <div class="lr-ad-content">
+        <div class="lr-cel-bg" style="background:${c.bg};">${c.em}</div>
+        <div class="lr-shimmer"></div>
+        <div class="lr-ad-slot" id="lr-slot-${i}"></div>
       </div>
-      <button class="bal-close" onclick="closeFadSlot(${i})">&#x2715;</button>
-    </div>
-    <div class="bal-string" style="background:${c.str};"></div>`;
+    </div>`;
 
   document.body.appendChild(wrap);
   return wrap;
 }
 
-function loadAdInSlot(i, adIdx) {
-  const box = document.getElementById('fad-content-' + i);
+function loadLRAd(i, adIdx){
+  const box=document.getElementById('lr-slot-'+i);
   if(!box) return;
-  const ad = FAD_ADS[adIdx % FAD_ADS.length];
-  const TW=54, TH=54;
-  const scale = Math.max(TW/ad.w, TH/ad.h);
-  const ox = (TW - ad.w*scale)/2;
-  const oy = (TH - ad.h*scale)/2;
-  box.style.cssText='position:absolute;inset:0;border-radius:50%;overflow:hidden;z-index:3;';
+  const ad=LR_ADS[adIdx%LR_ADS.length];
+  const TW=68, TH=58;
+  const scale=Math.max(TW/ad.w, TH/ad.h);
+  const ox=(TW-ad.w*scale)/2;
+  const oy=(TH-ad.h*scale)/2;
   box.innerHTML='';
-  const wrap = document.createElement('div');
-  wrap.style.cssText=`width:${ad.w}px;height:${ad.h}px;transform:scale(${scale});transform-origin:top left;position:absolute;top:${oy/scale}px;left:${ox/scale}px;z-index:1;`;
+  const wrapper=document.createElement('div');
+  wrapper.style.cssText=`width:${ad.w}px;height:${ad.h}px;transform:scale(${scale});transform-origin:top left;position:absolute;top:${oy/scale}px;left:${ox/scale}px;z-index:1;`;
   const s1=document.createElement('script');
   s1.text=`var atOptions={key:'${ad.key}',format:'iframe',height:${ad.h},width:${ad.w},params:{}};`;
   const s2=document.createElement('script');
   s2.src=ad.src; s2.async=true;
-  wrap.appendChild(s1); wrap.appendChild(s2);
-  box.appendChild(wrap);
+  wrapper.appendChild(s1); wrapper.appendChild(s2);
+  box.appendChild(wrapper);
 }
 
-function closeFadSlot(i) {
-  const wrap = fadSlots[i];
-  if(!wrap) return;
-  const sv = wrap.querySelector('.bal-svg-wrap');
-  if(sv) sv.classList.add('popping');
-  setTimeout(()=>{ wrap.classList.remove('fad-visible'); wrap.classList.add('fad-hiding'); },220);
-  if(fadTimers[i]){ clearInterval(fadTimers[i]); fadTimers[i]=null; }
+function closeLRSlot(i){
+  const w=lrSlots[i]; if(!w) return;
+  w.classList.remove('lr-visible'); w.classList.add('lr-hiding');
+  if(lrTimers[i]){ clearInterval(lrTimers[i]); lrTimers[i]=null; }
 }
 
-function startFloatingAds() {
-  if(fadActive) return;
-  fadActive = true;
-  FAD_POSITIONS = getFadPositions();
+function startLRAds(){
+  if(lrActive) return;
+  lrActive=true;
+  const positions=getLRPositions();
   for(let i=0;i<10;i++){
-    fadSlots[i] = buildFloatSlot(i);
-    let cur = i;
+    lrSlots[i]=buildLRSlot(i,positions);
+    let cur=i;
     setTimeout(()=>{
-      loadAdInSlot(i, cur);
-      fadSlots[i].classList.add('fad-visible');
-      fadTimers[i] = setInterval(()=>{
-        fadSlots[i].classList.remove('fad-visible');
-        fadSlots[i].classList.add('fad-hiding');
+      loadLRAd(i,cur);
+      lrSlots[i].classList.add('lr-visible');
+      lrTimers[i]=setInterval(()=>{
+        lrSlots[i].classList.remove('lr-visible');
+        lrSlots[i].classList.add('lr-hiding');
         setTimeout(()=>{
           cur++;
-          loadAdInSlot(i, cur);
-          fadSlots[i].classList.remove('fad-hiding');
-          fadSlots[i].classList.add('fad-visible');
-        }, 400);
-      }, 5000);
-    }, 120 + i*140);
+          loadLRAd(i,cur);
+          lrSlots[i].classList.remove('lr-hiding');
+          lrSlots[i].classList.add('lr-visible');
+        },400);
+      },5000);
+    },100+i*130);
   }
 }
 
-function stopFloatingAds() {
-  fadActive=false;
-  fadTimers.forEach(t=>t&&clearInterval(t)); fadTimers=[];
-  fadSlots.forEach(w=>{ if(w) w.remove(); }); fadSlots=[];
+function stopLRAds(){
+  lrActive=false;
+  lrTimers.forEach(t=>t&&clearInterval(t)); lrTimers=[];
+  lrSlots.forEach(w=>{ if(w) w.remove(); }); lrSlots=[];
 }
 
-// go() override
+/* ════════════════════════════════════════════════════
+   SYSTEM 2: CENTER FLYING BALLOONS
+   — Neeche se upar fly karte hain, 8-10 balloons
+   — Har 6 sec mein ek nayi wave
+   — Screen ke center mein scattered positions
+   ════════════════════════════════════════════════════ */
+
+const FB_COLORS=[
+  {main:'#FF6B6B',dark:'#CC4444',str:'#FF6B6B',em:'🎈'},
+  {main:'#A78BFA',dark:'#6D4FC2',str:'#A78BFA',em:'🌙'},
+  {main:'#34D399',dark:'#059669',str:'#34D399',em:'⭐'},
+  {main:'#FBBF24',dark:'#D97706',str:'#FBBF24',em:'✨'},
+  {main:'#38BDF8',dark:'#0284C7',str:'#38BDF8',em:'🎁'},
+  {main:'#F472B6',dark:'#BE185D',str:'#F472B6',em:'🌟'},
+  {main:'#FB923C',dark:'#C2410C',str:'#FB923C',em:'🎀'},
+  {main:'#C084FC',dark:'#7E22CE',str:'#C084FC',em:'💫'},
+  {main:'#4ADE80',dark:'#16A34A',str:'#4ADE80',em:'🪔'},
+  {main:'#F87171',dark:'#B91C1C',str:'#F87171',em:'🎊'},
+];
+
+let fbInterval=null;
+
+function makeFBSvg(c){
+  const id='fb'+c.main.replace('#','');
+  return `<svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="${id}" cx="36%" cy="28%" r="58%">
+        <stop offset="0%" stop-color="white" stop-opacity="0.5"/>
+        <stop offset="60%" stop-color="${c.main}" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+    <ellipse cx="26" cy="28" rx="20" ry="24" fill="${c.main}"/>
+    <ellipse cx="26" cy="28" rx="20" ry="24" fill="url(#${id})"/>
+    <path d="M23 51 Q26 57 29 51 Q27 54 26 55 Q25 54 23 51Z" fill="${c.dark}"/>
+    <line x1="26" y1="55" x2="26" y2="63" stroke="${c.str}" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+  </svg>`;
+}
+
+function launchFlyBalloons(){
+  const W=window.innerWidth;
+  const count=9; // 9 balloons per wave
+
+  // Center area mein positions — left/right se door
+  const margin=90; // side margin taake LR ads se overlap na ho
+  const usableW=W-(margin*2);
+
+  for(let i=0;i<count;i++){
+    const c=FB_COLORS[i%FB_COLORS.length];
+    const el=document.createElement('div');
+    el.className='fly-balloon';
+
+    // Random horizontal position — center mein
+    const leftPct=margin + Math.random()*usableW;
+    const dur=(5+Math.random()*3).toFixed(1); // 5-8 sec
+    const delay=(i*0.4).toFixed(1);           // staggered
+    const rot=(-8+Math.random()*16).toFixed(1)+'deg';
+
+    el.style.cssText=`
+      left:${leftPct}px;
+      --dur:${dur}s;
+      --delay:${delay}s;
+      --rot:${rot};
+    `;
+
+    // Sparkles
+    const sp=[
+      {t:'2px',l:'36px',d:'0s'},
+      {t:'18px',l:'44px',d:'0.5s'},
+      {t:'34px',l:'40px',d:'1s'},
+    ].map(s=>`<span class="fb-spark" style="top:${s.t};left:${s.l};animation-delay:${s.d};color:${c.main};">✦</span>`).join('');
+
+    el.innerHTML=`
+      <div class="fb-body">
+        ${makeFBSvg(c)}
+        ${sp}
+        <div class="fb-emoji">${c.em}</div>
+      </div>
+      <div class="fb-string" style="background:${c.str};"></div>`;
+
+    document.body.appendChild(el);
+
+    // Auto remove after animation done
+    const totalMs=(parseFloat(dur)+parseFloat(delay))*1000+500;
+    setTimeout(()=>{ if(el.parentNode) el.remove(); }, totalMs);
+  }
+}
+
+function startFlyBalloons(){
+  // Pehli wave turant
+  launchFlyBalloons();
+  // Har 7 sec mein nai wave
+  fbInterval=setInterval(launchFlyBalloons, 7000);
+}
+
+function stopFlyBalloons(){
+  if(fbInterval){ clearInterval(fbInterval); fbInterval=null; }
+  document.querySelectorAll('.fly-balloon').forEach(e=>e.remove());
+}
+
+/* ── COMBINED START/STOP ── */
+function stopFloatingAds(){
+  stopLRAds();
+  stopFlyBalloons();
+}
+
+// go() override — dono systems shuru karo
 const _origGo = go;
 window.go = function() {
   _origGo();
-  setTimeout(startFloatingAds, 1000);
+  setTimeout(()=>{
+    startLRAds();       // left/right square frames
+    startFlyBalloons(); // center flying balloons
+  }, 800);
 };
 </script>
 </body>
