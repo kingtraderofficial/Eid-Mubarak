@@ -537,8 +537,8 @@ body {
   z-index: 950;
   pointer-events: auto;
   opacity: 0;
-  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(.22,1,.36,1);
-  transform: scale(0.8) translateY(6px);
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(.22,1,.36,1);
+  transform: scale(0.8) translateY(4px);
 }
 .float-ad-wrap.fad-visible {
   opacity: 1;
@@ -546,32 +546,31 @@ body {
 }
 .float-ad-wrap.fad-hiding {
   opacity: 0;
-  transform: scale(0.8) translateY(6px);
+  transform: scale(0.8) translateY(4px);
 }
 .float-ad-inner {
-  width: 80px;
+  width: 62px;
   background: #fff;
-  border-radius: 8px;
+  border-radius: 6px;
   overflow: hidden;
   box-shadow:
-    0 2px 8px rgba(0,0,0,0.18),
-    0 6px 24px rgba(91,79,232,0.18),
-    0 0 0 1.5px rgba(91,79,232,0.13);
+    0 2px 6px rgba(0,0,0,0.16),
+    0 4px 16px rgba(91,79,232,0.15),
+    0 0 0 1px rgba(91,79,232,0.10);
   display: flex;
   flex-direction: column;
   position: relative;
 }
-
 /* Close button — floating top-right corner, no bar */
 .float-ad-close {
   position: absolute;
-  top: 3px; right: 3px;
-  width: 13px; height: 13px;
+  top: 2px; right: 2px;
+  width: 11px; height: 11px;
   border-radius: 50%;
   background: rgba(0,0,0,0.45);
   border: 1px solid rgba(255,255,255,0.3);
   color: #fff;
-  font-size: 7px;
+  font-size: 6px;
   font-weight: 900;
   cursor: pointer;
   display: flex;
@@ -582,26 +581,20 @@ body {
   z-index: 10;
   transition: background .15s;
 }
-.float-ad-close:hover {
-  background: rgba(220,50,50,0.85);
-}
-/* Hide label — no bar needed */
+.float-ad-close:hover { background: rgba(220,50,50,0.85); }
 .float-ad-bar { display: none; }
 .float-ad-lbl { display: none; }
 
-/* The actual ad content box — fixed 80x48, clips perfectly */
+/* Ad content box — 62x38 */
 .float-ad-content {
-  width: 80px;
-  height: 48px;
+  width: 62px;
+  height: 38px;
   overflow: hidden;
   position: relative;
   background: linear-gradient(135deg, #f0eeff 0%, #e8f0ff 100%);
   flex-shrink: 0;
-  /* Inner glow border */
-  box-shadow: inset 0 0 0 1px rgba(91,79,232,0.07);
+  box-shadow: inset 0 0 0 1px rgba(91,79,232,0.06);
 }
-
-/* Loading shimmer shown before ad loads */
 .float-ad-content::before {
   content: '';
   position: absolute;
@@ -619,8 +612,6 @@ body {
   0%   { background-position: -200% 0; }
   100% { background-position:  200% 0; }
 }
-
-/* Ad wrapper div sits above shimmer */
 .float-ad-content > div {
   position: absolute;
   top: 0; left: 0;
@@ -1296,29 +1287,42 @@ const FAD_ADS = [
   { key:'5eb43a7cd09c34bf77353a2c8b638efc', w:160, h:600, src:'https://www.highperformanceformat.com/5eb43a7cd09c34bf77353a2c8b638efc/invoke.js' },
 ];
 
-// 10 fixed positions — corners + edges (screen ke andar rahen)
-const FAD_POSITIONS = [
-  { top:'12px',   left:'8px'   },   // top-left
-  { top:'12px',   right:'8px'  },   // top-right
-  { bottom:'70px',left:'8px'   },   // bottom-left
-  { bottom:'70px',right:'8px'  },   // bottom-right
-  { top:'50%',    left:'8px',   transform:'translateY(-50%)' }, // mid-left
-  { top:'50%',    right:'8px',  transform:'translateY(-50%)' }, // mid-right
-  { top:'28%',    left:'8px'   },   // upper-left
-  { top:'28%',    right:'8px'  },   // upper-right
-  { bottom:'200px',left:'8px'  },   // lower-left
-  { bottom:'200px',right:'8px' },   // lower-right
-];
+// 10 fixed positions — JS se screen size check kar ke mobile/desktop alag
+function getFadPositions() {
+  const isMobile = window.innerWidth < 600;
+  const W = window.innerWidth;
+  const H = window.innerHeight;
+  const AW = 62; // ad width
+  const AH = 38; // ad height
+  const GAP = 4; // screen edge se gap
 
-let fadSlots = [];   // DOM nodes
-let fadTimers = [];  // per-slot interval
+  // Mobile: 5 left + 5 right, evenly distributed vertically (no gap)
+  // Desktop: 5 left + 5 right, evenly distributed
+  const slots = 5;
+  const usableH = H - 60; // top aur bottom thoda space
+  const step = usableH / slots;
+
+  const positions = [];
+  for (let i = 0; i < slots; i++) {
+    const topVal = Math.round(30 + i * step + (step - AH) / 2);
+    // Left side
+    positions.push({ top: topVal + 'px', left: GAP + 'px' });
+    // Right side
+    positions.push({ top: topVal + 'px', right: GAP + 'px' });
+  }
+  return positions; // 10 positions total
+}
+
+let FAD_POSITIONS = [];
+
+let fadSlots = [];
+let fadTimers = [];
 let fadActive = false;
 
 function buildFloatSlot(posIdx) {
   const wrap = document.createElement('div');
   wrap.className = 'float-ad-wrap';
 
-  // position apply karo
   const pos = FAD_POSITIONS[posIdx];
   Object.keys(pos).forEach(k => wrap.style[k] = pos[k]);
 
@@ -1328,7 +1332,7 @@ function buildFloatSlot(posIdx) {
         <span class="float-ad-lbl">Ad</span>
         <button class="float-ad-close" onclick="closeFadSlot(${posIdx})">&#x2715;</button>
       </div>
-      <div class="float-ad-content" id="fad-content-${posIdx}" style="width:80px;height:48px;"></div>
+      <div class="float-ad-content" id="fad-content-${posIdx}" style="width:62px;height:38px;"></div>
     </div>`;
 
   document.body.appendChild(wrap);
@@ -1341,17 +1345,13 @@ function loadAdInSlot(posIdx, adIdx) {
 
   const ad = FAD_ADS[adIdx % FAD_ADS.length];
 
-  // Frame size
-  const TW = 80, TH = 48;
-
-  // Scale to fill frame (cover style — fills box completely)
+  // 62x38 target frame
+  const TW = 62, TH = 38;
   const scale = Math.max(TW / ad.w, TH / ad.h);
-
-  // Center the scaled ad inside the frame
   const scaledW = ad.w * scale;
   const scaledH = ad.h * scale;
-  const offsetX  = (TW - scaledW) / 2;
-  const offsetY  = (TH - scaledH) / 2;
+  const offsetX = (TW - scaledW) / 2;
+  const offsetY = (TH - scaledH) / 2;
 
   container.style.width    = TW + 'px';
   container.style.height   = TH + 'px';
@@ -1359,24 +1359,22 @@ function loadAdInSlot(posIdx, adIdx) {
   container.style.position = 'relative';
   container.innerHTML = '';
 
-  // Wrapper — scaled & centered
   const wrapper = document.createElement('div');
   wrapper.style.cssText = `
-    width: ${ad.w}px;
-    height: ${ad.h}px;
-    transform: scale(${scale});
-    transform-origin: top left;
-    position: absolute;
-    top: ${offsetY / scale}px;
-    left: ${offsetX / scale}px;
-    z-index: 1;
+    width:${ad.w}px;
+    height:${ad.h}px;
+    transform:scale(${scale});
+    transform-origin:top left;
+    position:absolute;
+    top:${offsetY / scale}px;
+    left:${offsetX / scale}px;
+    z-index:1;
   `;
 
   const s1 = document.createElement('script');
   s1.text = `var atOptions={key:'${ad.key}',format:'iframe',height:${ad.h},width:${ad.w},params:{}};`;
-
   const s2 = document.createElement('script');
-  s2.src   = ad.src;
+  s2.src = ad.src;
   s2.async = true;
 
   wrapper.appendChild(s1);
@@ -1389,7 +1387,6 @@ function closeFadSlot(posIdx) {
   if (!wrap) return;
   wrap.classList.remove('fad-visible');
   wrap.classList.add('fad-hiding');
-  // Timer bhi band karo is slot ka
   if (fadTimers[posIdx]) {
     clearInterval(fadTimers[posIdx]);
     fadTimers[posIdx] = null;
@@ -1400,20 +1397,21 @@ function startFloatingAds() {
   if (fadActive) return;
   fadActive = true;
 
-  // 10 slots banao
+  // Screen size se positions calculate karo
+  FAD_POSITIONS = getFadPositions();
+
   for (let i = 0; i < 10; i++) {
     const wrap = buildFloatSlot(i);
     fadSlots[i] = wrap;
 
-    const startAdIdx = i; // har slot alag ad se shuru ho
-    let curAdIdx = startAdIdx;
+    let curAdIdx = i;
 
-    // Thodi delay se show karo taake page load ho
+    // Staggered appear — 150ms apart
     setTimeout(() => {
       loadAdInSlot(i, curAdIdx);
       wrap.classList.add('fad-visible');
 
-      // Har 8 sec mein rotate karo
+      // Har 5 sec mein rotate — smooth fade
       fadTimers[i] = setInterval(() => {
         wrap.classList.remove('fad-visible');
         wrap.classList.add('fad-hiding');
@@ -1422,10 +1420,10 @@ function startFloatingAds() {
           loadAdInSlot(i, curAdIdx);
           wrap.classList.remove('fad-hiding');
           wrap.classList.add('fad-visible');
-        }, 500);
-      }, 8000);
+        }, 350);
+      }, 5000);
 
-    }, 300 + i * 200); // ek ek kar ke appear hoon (staggered)
+    }, 150 + i * 120);
   }
 }
 
