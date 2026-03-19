@@ -1368,14 +1368,172 @@ function reset(){
 }
 
 /* ════════════════════════════════════════════
-   FLOATING MINI ADS SYSTEM
-   — 10 positions, corners + edges
-   — Har 4 sec mein ek naya ad rotate hota hai
-   — User close bhi kar sakta hai
-   — Sirf result page par show hote hain
+   BALLOON AD SYSTEM — COMPLETE
    ════════════════════════════════════════════ */
 
-// go() ke andar floating ads shuru karo
+// 10 vibrant balloon colors
+const BAL_COLORS = [
+  { main:'#FF6B6B', dark:'#CC4444', shine:'rgba(255,255,255,0.45)', str:'#FF6B6B', bg:'linear-gradient(135deg,#FF6B6B,#FF8E53)' },
+  { main:'#A78BFA', dark:'#6D4FC2', shine:'rgba(255,255,255,0.4)',  str:'#A78BFA', bg:'linear-gradient(135deg,#A78BFA,#EC4899)' },
+  { main:'#34D399', dark:'#059669', shine:'rgba(255,255,255,0.45)', str:'#34D399', bg:'linear-gradient(135deg,#34D399,#059669)' },
+  { main:'#FBBF24', dark:'#D97706', shine:'rgba(255,255,255,0.5)',  str:'#FBBF24', bg:'linear-gradient(135deg,#FBBF24,#F59E0B)' },
+  { main:'#38BDF8', dark:'#0284C7', shine:'rgba(255,255,255,0.45)', str:'#38BDF8', bg:'linear-gradient(135deg,#38BDF8,#818CF8)' },
+  { main:'#F472B6', dark:'#BE185D', shine:'rgba(255,255,255,0.4)',  str:'#F472B6', bg:'linear-gradient(135deg,#F472B6,#FB7185)' },
+  { main:'#FB923C', dark:'#C2410C', shine:'rgba(255,255,255,0.45)', str:'#FB923C', bg:'linear-gradient(135deg,#FB923C,#FBBF24)' },
+  { main:'#C084FC', dark:'#7E22CE', shine:'rgba(255,255,255,0.4)',  str:'#C084FC', bg:'linear-gradient(135deg,#C084FC,#38BDF8)' },
+  { main:'#4ADE80', dark:'#16A34A', shine:'rgba(255,255,255,0.45)', str:'#4ADE80', bg:'linear-gradient(135deg,#4ADE80,#34D399)' },
+  { main:'#F87171', dark:'#B91C1C', shine:'rgba(255,255,255,0.45)', str:'#F87171', bg:'linear-gradient(135deg,#F87171,#C084FC)' },
+];
+const BAL_EMOJIS = ['🌙','⭐','🎁','✨','🪔','🌟','🎀','💫','🕌','🎊'];
+const BAL_FLOATS = ['balloonFloat1','balloonFloat2','balloonFloat3','balloonFloat4','balloonFloat5','balloonFloat2','balloonFloat1','balloonFloat3','balloonFloat4','balloonFloat5'];
+const BAL_SPEEDS = [3.4,2.8,3.8,2.6,3.2,3.0,3.6,2.9,3.3,2.7];
+
+// Ad keys
+const FAD_ADS = [
+  { key:'7e9bc2066805e8a5ac72b38d41bb663c', w:468, h:60,  src:'https://www.highperformanceformat.com/7e9bc2066805e8a5ac72b38d41bb663c/invoke.js' },
+  { key:'6f544652133ff2804e6ee984429addb8', w:320, h:50,  src:'https://www.highperformanceformat.com/6f544652133ff2804e6ee984429addb8/invoke.js' },
+  { key:'67c38abd8c480ddae3650164b24e73a5', w:300, h:250, src:'https://www.highperformanceformat.com/67c38abd8c480ddae3650164b24e73a5/invoke.js' },
+  { key:'429cefeb3637e3ee06cdac632b55d6f0', w:160, h:300, src:'https://www.highperformanceformat.com/429cefeb3637e3ee06cdac632b55d6f0/invoke.js' },
+  { key:'5eb43a7cd09c34bf77353a2c8b638efc', w:160, h:600, src:'https://www.highperformanceformat.com/5eb43a7cd09c34bf77353a2c8b638efc/invoke.js' },
+  { key:'7e9bc2066805e8a5ac72b38d41bb663c', w:468, h:60,  src:'https://www.highperformanceformat.com/7e9bc2066805e8a5ac72b38d41bb663c/invoke.js' },
+  { key:'6f544652133ff2804e6ee984429addb8', w:320, h:50,  src:'https://www.highperformanceformat.com/6f544652133ff2804e6ee984429addb8/invoke.js' },
+  { key:'67c38abd8c480ddae3650164b24e73a5', w:300, h:250, src:'https://www.highperformanceformat.com/67c38abd8c480ddae3650164b24e73a5/invoke.js' },
+  { key:'429cefeb3637e3ee06cdac632b55d6f0', w:160, h:300, src:'https://www.highperformanceformat.com/429cefeb3637e3ee06cdac632b55d6f0/invoke.js' },
+  { key:'5eb43a7cd09c34bf77353a2c8b638efc', w:160, h:600, src:'https://www.highperformanceformat.com/5eb43a7cd09c34bf77353a2c8b638efc/invoke.js' },
+];
+
+// Positions — 5 left + 5 right evenly spaced
+function getFadPositions() {
+  const H = window.innerHeight;
+  const step = (H - 120) / 5;
+  const pos = [];
+  for(let i=0;i<5;i++){
+    const top = Math.round(30 + i * step) + 'px';
+    pos.push({ top, left:'2px'  });
+    pos.push({ top, right:'2px' });
+  }
+  return pos;
+}
+
+// Balloon SVG
+function makeBalloonSVG(c) {
+  const id = c.main.replace('#','');
+  return `<svg viewBox="0 0 70 90" xmlns="http://www.w3.org/2000/svg" style="width:70px;height:90px;display:block;">
+    <defs>
+      <radialGradient id="rg${id}" cx="36%" cy="30%" r="60%">
+        <stop offset="0%"  stop-color="white" stop-opacity="0.55"/>
+        <stop offset="60%" stop-color="${c.main}" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+    <ellipse cx="35" cy="38" rx="28" ry="34" fill="${c.main}"/>
+    <ellipse cx="35" cy="38" rx="28" ry="34" fill="url(#rg${id})"/>
+    <path d="M31 71 Q35 78 39 71 Q37 75 35 76 Q33 75 31 71Z" fill="${c.dark}"/>
+    <line x1="35" y1="76" x2="35" y2="89" stroke="${c.str}" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+  </svg>`;
+}
+
+let FAD_POSITIONS = [];
+let fadSlots   = [];
+let fadTimers  = [];
+let fadActive  = false;
+
+function buildFloatSlot(i) {
+  const wrap = document.createElement('div');
+  wrap.className = 'float-ad-wrap';
+
+  const pos = FAD_POSITIONS[i];
+  Object.keys(pos).forEach(k => wrap.style[k] = pos[k]);
+
+  const c   = BAL_COLORS[i % BAL_COLORS.length];
+  const spd = BAL_SPEEDS[i % BAL_SPEEDS.length];
+  const dly = (i * 0.3).toFixed(1);
+  const fl  = BAL_FLOATS[i % BAL_FLOATS.length];
+  const em  = BAL_EMOJIS[i % BAL_EMOJIS.length];
+
+  // Sparkles
+  const sp = [
+    {t:'6px', l:'50px', d:'0s'},
+    {t:'22px',l:'58px', d:'0.8s'},
+    {t:'40px',l:'56px', d:'1.5s'},
+  ].map(s=>`<span class="bal-spark" style="top:${s.t};left:${s.l};animation-delay:${s.d};color:${c.main};">✦</span>`).join('');
+
+  wrap.innerHTML = `
+    <div class="bal-svg-wrap" style="animation:${fl} ${spd}s ease-in-out ${dly}s infinite;">
+      ${makeBalloonSVG(c)}
+      ${sp}
+      <div class="bal-ad-clip">
+        <div style="position:absolute;inset:0;border-radius:50%;background:${c.bg};z-index:0;"></div>
+        <div style="position:absolute;inset:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;z-index:1;">${em}</div>
+        <div class="bal-ad-inner" id="fad-content-${i}"></div>
+      </div>
+      <button class="bal-close" onclick="closeFadSlot(${i})">&#x2715;</button>
+    </div>
+    <div class="bal-string" style="background:${c.str};"></div>`;
+
+  document.body.appendChild(wrap);
+  return wrap;
+}
+
+function loadAdInSlot(i, adIdx) {
+  const box = document.getElementById('fad-content-' + i);
+  if(!box) return;
+  const ad = FAD_ADS[adIdx % FAD_ADS.length];
+  const TW=54, TH=54;
+  const scale = Math.max(TW/ad.w, TH/ad.h);
+  const ox = (TW - ad.w*scale)/2;
+  const oy = (TH - ad.h*scale)/2;
+  box.style.cssText='position:absolute;inset:0;border-radius:50%;overflow:hidden;z-index:3;';
+  box.innerHTML='';
+  const wrap = document.createElement('div');
+  wrap.style.cssText=`width:${ad.w}px;height:${ad.h}px;transform:scale(${scale});transform-origin:top left;position:absolute;top:${oy/scale}px;left:${ox/scale}px;z-index:1;`;
+  const s1=document.createElement('script');
+  s1.text=`var atOptions={key:'${ad.key}',format:'iframe',height:${ad.h},width:${ad.w},params:{}};`;
+  const s2=document.createElement('script');
+  s2.src=ad.src; s2.async=true;
+  wrap.appendChild(s1); wrap.appendChild(s2);
+  box.appendChild(wrap);
+}
+
+function closeFadSlot(i) {
+  const wrap = fadSlots[i];
+  if(!wrap) return;
+  const sv = wrap.querySelector('.bal-svg-wrap');
+  if(sv) sv.classList.add('popping');
+  setTimeout(()=>{ wrap.classList.remove('fad-visible'); wrap.classList.add('fad-hiding'); },220);
+  if(fadTimers[i]){ clearInterval(fadTimers[i]); fadTimers[i]=null; }
+}
+
+function startFloatingAds() {
+  if(fadActive) return;
+  fadActive = true;
+  FAD_POSITIONS = getFadPositions();
+  for(let i=0;i<10;i++){
+    fadSlots[i] = buildFloatSlot(i);
+    let cur = i;
+    setTimeout(()=>{
+      loadAdInSlot(i, cur);
+      fadSlots[i].classList.add('fad-visible');
+      fadTimers[i] = setInterval(()=>{
+        fadSlots[i].classList.remove('fad-visible');
+        fadSlots[i].classList.add('fad-hiding');
+        setTimeout(()=>{
+          cur++;
+          loadAdInSlot(i, cur);
+          fadSlots[i].classList.remove('fad-hiding');
+          fadSlots[i].classList.add('fad-visible');
+        }, 400);
+      }, 5000);
+    }, 120 + i*140);
+  }
+}
+
+function stopFloatingAds() {
+  fadActive=false;
+  fadTimers.forEach(t=>t&&clearInterval(t)); fadTimers=[];
+  fadSlots.forEach(w=>{ if(w) w.remove(); }); fadSlots=[];
+}
+
+// go() override
 const _origGo = go;
 window.go = function() {
   _origGo();
