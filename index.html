@@ -252,7 +252,6 @@ body {
 }
 @keyframes heroSpin { to{transform:rotate(360deg)} }
 
-/* Stars decoration */
 .star-field {
   position: absolute; inset: 0; pointer-events: none; z-index: 0;
 }
@@ -272,7 +271,6 @@ body {
   align-items: center; gap: 0;
 }
 
-/* Big moon on result */
 .eid-moon {
   width: 100px; height: 100px;
   margin-bottom: 24px;
@@ -338,7 +336,6 @@ body {
   animation: dotPulse 1.4s ease-in-out infinite;
 }
 
-/* Scroll hint */
 .scroll-hint {
   display: flex; flex-direction: column;
   align-items: center; gap: 8px;
@@ -374,7 +371,6 @@ body {
   gap: 14px; position:relative; z-index:1;
 }
 
-/* motivation card */
 .mot-card {
   background: var(--card);
   border-radius: 20px; padding: 24px 22px;
@@ -420,7 +416,6 @@ body {
 @keyframes barFill{from{width:0%}to{width:100%}}
 .mot-next { font-size:.66rem; font-weight:700; color:#C0BDD8; white-space:nowrap; }
 
-/* prank card */
 .prank-card {
   background: linear-gradient(135deg,#F7F6FF,#EEF0FF);
   border-radius: 20px; padding: 24px 22px;
@@ -458,7 +453,6 @@ body {
 }
 .prank-b b { color:var(--p); font-weight:700; }
 
-/* share card */
 .share-card {
   background:var(--card); border-radius:20px;
   padding:20px 22px;
@@ -477,18 +471,9 @@ body {
   box-shadow:0 4px 16px rgba(34,197,94,.25);
   transition:all .2s; -webkit-appearance:none;
   min-height:50px;
+  text-decoration: none;
 }
 .btn-wa:active { transform:scale(.98); }
-.wa-ico {
-  width:19px;height:19px;border-radius:50%;
-  background:rgba(255,255,255,.22);
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;
-}
-.wa-ico::after {
-  content:'';width:10px;height:10px;border-radius:50%;
-  border:2px solid #fff; border-bottom-color:transparent;
-}
 .btn-copy {
   width:100%; display:flex; align-items:center;
   justify-content:center; gap:6px;
@@ -515,7 +500,6 @@ body {
 }
 .btn-back:active { border-color:var(--p); color:var(--p); }
 
-/* ads section */
 .ads-sec {
   width:100%; margin-top:auto;
   padding: 28px 16px 40px;
@@ -534,7 +518,6 @@ body {
   align-items:center; gap:4px;
 }
 
-/* confetti & fireworks */
 .cf {
   position:fixed; top:-16px;
   pointer-events:none; z-index:900;
@@ -631,18 +614,14 @@ body {
 <!-- ════ RESULT PAGE ════ -->
 <div id="result">
 
-  <!-- ticker -->
   <div class="ticker">
     <div class="ticker-track" id="tickEl"></div>
   </div>
 
-  <!-- ════ EID GREETING HERO — FULL SCREEN ════ -->
   <div class="eid-hero" id="eidHero">
-    <!-- animated stars -->
     <div class="star-field" id="starField"></div>
 
     <div class="eid-inner">
-      <!-- Moon -->
       <svg class="eid-moon" viewBox="0 0 82 82" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="mg2" x1="20%" y1="10%" x2="90%" y2="90%">
@@ -674,7 +653,6 @@ body {
         Eid ul Fitr 2026
       </span>
 
-      <!-- scroll down hint -->
       <div class="scroll-hint" onclick="scrollDown()">
         <span>Neeche dekho</span>
         <div class="scroll-arrow"></div>
@@ -685,7 +663,6 @@ body {
   <!-- ════ CARDS BELOW ════ -->
   <div class="r-content">
 
-    <!-- motivation -->
     <div class="mot-card">
       <div class="mot-head">
         <span class="mot-tag">Motivation</span>
@@ -700,7 +677,6 @@ body {
       </div>
     </div>
 
-    <!-- prank -->
     <div class="prank-card">
       <div class="laugh"></div>
       <p class="prank-t">Ek confession hai...</p>
@@ -710,13 +686,16 @@ body {
       </p>
     </div>
 
-    <!-- share -->
     <div class="share-card">
       <p style="font-size:.78rem;font-weight:700;color:var(--sub);text-align:center;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px;">Doston Ko Bhi Prank Karo 😄</p>
-      <button class="btn-wa" onclick="shareWA()">
+
+      <!-- ✅ FIXED: Direct wa.me link button — sabse reliable tarika -->
+      <a id="waBtn" href="#" target="_blank" rel="noopener"
+        class="btn-wa" onclick="return openWA()">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="white" style="flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.532 5.859L.054 23.293a.75.75 0 00.921.921l5.43-1.477A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.853 0-3.601-.484-5.118-1.335l-.361-.207-3.742 1.018 1.018-3.742-.207-.361A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
         WhatsApp Par Share Karo
-      </button>
+      </a>
+
       <button class="btn-copy" onclick="copyLink()">
         <span id="copyTxt">🔗 &nbsp; Link Copy Karo</span>
       </button>
@@ -838,13 +817,7 @@ function makeStars(){
     const s=document.createElement('div');
     s.className='star';
     const sz=1+Math.random()*3;
-    s.style.cssText=`
-      width:${sz}px;height:${sz}px;
-      top:${Math.random()*100}%;
-      left:${Math.random()*100}%;
-      animation-duration:${1.5+Math.random()*3}s;
-      animation-delay:${Math.random()*3}s;
-    `;
+    s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;animation-duration:${1.5+Math.random()*3}s;animation-delay:${Math.random()*3}s;`;
     sf.appendChild(s);
   }
 }
@@ -1016,39 +989,54 @@ function confetti(){
   }
 }
 
-/* ── SHARE ── */
+/* ════════════════════════════════════════
+   ✅ FIXED WhatsApp Share Function
+   — navigator.share hata diya (unreliable)
+   — Direct wa.me link use karta hai
+   — Message properly encode hota hai
+   ════════════════════════════════════════ */
 const SITE_URL = 'https://eid-mubarak-bhai.pages.dev/';
 
-function shareWA(){
+function buildWALink() {
   const senderName = document.getElementById('nameIn').value.trim() || 'Tumhara Dost';
   const msg =
-`🌙 *Eid Mubarak!* 🎉
+    '\uD83C\uDF19 *Eid Mubarak!* \uD83C\uDF89\n\n' +
+    senderName + ' ne tumhe *1000 Rupay Eidi* bheji hai! \uD83D\uDCB0\n\n' +
+    '\uD83D\uDC47 Abhi apna naam likho aur Eidi claim karo:\n' +
+    SITE_URL + '\n\n' +
+    '_(Eid par surprise hai \u2014 zaroor kholo!)_ \uD83D\uDE04';
+  return 'https://wa.me/?text=' + encodeURIComponent(msg);
+}
 
-${senderName} ne tumhe *1000 Rupay Eidi* bheji hai! 💰
-
-👇 Abhi apna naam likho aur Eidi claim karo:
-${SITE_URL}
-
-_(Eid par surprise hai — zaroor kholo!)_ 😄`;
-
-  // Mobile par native share sheet use karo
-  if(navigator.share){
-    navigator.share({
-      title: '🎁 Tumhari Eidi Aa Gayi!',
-      text: msg,
-      url: SITE_URL
-    }).catch(()=>{
-      window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
-    });
-  } else {
-    window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
-  }
+function openWA() {
+  const link = buildWALink();
+  // <a> tag ka href update karo (iOS Safari ke liye)
+  document.getElementById('waBtn').href = link;
+  // Directly bhi open karo (Android + Desktop ke liye)
+  window.open(link, '_blank');
+  return false; // default anchor behavior rok do
 }
 
 function copyLink(){
   const btn = document.querySelector('.btn-copy');
   const txt = document.getElementById('copyTxt');
-  navigator.clipboard.writeText(SITE_URL).then(()=>{
+  const doCopy = (text) => {
+    // Modern clipboard API
+    if(navigator.clipboard && window.isSecureContext){
+      return navigator.clipboard.writeText(text);
+    }
+    // Fallback for older browsers
+    const el = document.createElement('textarea');
+    el.value = text;
+    el.style.cssText = 'position:fixed;left:-9999px;top:-9999px';
+    document.body.appendChild(el);
+    el.focus(); el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    return Promise.resolve();
+  };
+
+  doCopy(SITE_URL).then(()=>{
     btn.classList.add('copied');
     txt.textContent = '✅  Link Copy Ho Gaya!';
     setTimeout(()=>{
@@ -1056,14 +1044,7 @@ function copyLink(){
       txt.innerHTML = '🔗 &nbsp; Link Copy Karo';
     }, 2500);
   }).catch(()=>{
-    // fallback
-    const el = document.createElement('textarea');
-    el.value = SITE_URL;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    el.remove();
-    txt.textContent = '✅  Copy Ho Gaya!';
+    txt.textContent = '❌ Copy nahi hua, manually copy karo';
     setTimeout(()=>{ txt.innerHTML = '🔗 &nbsp; Link Copy Karo'; }, 2500);
   });
 }
