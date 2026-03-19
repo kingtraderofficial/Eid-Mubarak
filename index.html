@@ -530,6 +530,75 @@ body {
   .eid-mubarak-text { font-size:1.5rem; }
   .mot-card,.prank-card,.share-card { padding:20px 16px; }
 }
+
+/* ══ FLOATING MINI ADS ══ */
+.float-ad-wrap {
+  position: fixed;
+  z-index: 950;
+  pointer-events: auto;
+  opacity: 0;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  transform: scale(0.85);
+}
+.float-ad-wrap.fad-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+.float-ad-wrap.fad-hiding {
+  opacity: 0;
+  transform: scale(0.85);
+}
+.float-ad-inner {
+  width: 100px;
+  background: rgba(255,255,255,0.97);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.22), 0 1px 4px rgba(91,79,232,0.15);
+  border: 1px solid rgba(91,79,232,0.12);
+  display: flex;
+  flex-direction: column;
+}
+.float-ad-bar {
+  background: linear-gradient(90deg, var(--p), var(--b));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 5px;
+  height: 16px;
+}
+.float-ad-lbl {
+  font-size: 7px;
+  font-weight: 800;
+  color: rgba(255,255,255,0.75);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.float-ad-close {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  border: none;
+  color: #fff;
+  font-size: 8px;
+  font-weight: 900;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  padding: 0;
+  flex-shrink: 0;
+}
+.float-ad-close:hover { background: rgba(255,255,255,0.45); }
+.float-ad-content {
+  width: 100px;
+  height: 60px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f8ff;
+}
 </style>
 </head>
 <body>
@@ -1169,12 +1238,180 @@ function copyLink(){
 function reset(){
   if(rotTimer){clearInterval(rotTimer);rotTimer=null;}
   idx=0; shuffle();
+  // floating ads bhi band karo
+  stopFloatingAds();
   document.getElementById('result').classList.remove('show');
   document.getElementById('popup').style.display='flex';
   document.getElementById('nameIn').value='';
   window.scrollTo(0,0);
   setTimeout(()=>document.getElementById('nameIn').focus(),200);
 }
+
+/* ════════════════════════════════════════════
+   FLOATING MINI ADS SYSTEM
+   — 10 positions, corners + edges
+   — Har 4 sec mein ek naya ad rotate hota hai
+   — User close bhi kar sakta hai
+   — Sirf result page par show hote hain
+   ════════════════════════════════════════════ */
+
+// Tumhare 6 ad keys — yahi repeat honge rotate ho kar
+const FAD_ADS = [
+  { key:'7e9bc2066805e8a5ac72b38d41bb663c', w:468, h:60,  src:'https://www.highperformanceformat.com/7e9bc2066805e8a5ac72b38d41bb663c/invoke.js' },
+  { key:'6f544652133ff2804e6ee984429addb8', w:320, h:50,  src:'https://www.highperformanceformat.com/6f544652133ff2804e6ee984429addb8/invoke.js' },
+  { key:'67c38abd8c480ddae3650164b24e73a5', w:300, h:250, src:'https://www.highperformanceformat.com/67c38abd8c480ddae3650164b24e73a5/invoke.js' },
+  { key:'429cefeb3637e3ee06cdac632b55d6f0', w:160, h:300, src:'https://www.highperformanceformat.com/429cefeb3637e3ee06cdac632b55d6f0/invoke.js' },
+  { key:'5eb43a7cd09c34bf77353a2c8b638efc', w:160, h:600, src:'https://www.highperformanceformat.com/5eb43a7cd09c34bf77353a2c8b638efc/invoke.js' },
+  { key:'7e9bc2066805e8a5ac72b38d41bb663c', w:468, h:60,  src:'https://www.highperformanceformat.com/7e9bc2066805e8a5ac72b38d41bb663c/invoke.js' },
+  { key:'6f544652133ff2804e6ee984429addb8', w:320, h:50,  src:'https://www.highperformanceformat.com/6f544652133ff2804e6ee984429addb8/invoke.js' },
+  { key:'67c38abd8c480ddae3650164b24e73a5', w:300, h:250, src:'https://www.highperformanceformat.com/67c38abd8c480ddae3650164b24e73a5/invoke.js' },
+  { key:'429cefeb3637e3ee06cdac632b55d6f0', w:160, h:300, src:'https://www.highperformanceformat.com/429cefeb3637e3ee06cdac632b55d6f0/invoke.js' },
+  { key:'5eb43a7cd09c34bf77353a2c8b638efc', w:160, h:600, src:'https://www.highperformanceformat.com/5eb43a7cd09c34bf77353a2c8b638efc/invoke.js' },
+];
+
+// 10 fixed positions — corners + edges (screen ke andar rahen)
+const FAD_POSITIONS = [
+  { top:'12px',   left:'8px'   },   // top-left
+  { top:'12px',   right:'8px'  },   // top-right
+  { bottom:'70px',left:'8px'   },   // bottom-left
+  { bottom:'70px',right:'8px'  },   // bottom-right
+  { top:'50%',    left:'8px',   transform:'translateY(-50%)' }, // mid-left
+  { top:'50%',    right:'8px',  transform:'translateY(-50%)' }, // mid-right
+  { top:'28%',    left:'8px'   },   // upper-left
+  { top:'28%',    right:'8px'  },   // upper-right
+  { bottom:'200px',left:'8px'  },   // lower-left
+  { bottom:'200px',right:'8px' },   // lower-right
+];
+
+let fadSlots = [];   // DOM nodes
+let fadTimers = [];  // per-slot interval
+let fadActive = false;
+
+function buildFloatSlot(posIdx) {
+  const wrap = document.createElement('div');
+  wrap.className = 'float-ad-wrap';
+
+  // position apply karo
+  const pos = FAD_POSITIONS[posIdx];
+  Object.keys(pos).forEach(k => wrap.style[k] = pos[k]);
+
+  wrap.innerHTML = `
+    <div class="float-ad-inner">
+      <div class="float-ad-bar">
+        <span class="float-ad-lbl">Ad</span>
+        <button class="float-ad-close" onclick="closeFadSlot(${posIdx})">&#x2715;</button>
+      </div>
+      <div class="float-ad-content" id="fad-content-${posIdx}"></div>
+    </div>`;
+
+  document.body.appendChild(wrap);
+  return wrap;
+}
+
+function loadAdInSlot(posIdx, adIdx) {
+  const container = document.getElementById('fad-content-' + posIdx);
+  if (!container) return;
+
+  const ad = FAD_ADS[adIdx % FAD_ADS.length];
+
+  // Scale karo taake 100x60 mein fit ho
+  const scaleX = 100 / ad.w;
+  const scaleY = 60  / ad.h;
+  const scale  = Math.min(scaleX, scaleY);
+
+  // Naya iframe banao
+  container.innerHTML = '';
+  const iframe = document.createElement('iframe');
+  iframe.style.cssText = `
+    width:${ad.w}px; height:${ad.h}px;
+    border:none; transform:scale(${scale});
+    transform-origin:top left;
+    pointer-events:auto;
+  `;
+  container.style.width  = '100px';
+  container.style.height = '60px';
+  container.style.overflow = 'hidden';
+  container.appendChild(iframe);
+
+  // iframe ke andar ad script inject karo
+  try {
+    const doc = iframe.contentDocument || iframe.contentWindow.document;
+    doc.open();
+    doc.write(`<!DOCTYPE html><html><head>
+      <style>*{margin:0;padding:0;overflow:hidden;}</style>
+      </head><body>
+      <script>
+        var atOptions={key:'${ad.key}',format:'iframe',height:${ad.h},width:${ad.w},params:{}};
+      <\/script>
+      <script src="${ad.src}"><\/script>
+      </body></html>`);
+    doc.close();
+  } catch(e) {
+    // cross-origin fallback — direct script tag
+    container.innerHTML = `<script>atOptions={key:'${ad.key}',format:'iframe',height:${ad.h},width:${ad.w},params:{}};<\/script><script src="${ad.src}"><\/script>`;
+  }
+}
+
+function closeFadSlot(posIdx) {
+  const wrap = fadSlots[posIdx];
+  if (!wrap) return;
+  wrap.classList.remove('fad-visible');
+  wrap.classList.add('fad-hiding');
+  // Timer bhi band karo is slot ka
+  if (fadTimers[posIdx]) {
+    clearInterval(fadTimers[posIdx]);
+    fadTimers[posIdx] = null;
+  }
+}
+
+function startFloatingAds() {
+  if (fadActive) return;
+  fadActive = true;
+
+  // 10 slots banao
+  for (let i = 0; i < 10; i++) {
+    const wrap = buildFloatSlot(i);
+    fadSlots[i] = wrap;
+
+    const startAdIdx = i; // har slot alag ad se shuru ho
+    let curAdIdx = startAdIdx;
+
+    // Thodi delay se show karo taake page load ho
+    setTimeout(() => {
+      loadAdInSlot(i, curAdIdx);
+      wrap.classList.add('fad-visible');
+
+      // Har 8 sec mein rotate karo
+      fadTimers[i] = setInterval(() => {
+        wrap.classList.remove('fad-visible');
+        wrap.classList.add('fad-hiding');
+        setTimeout(() => {
+          curAdIdx++;
+          loadAdInSlot(i, curAdIdx);
+          wrap.classList.remove('fad-hiding');
+          wrap.classList.add('fad-visible');
+        }, 500);
+      }, 8000);
+
+    }, 300 + i * 200); // ek ek kar ke appear hoon (staggered)
+  }
+}
+
+function stopFloatingAds() {
+  fadActive = false;
+  fadTimers.forEach(t => t && clearInterval(t));
+  fadTimers = [];
+  fadSlots.forEach(w => { if(w) w.remove(); });
+  fadSlots = [];
+}
+
+// go() ke andar floating ads shuru karo
+const _origGo = go;
+window.go = function() {
+  _origGo();
+  // Result show hone ke baad 1 sec mein floating ads start
+  setTimeout(startFloatingAds, 1000);
+};
 </script>
 </body>
 </html>
