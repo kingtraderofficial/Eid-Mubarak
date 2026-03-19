@@ -549,9 +549,9 @@ body {
   transform: scale(0.85);
 }
 .float-ad-inner {
-  width: 100px;
+  width: 80px;
   background: rgba(255,255,255,0.97);
-  border-radius: 8px;
+  border-radius: 6px;
   overflow: hidden;
   box-shadow: 0 4px 16px rgba(0,0,0,0.22), 0 1px 4px rgba(91,79,232,0.15);
   border: 1px solid rgba(91,79,232,0.12);
@@ -563,23 +563,23 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 2px 5px;
-  height: 16px;
+  padding: 2px 4px;
+  height: 13px;
 }
 .float-ad-lbl {
-  font-size: 7px;
+  font-size: 6px;
   font-weight: 800;
   color: rgba(255,255,255,0.75);
   letter-spacing: 0.5px;
   text-transform: uppercase;
 }
 .float-ad-close {
-  width: 12px; height: 12px;
+  width: 10px; height: 10px;
   border-radius: 50%;
   background: rgba(255,255,255,0.25);
   border: none;
   color: #fff;
-  font-size: 8px;
+  font-size: 7px;
   font-weight: 900;
   cursor: pointer;
   display: flex;
@@ -591,13 +591,14 @@ body {
 }
 .float-ad-close:hover { background: rgba(255,255,255,0.45); }
 .float-ad-content {
-  width: 100px;
-  height: 60px;
+  width: 80px;
+  height: 48px;
   overflow: hidden;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: flex-start;
   background: #f8f8ff;
+  position: relative;
 }
 </style>
 </head>
@@ -1301,7 +1302,7 @@ function buildFloatSlot(posIdx) {
         <span class="float-ad-lbl">Ad</span>
         <button class="float-ad-close" onclick="closeFadSlot(${posIdx})">&#x2715;</button>
       </div>
-      <div class="float-ad-content" id="fad-content-${posIdx}"></div>
+      <div class="float-ad-content" id="fad-content-${posIdx}" style="width:80px;height:48px;"></div>
     </div>`;
 
   document.body.appendChild(wrap);
@@ -1314,42 +1315,44 @@ function loadAdInSlot(posIdx, adIdx) {
 
   const ad = FAD_ADS[adIdx % FAD_ADS.length];
 
-  // Scale karo taake 100x60 mein fit ho
-  const scaleX = 100 / ad.w;
-  const scaleY = 60  / ad.h;
-  const scale  = Math.min(scaleX, scaleY);
+  // 80x48 target size — scale ad to fit
+  const TW = 80, TH = 48;
+  const scale = Math.min(TW / ad.w, TH / ad.h);
+  const scaledW = Math.round(ad.w * scale);
+  const scaledH = Math.round(ad.h * scale);
 
-  // Naya iframe banao
-  container.innerHTML = '';
-  const iframe = document.createElement('iframe');
-  iframe.style.cssText = `
-    width:${ad.w}px; height:${ad.h}px;
-    border:none; transform:scale(${scale});
-    transform-origin:top left;
-    pointer-events:auto;
-  `;
-  container.style.width  = '100px';
-  container.style.height = '60px';
+  container.style.width   = TW + 'px';
+  container.style.height  = TH + 'px';
   container.style.overflow = 'hidden';
-  container.appendChild(iframe);
+  container.style.position = 'relative';
 
-  // iframe ke andar ad script inject karo
-  try {
-    const doc = iframe.contentDocument || iframe.contentWindow.document;
-    doc.open();
-    doc.write(`<!DOCTYPE html><html><head>
-      <style>*{margin:0;padding:0;overflow:hidden;}</style>
-      </head><body>
-      <script>
-        var atOptions={key:'${ad.key}',format:'iframe',height:${ad.h},width:${ad.w},params:{}};
-      <\/script>
-      <script src="${ad.src}"><\/script>
-      </body></html>`);
-    doc.close();
-  } catch(e) {
-    // cross-origin fallback — direct script tag
-    container.innerHTML = `<script>atOptions={key:'${ad.key}',format:'iframe',height:${ad.h},width:${ad.w},params:{}};<\/script><script src="${ad.src}"><\/script>`;
-  }
+  // Unique div ID for this slot+rotation
+  const uid = 'fad-' + posIdx + '-' + adIdx;
+  container.innerHTML = '';
+
+  // Wrapper div jo scale hoga
+  const wrapper = document.createElement('div');
+  wrapper.style.cssText = `
+    width:${ad.w}px;
+    height:${ad.h}px;
+    transform:scale(${scale});
+    transform-origin:top left;
+    position:absolute;
+    top:0; left:0;
+  `;
+
+  // atOptions script
+  const s1 = document.createElement('script');
+  s1.text = `var atOptions={key:'${ad.key}',format:'iframe',height:${ad.h},width:${ad.w},params:{}};`;
+
+  // invoke script
+  const s2 = document.createElement('script');
+  s2.src = ad.src;
+  s2.async = true;
+
+  wrapper.appendChild(s1);
+  wrapper.appendChild(s2);
+  container.appendChild(wrapper);
 }
 
 function closeFadSlot(posIdx) {
