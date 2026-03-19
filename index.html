@@ -559,42 +559,18 @@ body {
     0 0 0 1.5px rgba(91,79,232,0.13);
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
-/* Shimmer border top */
-.float-ad-inner::before {
-  content: '';
-  display: block;
-  height: 2px;
-  background: linear-gradient(90deg, var(--p), var(--gold), var(--b), var(--gold), var(--p));
-  background-size: 300% 100%;
-  animation: shimBar 3s linear infinite;
-  flex-shrink: 0;
-}
-
-.float-ad-bar {
-  background: linear-gradient(90deg, #1a1730, #2a2560);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 5px;
-  height: 14px;
-  flex-shrink: 0;
-}
-.float-ad-lbl {
-  font-size: 6px;
-  font-weight: 800;
-  color: rgba(255,255,255,0.55);
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-}
+/* Close button — floating top-right corner, no bar */
 .float-ad-close {
-  width: 11px; height: 11px;
+  position: absolute;
+  top: 3px; right: 3px;
+  width: 13px; height: 13px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.12);
-  border: 1px solid rgba(255,255,255,0.2);
-  color: rgba(255,255,255,0.7);
+  background: rgba(0,0,0,0.45);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: #fff;
   font-size: 7px;
   font-weight: 900;
   cursor: pointer;
@@ -603,13 +579,15 @@ body {
   justify-content: center;
   line-height: 1;
   padding: 0;
-  flex-shrink: 0;
+  z-index: 10;
   transition: background .15s;
 }
 .float-ad-close:hover {
-  background: rgba(255,80,80,0.5);
-  color: #fff;
+  background: rgba(220,50,50,0.85);
 }
+/* Hide label — no bar needed */
+.float-ad-bar { display: none; }
+.float-ad-lbl { display: none; }
 
 /* The actual ad content box — fixed 80x48, clips perfectly */
 .float-ad-content {
