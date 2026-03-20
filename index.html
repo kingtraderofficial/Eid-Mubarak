@@ -1398,6 +1398,12 @@ function reset(){
   idx=0; shuffle();
   // floating ads bhi band karo
   stopFloatingAds();
+  // naam animation reset
+  const nameEl = document.getElementById('rName');
+  if(nameEl){ nameEl.className='eid-name'; nameEl.textContent='—'; }
+  // eid mubarak text reset
+  const mbEl = document.querySelector('.eid-mubarak-text');
+  if(mbEl) mbEl.classList.remove('show-up');
   document.getElementById('result').classList.remove('show');
   document.getElementById('popup').style.display='flex';
   document.getElementById('nameIn').value='';
@@ -1458,7 +1464,7 @@ function makeAdIframeHTML(key, w, h){
   const scale = Math.min(50/w, 80/h).toFixed(5);
   return (
     `<!DOCTYPE html><html><head>` +
-    `<style>*{margin:0;padding:0;overflow:hidden;body{background:transparent}}</style>` +
+    `<style>*{margin:0;padding:0;overflow:hidden;}body{background:transparent;}</style>` +
     `</head><body>` +
     `<div style="width:${w}px;height:${h}px;transform:scale(${scale});transform-origin:top left;">` +
     `<script>var atOptions={key:'${key}',format:'iframe',height:${h},width:${w},params:{}};<\/script>` +
