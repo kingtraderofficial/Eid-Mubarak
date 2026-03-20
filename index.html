@@ -655,7 +655,7 @@ body {
   align-items: center;
   justify-content: space-evenly;
   padding: 8px 0;
-  pointer-events: none;
+  pointer-events: auto;
   opacity: 0;
   transition: opacity .5s ease;
 }
@@ -667,11 +667,13 @@ body {
 .lr-box {
   width: 50px;
   border-radius: 8px;
-  overflow: hidden;
+  overflow: visible;
   position: relative;
   pointer-events: auto;
   flex-shrink: 0;
   animation: lrFloat 3.5s ease-in-out infinite, lrGlow 3.5s ease-in-out infinite;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Rainbow top ribbon */
@@ -1441,27 +1443,31 @@ const LR_COLORS = [
 ];
 
 // ═══════════════════════════════════════════════
-// ALL available ad keys — rotate karte rahein
+// Side box ads — ONLY 160px wide
+// 160px → 50px = scale 0.3125 (visible threshold ✓)
+// 300px, 320px, 468px ads scale too tiny → blank
 // ═══════════════════════════════════════════════
 const LR_ADS = [
   { key:'429cefeb3637e3ee06cdac632b55d6f0', w:160, h:300 },
   { key:'5eb43a7cd09c34bf77353a2c8b638efc', w:160, h:600 },
-  { key:'67c38abd8c480ddae3650164b24e73a5', w:300, h:250 },
-  { key:'6f544652133ff2804e6ee984429addb8', w:320, h:50  },
-  { key:'7e9bc2066805e8a5ac72b38d41bb663c', w:468, h:60  },
   { key:'429cefeb3637e3ee06cdac632b55d6f0', w:160, h:300 },
   { key:'5eb43a7cd09c34bf77353a2c8b638efc', w:160, h:600 },
-  { key:'67c38abd8c480ddae3650164b24e73a5', w:300, h:250 },
-  { key:'6f544652133ff2804e6ee984429addb8', w:320, h:50  },
   { key:'429cefeb3637e3ee06cdac632b55d6f0', w:160, h:300 },
+  { key:'5eb43a7cd09c34bf77353a2c8b638efc', w:160, h:600 },
+  { key:'429cefeb3637e3ee06cdac632b55d6f0', w:160, h:300 },
+  { key:'5eb43a7cd09c34bf77353a2c8b638efc', w:160, h:600 },
+  { key:'429cefeb3637e3ee06cdac632b55d6f0', w:160, h:300 },
+  { key:'5eb43a7cd09c34bf77353a2c8b638efc', w:160, h:600 },
 ];
 
 let lrColLeft=null, lrColRight=null, lrActive=false;
 const lrTimers = []; // rotation timers
 
 // iframe HTML banao — srcdoc method (guaranteed working)
+// Scale by WIDTH only: 160 → 50px = 0.3125
+// Height clips naturally via overflow:hidden on lr-box-inner
 function makeAdIframeHTML(key, w, h){
-  const scale = Math.min(50/w, 80/h).toFixed(5);
+  const scale = (50 / w).toFixed(5); // width-based scale only
   return (
     `<!DOCTYPE html><html><head>` +
     `<style>*{margin:0;padding:0;overflow:hidden;}body{background:transparent;}</style>` +
@@ -1518,15 +1524,21 @@ function buildLRBox(boxIdx){
   box.appendChild(inner);
 
   // Corner sparkles
-  [{top:'-3px',left:'-3px',delay:'0s'},
-   {top:'-3px',right:'-3px',delay:'.8s'},
-   {bottom:'-3px',left:'-3px',delay:'1.4s'},
-   {bottom:'-3px',right:'-3px',delay:'2s'},
-  ].forEach(sp => {
+  const sparkPos = [
+    {top:'-3px', left:'-3px',  animDelay:'0s'  },
+    {top:'-3px', right:'-3px', animDelay:'.8s' },
+    {bottom:'-3px', left:'-3px',  animDelay:'1.4s'},
+    {bottom:'-3px', right:'-3px', animDelay:'2s'  },
+  ];
+  sparkPos.forEach(sp => {
     const s = document.createElement('span');
     s.className   = 'lr-spark';
     s.textContent = '✦';
-    s.style.cssText = Object.entries(sp).map(([k,v])=>`${k}:${v}`).join(';') + `;color:${c.border};`;
+    const pos = Object.entries(sp)
+      .filter(([k]) => k !== 'animDelay')
+      .map(([k,v]) => `${k}:${v}`)
+      .join(';');
+    s.style.cssText = pos + `;animation-delay:${sp.animDelay};color:${c.border};`;
     box.appendChild(s);
   });
 
