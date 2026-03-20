@@ -369,24 +369,90 @@ body {
   animation:dotPulse 1.4s ease-in-out infinite;
 }
 
-/* Floating celebration emojis — JS adds these */
+/* Floating celebration emojis container — now pure CSS decorations, no emoji */
 .eid-float-emojis {
   position:absolute; inset:0;
-  pointer-events:none; z-index:3;
+  pointer-events:none; z-index:1;
+  overflow:hidden;
 }
-.eid-em {
+/* Animated gold rays shooting from center */
+.eid-ray {
   position:absolute;
-  font-size:clamp(14px,3.5vw,20px);
-  user-select:none;
-  animation:emFloat ease-in-out infinite, emAppear .4s ease both;
+  top:50%; left:50%;
+  width:1.5px;
+  border-radius:2px;
+  transform-origin:0 0;
+  animation:rayShoot ease-out both;
 }
-@keyframes emFloat {
-  0%,100%{transform:translateY(0) rotate(-6deg);}
-  50%    {transform:translateY(-14px) rotate(6deg);}
+@keyframes rayShoot {
+  0%  { opacity:0; height:0px; }
+  15% { opacity:.8; }
+  100%{ opacity:0; height:38vh; }
 }
-@keyframes emAppear {
-  from{opacity:0;transform:scale(0) rotate(-20deg)}
-  to  {opacity:1;transform:scale(1) rotate(0deg)}
+/* Orbiting glowing dots */
+.eid-orbit {
+  position:absolute;
+  top:50%; left:50%;
+  width:0; height:0;
+  animation:orbitSpin linear infinite;
+}
+@keyframes orbitSpin { to{ transform:rotate(360deg); } }
+.eid-orbit-dot {
+  position:absolute;
+  border-radius:50%;
+  transform:translateX(var(--r)) translateY(-50%);
+  background:radial-gradient(circle, #FFD700, #FFA500);
+  box-shadow:0 0 6px rgba(255,215,0,.9), 0 0 12px rgba(255,165,0,.5);
+}
+/* Corner gold diamonds */
+.eid-diamond {
+  position:absolute;
+  width:7px; height:7px;
+  background:linear-gradient(135deg,#FFD700,#FFF176);
+  transform:rotate(45deg);
+  border-radius:1px;
+  box-shadow:0 0 8px rgba(255,215,0,.95), 0 0 16px rgba(255,215,0,.4);
+  animation:diamondPulse ease-in-out infinite;
+}
+@keyframes diamondPulse {
+  0%,100%{ opacity:.35; transform:rotate(45deg) scale(.6); }
+  50%    { opacity:1;   transform:rotate(45deg) scale(1.3); }
+}
+
+/* Name glow card wrapper */
+.name-wrapper {
+  position:relative;
+  padding:5px 16px 7px;
+  border-radius:14px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,215,0,.2);
+  backdrop-filter:blur(6px);
+  box-shadow:
+    0 0 0 1px rgba(255,215,0,.08),
+    0 0 28px rgba(255,215,0,.2),
+    inset 0 1px 0 rgba(255,255,255,.1);
+  margin-bottom:5px;
+  animation:wrapGlow 2.8s ease-in-out infinite;
+}
+@keyframes wrapGlow {
+  0%,100%{ box-shadow:0 0 0 1px rgba(255,215,0,.08),0 0 22px rgba(255,215,0,.18),inset 0 1px 0 rgba(255,255,255,.1); }
+  50%    { box-shadow:0 0 0 2px rgba(255,215,0,.18),0 0 42px rgba(255,215,0,.38),inset 0 1px 0 rgba(255,255,255,.18); }
+}
+/* Deco lines beside label */
+.name-deco {
+  display:flex; align-items:center; justify-content:center; gap:7px;
+  margin-bottom:2px;
+  animation:fadeUp .4s ease .1s both;
+}
+.name-deco-line {
+  height:1px; width:24px;
+  background:linear-gradient(90deg,transparent,rgba(255,215,0,.65),transparent);
+}
+.name-deco-dot {
+  width:4px; height:4px; border-radius:50%;
+  background:rgba(255,215,0,.8);
+  box-shadow:0 0 5px rgba(255,215,0,.9);
+  animation:dotPulse 1.5s ease-in-out infinite;
 }
 
 /* Scroll hint */
@@ -691,14 +757,14 @@ body {
   animation: ribbonMove 2s linear infinite reverse;
 }
 
-/* Ad content viewport — clips the scaled iframe */
+/* Ad content viewport */
 .lr-ad-content {
   width: 50px;
   height: 80px;
   overflow: hidden;
   position: relative;
   flex-shrink: 0;
-  background: rgba(0,0,0,0.08);
+  background: rgba(0,0,0,0.06);
 }
 
 /* Emoji background decoration */
@@ -709,35 +775,33 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 18px;
-  opacity: 0.35;
+  opacity: 0.3;
 }
 
-/* Shimmer loading effect */
+/* Shimmer loading effect — only plays 3 times then stops */
 .lr-ad-content .lr-shimmer {
   position: absolute;
-  inset: 0; z-index: 3;
-  background: linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.5) 50%,transparent 100%);
+  inset: 0; z-index: 4;
+  background: linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.55) 50%,transparent 100%);
   background-size: 200% 100%;
-  animation: shimLoad 1.4s ease-in-out 3;
+  animation: shimLoad 1.2s ease-in-out 3;
   pointer-events: none;
 }
 
-/* Ad slot — iframe rendered at real size here, clipped by parent overflow:hidden */
+/* Ad slot — OVERFLOW VISIBLE so scaled iframe is not clipped */
 .lr-ad-content .lr-ad-slot {
   position: absolute;
   top: 0; left: 0;
   z-index: 2;
-  overflow: hidden;
+  overflow: visible;   /* ← KEY FIX: don't clip the scaled iframe */
   width: 50px;
   height: 80px;
 }
 
-/* The scaled iframe wrapper inside slot */
+/* The scaled iframe wrapper — positioned by JS */
 .lr-ad-content .lr-ad-slot .lr-iframe-wrap {
   position: absolute;
-  top: 0; left: 0;
   transform-origin: top left;
-  /* scale applied via JS */
 }
 
 /* Sparkle corners */
@@ -860,7 +924,16 @@ body {
       </svg>
 
       <p class="eid-label">Mubarak Ho</p>
-      <h1 class="eid-name" id="rName">—</h1>
+
+      <div class="name-wrapper">
+        <div class="name-deco">
+          <div class="name-deco-line"></div>
+          <div class="name-deco-dot"></div>
+          <div class="name-deco-line"></div>
+        </div>
+        <h1 class="eid-name" id="rName">—</h1>
+      </div>
+
       <div class="eid-mubarak-text">🎉 Eid Mubarak! 🌙</div>
 
       <span class="eid-pill">
@@ -1194,44 +1267,73 @@ function go(){
   setTimeout(spawnFloatEmojis, 400);
 }
 
-/* ── FLOATING EMOJIS around the name ── */
+/* ── CSS FESTIVAL DECORATIONS (no emoji) ── */
 function spawnFloatEmojis(){
   const hero = document.getElementById('eidHero');
-  // Remove old ones if any
-  const old = hero.querySelector('.eid-float-emojis');
+  const old  = hero.querySelector('.eid-float-emojis');
   if(old) old.remove();
 
-  const container = document.createElement('div');
-  container.className = 'eid-float-emojis';
+  const cont = document.createElement('div');
+  cont.className = 'eid-float-emojis';
 
-  const ems = ['🎉','🎊','✨','🌟','💛','🥳','🎁','💫','⭐','🌙','🎆','🎇'];
-  const W = hero.offsetWidth;
-  const H = hero.offsetHeight;
-
-  ems.forEach((em, i) => {
-    const el = document.createElement('span');
-    el.className = 'eid-em';
-    el.textContent = em;
-
-    // Spread around edges so they don't cover the name in center
-    const zone = i % 4; // 0=top-left, 1=top-right, 2=bottom-left, 3=bottom-right
-    let x, y;
-    if(zone===0){ x=5+Math.random()*35;  y=5+Math.random()*35; }
-    else if(zone===1){ x=60+Math.random()*35; y=5+Math.random()*35; }
-    else if(zone===2){ x=5+Math.random()*35;  y=60+Math.random()*35; }
-    else            { x=60+Math.random()*35; y=60+Math.random()*35; }
-
-    const dur = (2.5 + Math.random() * 2).toFixed(1);
-    const dly = (i * 0.08).toFixed(2);
-    el.style.cssText =
-      `left:${x}%;top:${y}%;` +
-      `animation-duration:${dur}s;` +
-      `animation-delay:${dly}s;`;
-
-    container.appendChild(el);
+  // 1. Gold rays shooting from center in all directions
+  const rayColors = ['#FFD700','#FFF176','#FFFFFF','#FFE566','#FFA500'];
+  const rayAngles = [0,30,60,90,120,150,180,210,240,270,300,330];
+  rayAngles.forEach((angle, i) => {
+    const ray = document.createElement('div');
+    ray.className = 'eid-ray';
+    const color = rayColors[i % rayColors.length];
+    ray.style.cssText =
+      `transform:rotate(${angle}deg);` +
+      `background:linear-gradient(to top, ${color}, transparent);` +
+      `animation-duration:${1.2 + (i%3)*0.2}s;` +
+      `animation-delay:${i*0.06}s;`;
+    cont.appendChild(ray);
   });
 
-  hero.appendChild(container);
+  // 2. Orbiting glowing dots — 3 orbits
+  const orbits = [
+    { r:'55px', count:4, size:4, dur:'4s' },
+    { r:'80px', count:5, size:3, dur:'6s' },
+    { r:'110px', count:6, size:2.5, dur:'9s', reverse:true },
+  ];
+  orbits.forEach(o => {
+    for(let i=0; i<o.count; i++){
+      const orbit = document.createElement('div');
+      orbit.className = 'eid-orbit';
+      orbit.style.cssText =
+        `animation-duration:${o.dur};` +
+        `animation-direction:${o.reverse?'reverse':'normal'};` +
+        `animation-delay:${-(i/o.count * parseFloat(o.dur)).toFixed(1)}s;`;
+
+      const dot = document.createElement('div');
+      dot.className = 'eid-orbit-dot';
+      dot.style.cssText =
+        `width:${o.size}px;height:${o.size}px;` +
+        `--r:${o.r};`;
+      orbit.appendChild(dot);
+      cont.appendChild(orbit);
+    }
+  });
+
+  // 3. Corner + edge gold diamonds
+  const dPositions = [
+    'top:12%;left:10%', 'top:12%;right:10%',
+    'top:35%;left:5%',  'top:35%;right:5%',
+    'bottom:20%;left:8%','bottom:20%;right:8%',
+    'top:60%;left:3%',  'top:60%;right:3%',
+  ];
+  dPositions.forEach((pos, i) => {
+    const d = document.createElement('div');
+    d.className = 'eid-diamond';
+    d.style.cssText =
+      `${pos};` +
+      `animation-duration:${1.8 + i*0.25}s;` +
+      `animation-delay:${i*0.12}s;`;
+    cont.appendChild(d);
+  });
+
+  hero.appendChild(cont);
 }
 
 /* ── FIREWORKS ── */
@@ -1475,13 +1577,17 @@ function injectAd(slotIdx){
   if(!box || box.dataset.loaded) return;
   box.dataset.loaded = '1';
 
-  const ad    = LR_AD_KEYS[slotIdx % LR_AD_KEYS.length];
-  const VW=50, VH=80;
-  // 160px wide ad → scale = 50/160 = 0.3125 (visible to ad network ✓)
+  const ad = LR_AD_KEYS[slotIdx % LR_AD_KEYS.length];
+  const VW = 50, VH = 80;
+
+  // Scale to fill WIDTH exactly (50px), then clip height via overflow:hidden
+  // 160 → 50px = scale 0.3125
+  // 160×300 → scaled: 50×93.75 → slightly taller than 80, tiny clip ✓
+  // 160×600 → scaled: 50×187.5 → tall, center it so middle shows
   const scale = VW / ad.w;
-  // Center vertically: scaled height = ad.h * scale
   const scaledH = ad.h * scale;
-  const oy = (VH - scaledH) / 2;
+  // Center vertically — show middle portion of tall ads
+  const topOffset = (VH - scaledH) / 2; // negative for tall ads = shows center
 
   const iwrap = document.createElement('div');
   iwrap.className = 'lr-iframe-wrap';
@@ -1491,7 +1597,7 @@ function injectAd(slotIdx){
     `transform:scale(${scale});` +
     `transform-origin:top left;` +
     `position:absolute;` +
-    `top:${(oy/scale).toFixed(1)}px;` +
+    `top:${(topOffset / scale).toFixed(1)}px;` +
     `left:0px;`;
 
   // atOptions MUST come before invoke.js in same scope
