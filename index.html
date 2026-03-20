@@ -1434,7 +1434,7 @@ const LR_COLORS = [
   { bg:'linear-gradient(160deg,#FCA5A5,#FBBF24)', border:'#FCA5A5' },
 ];
 
-// Ad keys — only 160px wide (reliable scale factor)
+// Ad keys — only 160px wide ads
 const LR_ADS = [
   { key:'429cefeb3637e3ee06cdac632b55d6f0', w:160, h:300 },
   { key:'5eb43a7cd09c34bf77353a2c8b638efc', w:160, h:600 },
@@ -1443,8 +1443,8 @@ const LR_ADS = [
 let lrColLeft=null, lrColRight=null, lrActive=false;
 
 function buildLRBox(boxIdx, adIdx){
-  const ad = LR_ADS[adIdx % LR_ADS.length];
-  const c  = LR_COLORS[boxIdx % LR_COLORS.length];
+  const ad  = LR_ADS[adIdx % LR_ADS.length];
+  const c   = LR_COLORS[boxIdx % LR_COLORS.length];
   const spd = (3.2 + boxIdx * 0.1).toFixed(1);
   const dly = (boxIdx * 0.22).toFixed(1);
 
@@ -1452,34 +1452,41 @@ function buildLRBox(boxIdx, adIdx){
   box.className = 'lr-box';
   box.style.cssText = `animation-duration:${spd}s;animation-delay:-${dly}s;`;
 
-  // Inner viewport — clips the scaled ad
+  // Inner viewport
   const inner = document.createElement('div');
   inner.className = 'lr-box-inner';
   inner.style.background = c.bg;
 
-  // Shimmer bar
+  // Shimmer
   const shimmer = document.createElement('div');
   shimmer.className = 'lr-shimmer-bar';
   inner.appendChild(shimmer);
 
-  // Scaled iframe host
+  // ─────────────────────────────────────────────────
+  // GUARANTEED METHOD: srcdoc iframe
+  // atOptions + invoke.js INSIDE the iframe's own HTML
+  // No scope issues — everything runs in iframe context
+  // ─────────────────────────────────────────────────
   const scale = (50 / ad.w).toFixed(5); // 50/160 = 0.3125
-  const host  = document.createElement('div');
-  host.className  = 'lr-iframe-host';
-  host.style.cssText =
-    `width:${ad.w}px;height:${ad.h}px;` +
-    `transform:scale(${scale});transform-origin:top left;`;
 
-  // atOptions + invoke — MUST be in same inline context
-  const s1   = document.createElement('script');
-  s1.text    = `atOptions={key:'${ad.key}',format:'iframe',height:${ad.h},width:${ad.w},params:{}};`;
-  const s2   = document.createElement('script');
-  s2.src     = `https://www.highperformanceformat.com/${ad.key}/invoke.js`;
-  s2.async   = true;
+  const iframeHTML =
+    `<!DOCTYPE html><html><head>` +
+    `<style>*{margin:0;padding:0;overflow:hidden;}</style>` +
+    `</head><body>` +
+    `<div style="width:${ad.w}px;height:${ad.h}px;transform:scale(${scale});transform-origin:top left;">` +
+    `<script>var atOptions={key:'${ad.key}',format:'iframe',height:${ad.h},width:${ad.w},params:{}};<\/script>` +
+    `<script src="https://www.highperformanceformat.com/${ad.key}/invoke.js"><\/script>` +
+    `</div></body></html>`;
 
-  host.appendChild(s1);
-  host.appendChild(s2);
-  inner.appendChild(host);
+  const iframe = document.createElement('iframe');
+  iframe.scrolling   = 'no';
+  iframe.frameBorder = '0';
+  iframe.style.cssText =
+    `width:50px;height:80px;border:none;display:block;` +
+    `position:absolute;top:0;left:0;z-index:2;background:transparent;`;
+  iframe.srcdoc = iframeHTML;
+
+  inner.appendChild(iframe);
   box.appendChild(inner);
 
   // Corner sparkles
@@ -1490,7 +1497,7 @@ function buildLRBox(boxIdx, adIdx){
     {bottom:'-3px',right:'-3px',delay:'2s'},
   ].forEach(sp => {
     const s = document.createElement('span');
-    s.className = 'lr-spark';
+    s.className   = 'lr-spark';
     s.textContent = '✦';
     s.style.cssText = Object.entries(sp).map(([k,v])=>`${k}:${v}`).join(';') + `;color:${c.border};`;
     box.appendChild(s);
