@@ -237,7 +237,8 @@ body {
   align-items: center;
   justify-content: center;
   background: linear-gradient(145deg, var(--p) 0%, #4840D4 50%, var(--b) 100%);
-  padding: 40px 20px;
+  /* 54px left/right = 50px ad width + 4px gap */
+  padding: 40px 54px;
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -364,7 +365,8 @@ body {
 /* ══ CONTENT BELOW HERO ══ */
 .r-content {
   width: 100%; max-width: 420px;
-  padding: 28px 16px 0;
+  /* 54px padding on each side = 50px ad + 4px breathing room */
+  padding: 28px 54px 0;
   display: flex; flex-direction: column;
   gap: 14px; position:relative; z-index:1;
 }
@@ -533,12 +535,12 @@ body {
 }
 
 /* ══════════════════════════════════════════
-   LEFT/RIGHT CELEBRATION AD FRAMES
-   — Phone optimized, 7 left + 7 right = 14
+   LEFT/RIGHT AD FRAMES — IMPRESSION-SAFE
+   50px wide × 80px tall — MRC viewability ok
    ══════════════════════════════════════════ */
 @keyframes lrFloat {
-  0%,100%{ transform:translateY(0) rotate(-0.8deg); }
-  50%    { transform:translateY(-5px) rotate(0.8deg); }
+  0%,100%{ transform:translateY(0); }
+  50%    { transform:translateY(-4px); }
 }
 @keyframes ribbonMove {
   0%  { background-position:0% 50%; }
@@ -553,8 +555,8 @@ body {
   50%    { opacity:1; transform:scale(1); }
 }
 @keyframes lrGlow {
-  0%,100%{ filter:brightness(1); }
-  50%    { filter:brightness(1.08); }
+  0%,100%{ box-shadow:0 2px 10px rgba(0,0,0,0.2); }
+  50%    { box-shadow:0 4px 18px rgba(0,0,0,0.35); }
 }
 
 /* ══════════════════════════════════════════
@@ -586,123 +588,127 @@ body {
   filter:drop-shadow(0 4px 10px rgba(0,0,0,0.2));
 }
 
+/* Outer wrapper — fixed position on screen edge */
 .lr-ad-wrap {
-  position:fixed;
-  z-index:950;
-  pointer-events:auto;
-  opacity:0;
-  transition:opacity 0.4s ease;
+  position: fixed;
+  z-index: 950;
+  pointer-events: auto;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  /* Width = box width exactly */
+  width: 50px;
 }
-.lr-ad-wrap.lr-visible { opacity:1; }
-.lr-ad-wrap.lr-hiding  { opacity:0; }
+.lr-ad-wrap.lr-visible { opacity: 1; }
+.lr-ad-wrap.lr-hiding  { opacity: 0; }
 
-/* Main celebration box */
+/* Floating animation on inner box */
 .lr-ad-inner {
-  width:29px;
-  border-radius:6px;
-  overflow:visible;
-  display:flex;
-  flex-direction:column;
-  position:relative;
-  animation:lrFloat 3s ease-in-out infinite, lrGlow 3s ease-in-out infinite;
+  width: 50px;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  animation: lrFloat 3.5s ease-in-out infinite, lrGlow 3.5s ease-in-out infinite;
 }
 
 /* Rainbow ribbon top */
 .lr-ad-inner::before {
-  content:'';
-  display:block;
-  height:2.5px;
-  border-radius:10px 10px 0 0;
-  flex-shrink:0;
-  background:linear-gradient(90deg,#FFD700,#FF6B9D,#A78BFA,#38BDF8,#FFD700,#FF6B9D,#A78BFA);
-  background-size:300% 100%;
-  animation:ribbonMove 2s linear infinite;
+  content: '';
+  display: block;
+  height: 3px;
+  border-radius: 8px 8px 0 0;
+  flex-shrink: 0;
+  background: linear-gradient(90deg,#FFD700,#FF6B9D,#A78BFA,#38BDF8,#FFD700,#FF6B9D,#A78BFA);
+  background-size: 300% 100%;
+  animation: ribbonMove 2s linear infinite;
 }
 /* Rainbow ribbon bottom */
 .lr-ad-inner::after {
-  content:'';
-  display:block;
-  height:2.5px;
-  border-radius:0 0 10px 10px;
-  flex-shrink:0;
-  background:linear-gradient(90deg,#38BDF8,#A78BFA,#FF6B9D,#FFD700,#38BDF8,#A78BFA);
-  background-size:300% 100%;
-  animation:ribbonMove 2s linear infinite reverse;
+  content: '';
+  display: block;
+  height: 3px;
+  border-radius: 0 0 8px 8px;
+  flex-shrink: 0;
+  background: linear-gradient(90deg,#38BDF8,#A78BFA,#FF6B9D,#FFD700,#38BDF8,#A78BFA);
+  background-size: 300% 100%;
+  animation: ribbonMove 2s linear infinite reverse;
 }
 
-/* Ad content area */
+/* Ad content viewport — clips the scaled iframe */
 .lr-ad-content {
-  width:29px;
-  height:26px;
-  overflow:hidden;
-  position:relative;
-  flex-shrink:0;
-  border-left:1px solid rgba(255,255,255,0.25);
-  border-right:1px solid rgba(255,255,255,0.25);
+  width: 50px;
+  height: 80px;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+  background: rgba(0,0,0,0.08);
 }
+
+/* Emoji background decoration */
 .lr-ad-content .lr-cel-bg {
-  position:absolute;
-  inset:0; z-index:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:10px;
+  position: absolute;
+  inset: 0; z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  opacity: 0.35;
 }
-/* iframe wrapper — real size rendered, CSS scaled so browser counts impression */
-.lr-ad-content .lr-ad-slot {
-  position:absolute;
-  inset:0; z-index:1;
-  overflow:visible;
-}
-.lr-ad-content .lr-ad-slot > div {
-  position:absolute;
-  top:0; left:0; z-index:1;
-  /* Scale DOWN visually but keep real pixel size for ad network impression counting */
-  transform-origin: top left;
-}
+
+/* Shimmer loading effect */
 .lr-ad-content .lr-shimmer {
-  position:absolute;
-  inset:0; z-index:2;
-  background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.45) 50%,transparent 100%);
-  background-size:200% 100%;
-  animation:shimLoad 1.6s ease-in-out infinite;
-  pointer-events:none;
+  position: absolute;
+  inset: 0; z-index: 3;
+  background: linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.5) 50%,transparent 100%);
+  background-size: 200% 100%;
+  animation: shimLoad 1.4s ease-in-out 3;
+  pointer-events: none;
 }
+
+/* Ad slot — iframe rendered at real size here, clipped by parent overflow:hidden */
 .lr-ad-content .lr-ad-slot {
-  position:absolute;
-  inset:0; z-index:1;
-  overflow:hidden;
+  position: absolute;
+  top: 0; left: 0;
+  z-index: 2;
+  overflow: hidden;
+  width: 50px;
+  height: 80px;
 }
-.lr-ad-content .lr-ad-slot > div {
-  position:absolute;
-  top:0; left:0; z-index:1;
+
+/* The scaled iframe wrapper inside slot */
+.lr-ad-content .lr-ad-slot .lr-iframe-wrap {
+  position: absolute;
+  top: 0; left: 0;
+  transform-origin: top left;
+  /* scale applied via JS */
 }
 
 /* Sparkle corners */
 .lr-spark {
-  position:absolute;
-  font-size:4px;
-  pointer-events:none;
-  z-index:6;
-  animation:lrSpark 2s ease-in-out infinite;
+  position: absolute;
+  font-size: 5px;
+  pointer-events: none;
+  z-index: 6;
+  animation: lrSpark 2s ease-in-out infinite;
 }
 
 /* Close button */
 .lr-close {
-  position:absolute;
-  top:2px; right:1px;
-  width:8px; height:8px;
-  border-radius:50%;
-  background:rgba(0,0,0,0.35);
-  border:1px solid rgba(255,255,255,0.4);
-  color:#fff;
-  font-size:4px; font-weight:900;
-  cursor:pointer;
-  display:flex; align-items:center; justify-content:center;
-  z-index:10; padding:0; line-height:1;
-  transition:background .15s;
+  position: absolute;
+  top: 3px; right: 2px;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.5);
+  color: #fff;
+  font-size: 6px; font-weight: 900;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 10; padding: 0; line-height: 1;
+  transition: background .15s;
 }
-.lr-close:hover { background:rgba(220,50,50,0.9); }
+.lr-close:hover { background: rgba(220,50,50,0.9); }
 </style>
 </head>
 <body>
@@ -1310,21 +1316,20 @@ const LR_ADS = [
 
 let lrSlots=[], lrTimers=[], lrActive=false;
 
-// 7 left + 7 right — screen height se evenly fill karo, proper gap
+// 7 left + 7 right — screen height se evenly distribute, proper gap
 function getLRPositions(){
-  const H   = window.innerHeight;
-  const BOX = 31;  // height of each ad box (26px content + 5px ribbons)
-  const SLOTS= 7;
-  // Total height needed: 7 * 31 = 217px
-  // Distribute evenly across full screen height with good spacing
-  const gap  = Math.max(8, Math.floor((H - (SLOTS * BOX)) / (SLOTS + 1)));
-  const pos  = [];
-  for(let i=0;i<SLOTS;i++){
-    const top = gap + i*(BOX+gap);
-    pos.push({ top: top+'px', left:'0px'  }); // left side
-    pos.push({ top: top+'px', right:'0px' }); // right side
+  const H     = window.innerHeight;
+  const BOX   = 86;   // 80px content + 3px top ribbon + 3px bottom ribbon
+  const SLOTS = 7;
+  // Evenly space 7 boxes across full screen height
+  const gap   = Math.max(10, Math.floor((H - (SLOTS * BOX)) / (SLOTS + 1)));
+  const pos   = [];
+  for(let i = 0; i < SLOTS; i++){
+    const top = gap + i * (BOX + gap);
+    pos.push({ top: top + 'px', left:  '0px' }); // left side
+    pos.push({ top: top + 'px', right: '0px' }); // right side
   }
-  return pos; // 14 positions
+  return pos; // 14 positions total
 }
 
 function buildLRSlot(i, positions){
@@ -1352,16 +1357,14 @@ function buildLRSlot(i, positions){
 
   wrap.innerHTML = `
     <div class="lr-ad-inner"
-      style="background:${c.bg};
-             animation-duration:${spd}s;
-             animation-delay:${dly}s;
-             box-shadow:0 3px 14px ${c.border}55,0 0 0 1px ${c.border}33;">
+      style="animation-duration:${spd}s;
+             animation-delay:${dly}s;">
       ${sparks}
       <button class="lr-close" onclick="closeLRSlot(${i})">&#x2715;</button>
-      <div class="lr-ad-content">
-        <div class="lr-cel-bg" style="background:${c.bg};">${c.em}</div>
-        <div class="lr-shimmer"></div>
+      <div class="lr-ad-content" style="background:${c.bg};">
+        <div class="lr-cel-bg">${c.em}</div>
         <div class="lr-ad-slot" id="lr-slot-${i}"></div>
+        <div class="lr-shimmer"></div>
       </div>
     </div>`;
 
@@ -1370,49 +1373,49 @@ function buildLRSlot(i, positions){
 }
 
 function loadLRAd(i, adIdx){
-  const box = document.getElementById('lr-slot-'+i);
+  const box = document.getElementById('lr-slot-' + i);
   if(!box) return;
-  const ad  = LR_ADS[adIdx % LR_ADS.length];
+  const ad = LR_ADS[adIdx % LR_ADS.length];
 
-  // Visual container size
-  const TW=29, TH=26;
+  // Visible viewport of our box (must match CSS)
+  const VW = 50, VH = 80;
 
-  // Scale factor: fit real ad into visual box
-  const scale = Math.min(TW/ad.w, TH/ad.h);
+  // Scale to FIT entire ad inside viewport (letterbox style)
+  // Math.min = fit inside (no overflow), impression counts because iframe is visible
+  const scale = Math.min(VW / ad.w, VH / ad.h);
 
-  // Center offset
-  const ox = (TW - ad.w*scale)/2;
-  const oy = (TH - ad.h*scale)/2;
+  // Center the scaled ad inside the viewport
+  const scaledW = ad.w * scale;
+  const scaledH = ad.h * scale;
+  const ox = (VW - scaledW) / 2;
+  const oy = (VH - scaledH) / 2;
 
-  box.innerHTML='';
+  // Clear old ad
+  box.innerHTML = '';
 
-  // Outer div: positions correctly in the clipped visual area
-  const wrapper = document.createElement('div');
-  wrapper.style.cssText = [
-    `width:${ad.w}px`,
-    `height:${ad.h}px`,
-    `transform:scale(${scale.toFixed(4)})`,
-    `transform-origin:top left`,
-    `position:absolute`,
-    `top:${oy/scale}px`,
-    `left:${ox/scale}px`,
-    `z-index:1`,
-    // Keep iframe VISIBLE to browser so ad network counts impression
-    `pointer-events:auto`,
-    `opacity:1`,
-  ].join(';');
+  // Wrapper at real ad dimensions, scaled + positioned
+  const wrap = document.createElement('div');
+  wrap.className = 'lr-iframe-wrap';
+  wrap.style.cssText =
+    `width:${ad.w}px;` +
+    `height:${ad.h}px;` +
+    `transform:scale(${scale.toFixed(5)});` +
+    `transform-origin:top left;` +
+    `position:absolute;` +
+    `top:${oy / scale}px;` +
+    `left:${ox / scale}px;`;
 
-  // atOptions FIRST, then invoke script
+  // atOptions must come BEFORE invoke.js
   const s1 = document.createElement('script');
-  s1.text  = `var atOptions={key:'${ad.key}',format:'iframe',height:${ad.h},width:${ad.w},params:{}};`;
+  s1.text = `var atOptions={key:'${ad.key}',format:'iframe',height:${ad.h},width:${ad.w},params:{}};`;
 
   const s2 = document.createElement('script');
   s2.src   = ad.src;
   s2.async = true;
 
-  wrapper.appendChild(s1);
-  wrapper.appendChild(s2);
-  box.appendChild(wrapper);
+  wrap.appendChild(s1);
+  wrap.appendChild(s2);
+  box.appendChild(wrap);
 }
 
 function closeLRSlot(i){
