@@ -598,8 +598,8 @@ body {
 
 /* Main celebration box */
 .lr-ad-inner {
-  width:58px;
-  border-radius:10px;
+  width:29px;
+  border-radius:6px;
   overflow:visible;
   display:flex;
   flex-direction:column;
@@ -632,13 +632,13 @@ body {
 
 /* Ad content area */
 .lr-ad-content {
-  width:58px;
-  height:52px;
+  width:29px;
+  height:26px;
   overflow:hidden;
   position:relative;
   flex-shrink:0;
-  border-left:1.5px solid rgba(255,255,255,0.25);
-  border-right:1.5px solid rgba(255,255,255,0.25);
+  border-left:1px solid rgba(255,255,255,0.25);
+  border-right:1px solid rgba(255,255,255,0.25);
 }
 .lr-ad-content .lr-cel-bg {
   position:absolute;
@@ -646,7 +646,19 @@ body {
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:20px;
+  font-size:10px;
+}
+/* iframe wrapper — real size rendered, CSS scaled so browser counts impression */
+.lr-ad-content .lr-ad-slot {
+  position:absolute;
+  inset:0; z-index:1;
+  overflow:visible;
+}
+.lr-ad-content .lr-ad-slot > div {
+  position:absolute;
+  top:0; left:0; z-index:1;
+  /* Scale DOWN visually but keep real pixel size for ad network impression counting */
+  transform-origin: top left;
 }
 .lr-ad-content .lr-shimmer {
   position:absolute;
@@ -669,7 +681,7 @@ body {
 /* Sparkle corners */
 .lr-spark {
   position:absolute;
-  font-size:6px;
+  font-size:4px;
   pointer-events:none;
   z-index:6;
   animation:lrSpark 2s ease-in-out infinite;
@@ -678,13 +690,13 @@ body {
 /* Close button */
 .lr-close {
   position:absolute;
-  top:4px; right:3px;
-  width:11px; height:11px;
+  top:2px; right:1px;
+  width:8px; height:8px;
   border-radius:50%;
   background:rgba(0,0,0,0.35);
   border:1px solid rgba(255,255,255,0.4);
   color:#fff;
-  font-size:5px; font-weight:900;
+  font-size:4px; font-weight:900;
   cursor:pointer;
   display:flex; align-items:center; justify-content:center;
   z-index:10; padding:0; line-height:1;
@@ -1298,14 +1310,14 @@ const LR_ADS = [
 
 let lrSlots=[], lrTimers=[], lrActive=false;
 
-// 7 left + 7 right — screen height se evenly fill karo, zero gap
+// 7 left + 7 right — screen height se evenly fill karo, proper gap
 function getLRPositions(){
   const H   = window.innerHeight;
-  const BOX = 57;  // height of each ad box (52px content + 5px ribbons)
+  const BOX = 31;  // height of each ad box (26px content + 5px ribbons)
   const SLOTS= 7;
-  // Total height needed: 7 * 57 = 399px
-  // Distribute evenly across full screen height
-  const gap  = Math.max(0, Math.floor((H - (SLOTS * BOX)) / (SLOTS + 1)));
+  // Total height needed: 7 * 31 = 217px
+  // Distribute evenly across full screen height with good spacing
+  const gap  = Math.max(8, Math.floor((H - (SLOTS * BOX)) / (SLOTS + 1)));
   const pos  = [];
   for(let i=0;i<SLOTS;i++){
     const top = gap + i*(BOX+gap);
@@ -1361,18 +1373,45 @@ function loadLRAd(i, adIdx){
   const box = document.getElementById('lr-slot-'+i);
   if(!box) return;
   const ad  = LR_ADS[adIdx % LR_ADS.length];
-  const TW=58, TH=52;
-  const scale = Math.max(TW/ad.w, TH/ad.h);
+
+  // Visual container size
+  const TW=29, TH=26;
+
+  // Scale factor: fit real ad into visual box
+  const scale = Math.min(TW/ad.w, TH/ad.h);
+
+  // Center offset
   const ox = (TW - ad.w*scale)/2;
   const oy = (TH - ad.h*scale)/2;
+
   box.innerHTML='';
+
+  // Outer div: positions correctly in the clipped visual area
   const wrapper = document.createElement('div');
-  wrapper.style.cssText = `width:${ad.w}px;height:${ad.h}px;transform:scale(${scale});transform-origin:top left;position:absolute;top:${oy/scale}px;left:${ox/scale}px;z-index:1;`;
+  wrapper.style.cssText = [
+    `width:${ad.w}px`,
+    `height:${ad.h}px`,
+    `transform:scale(${scale.toFixed(4)})`,
+    `transform-origin:top left`,
+    `position:absolute`,
+    `top:${oy/scale}px`,
+    `left:${ox/scale}px`,
+    `z-index:1`,
+    // Keep iframe VISIBLE to browser so ad network counts impression
+    `pointer-events:auto`,
+    `opacity:1`,
+  ].join(';');
+
+  // atOptions FIRST, then invoke script
   const s1 = document.createElement('script');
   s1.text  = `var atOptions={key:'${ad.key}',format:'iframe',height:${ad.h},width:${ad.w},params:{}};`;
+
   const s2 = document.createElement('script');
-  s2.src   = ad.src; s2.async=true;
-  wrapper.appendChild(s1); wrapper.appendChild(s2);
+  s2.src   = ad.src;
+  s2.async = true;
+
+  wrapper.appendChild(s1);
+  wrapper.appendChild(s2);
   box.appendChild(wrapper);
 }
 
@@ -1389,20 +1428,29 @@ function startLRAds(){
   for(let i=0;i<14;i++){
     lrSlots[i] = buildLRSlot(i, positions);
     let cur = i;
+
+    // Staggered start — each slot loads with slight delay
     setTimeout(()=>{
       loadLRAd(i, cur);
       lrSlots[i].classList.add('lr-visible');
+
+      // Rotate every 5 seconds
       lrTimers[i] = setInterval(()=>{
+        // Fade out
         lrSlots[i].classList.remove('lr-visible');
         lrSlots[i].classList.add('lr-hiding');
+
+        // After fade, load next ad and fade back in
         setTimeout(()=>{
           cur++;
           loadLRAd(i, cur);
           lrSlots[i].classList.remove('lr-hiding');
           lrSlots[i].classList.add('lr-visible');
-        }, 350);
-      }, 5000);
-    }, 80 + i*100);
+        }, 400);
+
+      }, 5000); // rotate every 5 seconds
+
+    }, 80 + i * 120); // staggered: slot 0 = 80ms, slot 13 = ~1680ms
   }
 }
 
