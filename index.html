@@ -227,7 +227,6 @@ body {
 }
 
 /* ══ EID GREETING HERO — FULL SCREEN CENTER ══ */
-/* ══ EID GREETING HERO — FULL CELEBRATION ══ */
 .eid-hero {
   width: 100%;
   min-height: 100vh;
@@ -236,251 +235,207 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(145deg, #3730a3 0%, #4840D4 45%, #1d4ed8 100%);
+  background: linear-gradient(145deg, var(--p) 0%, #4840D4 50%, var(--b) 100%);
   padding: 40px 54px;
   text-align: center;
   position: relative;
   overflow: hidden;
 }
+
 .eid-hero::before {
-  content:''; position:absolute; inset:-60px;
-  background: repeating-conic-gradient(rgba(255,255,255,.03) 0deg 1deg, transparent 1deg 20deg);
-  animation: heroSpin 60s linear infinite;
-}
-/* Gold radial glow behind name */
-.eid-hero::after {
-  content:'';
-  position:absolute;
-  width:320px; height:320px;
-  border-radius:50%;
-  background: radial-gradient(circle, rgba(255,215,0,.22) 0%, transparent 70%);
-  top:50%; left:50%;
-  transform:translate(-50%,-50%);
-  animation: heroGlow 2.8s ease-in-out infinite;
-  pointer-events:none; z-index:1;
-}
-@keyframes heroGlow {
-  0%,100%{ opacity:.5; transform:translate(-50%,-50%) scale(1); }
-  50%    { opacity:1;  transform:translate(-50%,-50%) scale(1.35); }
+  content:''; position:absolute; inset:-50px;
+  background: repeating-conic-gradient(rgba(255,255,255,.025) 0deg 1deg, transparent 1deg 24deg);
+  animation: heroSpin 50s linear infinite;
 }
 @keyframes heroSpin { to{transform:rotate(360deg)} }
 
-.star-field { position:absolute; inset:0; pointer-events:none; z-index:0; }
+.star-field {
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+}
 .star {
-  position:absolute; border-radius:50%;
-  background:rgba(255,255,255,.8);
-  animation:starTwinkle ease-in-out infinite;
+  position: absolute; border-radius: 50%;
+  background: rgba(255,255,255,.6);
+  animation: starTwinkle ease-in-out infinite;
 }
 @keyframes starTwinkle {
-  0%,100%{opacity:.2;transform:scale(1)}
-  50%{opacity:1;transform:scale(1.6)}
+  0%,100%{opacity:.3;transform:scale(1)}
+  50%{opacity:1;transform:scale(1.4)}
 }
 
 .eid-inner {
-  position:relative; z-index:2;
-  display:flex; flex-direction:column;
-  align-items:center; gap:0;
+  position: relative; z-index: 2;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 0;
 }
 
-/* Moon */
 .eid-moon {
-  width:68px; height:68px;
-  margin-bottom:12px;
-  animation:moonFloat 3.2s ease-in-out infinite;
+  width: 100px; height: 100px;
+  margin-bottom: 24px;
+  animation: moonFloat 3s ease-in-out infinite;
   filter:
-    drop-shadow(0 0 10px rgba(255,255,255,.55))
-    drop-shadow(0 0 26px rgba(255,215,0,.55));
+    drop-shadow(0 0 20px rgba(255,255,255,0.5))
+    drop-shadow(0 0 40px rgba(91,79,232,0.8));
 }
 @keyframes moonFloat {
-  0%,100%{transform:translateY(0) rotate(-4deg)}
-  50%{transform:translateY(-11px) rotate(4deg)}
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-10px)}
 }
 
-/* "Mubarak Ho" label */
 .eid-label {
-  font-size:.62rem; font-weight:800;
-  letter-spacing:5px; text-transform:uppercase;
-  color:rgba(255,255,255,.55);
-  margin-bottom:4px;
-  animation:fadeUp .5s ease both;
-}
-@keyframes fadeUp {
-  from{opacity:0;transform:translateY(10px)}
-  to{opacity:1;transform:translateY(0)}
+  font-size: .75rem; font-weight: 800;
+  letter-spacing: 4px; text-transform: uppercase;
+  color: rgba(255,255,255,.55);
+  margin-bottom: 8px;
 }
 
-/* ★ NAME — THE STAR OF THE SHOW ★ */
 .eid-name {
-  font-family:'Plus Jakarta Sans',sans-serif;
-  font-size:clamp(2.1rem, 10vw, 3.2rem);
-  font-weight:900;
-  line-height:1.05;
-  margin-bottom:5px;
-  background:linear-gradient(135deg,
-    #FFE566 0%, #FFFFFF 28%,
-    #FFD700 50%, #FFFFFF 72%,
-    #FFE566 100%);
-  background-size:300% 100%;
-  -webkit-background-clip:text; background-clip:text;
-  -webkit-text-fill-color:transparent;
-  filter:drop-shadow(0 0 16px rgba(255,215,0,.8))
-         drop-shadow(0 0 32px rgba(255,215,0,.4));
+  font-family: 'Fraunces', serif;
+  font-size: clamp(2.4rem, 9vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 6px;
+  color: #fff;
+  text-shadow: 0 2px 20px rgba(0,0,0,.2);
+  /* default state — JS triggers the cinematic sequence */
+}
+
+/* ── PHASE 1: ZOOM IN big, then freeze ── */
+.name-phase-zoom {
+  animation: nameZoomIn .6s cubic-bezier(.22,1,.36,1) both !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  text-shadow:
+    0 0 40px rgba(255,255,255,.9),
+    0 0 80px rgba(255,255,255,.5) !important;
+}
+@keyframes nameZoomIn {
+  0%   { opacity:0; transform:scale(8) translateY(-20px); filter:blur(12px); }
+  70%  { opacity:1; transform:scale(1.05); filter:blur(0); }
+  100% { opacity:1; transform:scale(1); }
+}
+
+/* ── PHASE 2: SHATTER — letters scatter ── */
+.name-phase-shatter {
+  animation: nameShatter .35s ease-in both !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+@keyframes nameShatter {
+  0%  { opacity:1; transform:scale(1); filter:blur(0); }
+  100%{ opacity:0; transform:scale(2.5) rotate(8deg); filter:blur(16px); letter-spacing:24px; }
+}
+
+/* ── PHASE 3: REJOIN — letters come back together ── */
+.name-phase-rejoin {
+  animation: nameRejoin .55s cubic-bezier(.34,1.56,.64,1) both !important;
+  background: linear-gradient(135deg, #FFD700 0%, #FF6BCB 35%, #A78BFA 65%, #38BDF8 100%) !important;
+  background-size: 300% 100% !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  filter: drop-shadow(0 0 12px rgba(255,215,0,.8))
+          drop-shadow(0 2px 0 rgba(0,0,0,.4)) !important;
+  paint-order: stroke fill !important;
+}
+@keyframes nameRejoin {
+  0%  { opacity:0; transform:scale(0.1); letter-spacing:32px; filter:blur(20px) drop-shadow(0 0 0 transparent); }
+  60% { opacity:1; transform:scale(1.08); letter-spacing:1px; }
+  100%{ opacity:1; transform:scale(1); letter-spacing:0; }
+}
+
+/* ── PHASE 4: FLOAT + COLOR CYCLE + STROKE ── */
+.name-phase-final {
+  background: linear-gradient(135deg, #FFD700 0%, #FF6BCB 35%, #A78BFA 65%, #38BDF8 100%) !important;
+  background-size: 300% 100% !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  filter: drop-shadow(0 0 16px rgba(255,215,0,.7))
+          drop-shadow(0 3px 0 rgba(0,0,0,.5)) !important;
   animation:
-    nameEntry .75s cubic-bezier(.22,1,.36,1) both,
-    nameShine 2.2s linear .75s infinite;
+    nameFloat 2.2s ease-in-out infinite,
+    nameColorCycle 3s linear infinite !important;
 }
-@keyframes nameEntry {
-  0%  { opacity:0; filter:drop-shadow(0 0 0px rgba(255,215,0,0)) blur(8px);
-        transform:scale(.4) translateY(40px); }
-  55% { opacity:1; transform:scale(1.12) translateY(-8px); }
-  100%{ opacity:1; filter:drop-shadow(0 0 16px rgba(255,215,0,.8)) drop-shadow(0 0 32px rgba(255,215,0,.4)) blur(0);
-        transform:scale(1) translateY(0); }
+@keyframes nameFloat {
+  0%,100%{ transform: translateY(0) scale(1); }
+  50%    { transform: translateY(-10px) scale(1.03); }
 }
-@keyframes nameShine {
-  0%  { background-position:100% 0; }
-  100%{ background-position:-100% 0; }
+@keyframes nameColorCycle {
+  0%  { background-position: 0% 0; }
+  100%{ background-position: 300% 0; }
 }
 
-/* Eid Mubarak subtext */
+/* Eid Mubarak text — slides up from name */
 .eid-mubarak-text {
-  font-family:'Plus Jakarta Sans',sans-serif;
-  font-size:clamp(.95rem, 4.5vw, 1.4rem);
-  font-weight:700;
-  color:rgba(255,255,255,.93);
-  letter-spacing:.4px;
-  margin-bottom:12px;
-  animation:fadeUp .5s ease .5s both;
+  font-family: 'Fraunces', serif;
+  font-size: clamp(1.8rem, 7vw, 2.8rem);
+  font-weight: 700;
+  background: linear-gradient(135deg, #FFD700, #FFF176, #FFD700);
+  background-size: 200% 100%;
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: goldShine 3s linear infinite;
+  margin-bottom: 20px;
+  line-height: 1.2;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity .4s ease, transform .4s ease;
+}
+.eid-mubarak-text.show-up {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  animation: mubarakEject .6s cubic-bezier(.34,1.56,.64,1) both, goldShine 3s linear .6s infinite !important;
+}
+@keyframes mubarakEject {
+  0%  { opacity:0; transform:translateY(40px) scale(.6); }
+  70% { transform:translateY(-8px) scale(1.05); }
+  100%{ opacity:1; transform:translateY(0) scale(1); }
+}
+@keyframes goldShine {
+  0%{background-position:0%}
+  100%{background-position:200%}
 }
 
-/* Pill */
 .eid-pill {
-  display:inline-flex; align-items:center; gap:6px;
-  background:rgba(255,255,255,.12);
-  border:1px solid rgba(255,255,255,.22);
-  border-radius:100px; padding:6px 14px;
-  font-size:.72rem; font-weight:600; color:#fff;
-  backdrop-filter:blur(8px);
-  margin-bottom:16px;
-  animation:fadeUp .5s ease .85s both;
+  display: inline-flex; align-items: center; gap: 10px;
+  background: rgba(255,255,255,.15);
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: 100px; padding: 10px 24px;
+  font-size: .92rem; font-weight: 700; color: #fff;
+  backdrop-filter: blur(8px);
+  margin-bottom: 32px;
 }
 .eid-pill-dot {
-  width:6px; height:6px; border-radius:50%;
-  background:#38BDF8; box-shadow:0 0 7px #38BDF8;
-  animation:dotPulse 1.4s ease-in-out infinite;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #38BDF8; box-shadow: 0 0 10px #38BDF8;
+  animation: dotPulse 1.4s ease-in-out infinite;
 }
 
-/* Floating celebration emojis container — now pure CSS decorations, no emoji */
-.eid-float-emojis {
-  position:absolute; inset:0;
-  pointer-events:none; z-index:1;
-  overflow:hidden;
-}
-/* Animated gold rays shooting from center */
-.eid-ray {
-  position:absolute;
-  top:50%; left:50%;
-  width:1.5px;
-  border-radius:2px;
-  transform-origin:0 0;
-  animation:rayShoot ease-out both;
-}
-@keyframes rayShoot {
-  0%  { opacity:0; height:0px; }
-  15% { opacity:.8; }
-  100%{ opacity:0; height:38vh; }
-}
-/* Orbiting glowing dots */
-.eid-orbit {
-  position:absolute;
-  top:50%; left:50%;
-  width:0; height:0;
-  animation:orbitSpin linear infinite;
-}
-@keyframes orbitSpin { to{ transform:rotate(360deg); } }
-.eid-orbit-dot {
-  position:absolute;
-  border-radius:50%;
-  transform:translateX(var(--r)) translateY(-50%);
-  background:radial-gradient(circle, #FFD700, #FFA500);
-  box-shadow:0 0 6px rgba(255,215,0,.9), 0 0 12px rgba(255,165,0,.5);
-}
-/* Corner gold diamonds */
-.eid-diamond {
-  position:absolute;
-  width:7px; height:7px;
-  background:linear-gradient(135deg,#FFD700,#FFF176);
-  transform:rotate(45deg);
-  border-radius:1px;
-  box-shadow:0 0 8px rgba(255,215,0,.95), 0 0 16px rgba(255,215,0,.4);
-  animation:diamondPulse ease-in-out infinite;
-}
-@keyframes diamondPulse {
-  0%,100%{ opacity:.35; transform:rotate(45deg) scale(.6); }
-  50%    { opacity:1;   transform:rotate(45deg) scale(1.3); }
-}
-
-/* Name glow card wrapper */
-.name-wrapper {
-  position:relative;
-  padding:5px 16px 7px;
-  border-radius:14px;
-  background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,215,0,.2);
-  backdrop-filter:blur(6px);
-  box-shadow:
-    0 0 0 1px rgba(255,215,0,.08),
-    0 0 28px rgba(255,215,0,.2),
-    inset 0 1px 0 rgba(255,255,255,.1);
-  margin-bottom:5px;
-  animation:wrapGlow 2.8s ease-in-out infinite;
-}
-@keyframes wrapGlow {
-  0%,100%{ box-shadow:0 0 0 1px rgba(255,215,0,.08),0 0 22px rgba(255,215,0,.18),inset 0 1px 0 rgba(255,255,255,.1); }
-  50%    { box-shadow:0 0 0 2px rgba(255,215,0,.18),0 0 42px rgba(255,215,0,.38),inset 0 1px 0 rgba(255,255,255,.18); }
-}
-/* Deco lines beside label */
-.name-deco {
-  display:flex; align-items:center; justify-content:center; gap:7px;
-  margin-bottom:2px;
-  animation:fadeUp .4s ease .1s both;
-}
-.name-deco-line {
-  height:1px; width:24px;
-  background:linear-gradient(90deg,transparent,rgba(255,215,0,.65),transparent);
-}
-.name-deco-dot {
-  width:4px; height:4px; border-radius:50%;
-  background:rgba(255,215,0,.8);
-  box-shadow:0 0 5px rgba(255,215,0,.9);
-  animation:dotPulse 1.5s ease-in-out infinite;
-}
-
-/* Scroll hint */
 .scroll-hint {
-  display:flex; flex-direction:column;
-  align-items:center; gap:5px;
-  color:rgba(255,255,255,.45);
-  font-size:.62rem; font-weight:700;
-  letter-spacing:2px; text-transform:uppercase;
-  animation:hintBounce 2s ease-in-out 1.4s infinite, fadeUp .5s ease 1.2s both;
-  cursor:pointer;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 8px;
+  color: rgba(255,255,255,.5);
+  font-size: .72rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  animation: hintBounce 2s ease-in-out infinite;
+  cursor: pointer;
 }
 .scroll-arrow {
-  width:22px; height:22px;
-  border:1.5px solid rgba(255,255,255,.25);
-  border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
+  width: 28px; height: 28px;
+  border: 2px solid rgba(255,255,255,.3);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
 }
 .scroll-arrow::after {
-  content:'';
-  width:6px; height:6px;
-  border-right:1.5px solid rgba(255,255,255,.4);
-  border-bottom:1.5px solid rgba(255,255,255,.4);
-  transform:rotate(45deg) translateY(-2px);
+  content: '';
+  width: 8px; height: 8px;
+  border-right: 2px solid rgba(255,255,255,.5);
+  border-bottom: 2px solid rgba(255,255,255,.5);
+  transform: rotate(45deg) translateY(-2px);
 }
 @keyframes hintBounce {
-  0%,100%{transform:translateY(0);opacity:.45}
-  50%{transform:translateY(5px);opacity:.9}
+  0%,100%{transform:translateY(0);opacity:.5}
+  50%{transform:translateY(6px);opacity:1}
 }
 
 /* ══ CONTENT BELOW HERO ══ */
@@ -650,8 +605,8 @@ body {
 @media(max-width:390px){
   .p-card { padding:20px 16px 18px; }
   .p-title { font-size:1.1rem; }
-  .eid-name  { font-size:1.5rem; }
-  .eid-mubarak-text { font-size:1.05rem; }
+  .eid-name  { font-size:1.9rem; }
+  .eid-mubarak-text { font-size:1.5rem; }
   .mot-card,.prank-card,.share-card { padding:13px 12px; }
   .r-content { padding: 12px 54px 0; }
 }
@@ -788,19 +743,20 @@ body {
   pointer-events: none;
 }
 
-/* Ad slot — OVERFLOW VISIBLE so scaled iframe is not clipped */
+/* Ad slot — overflow hidden clips at box boundary */
 .lr-ad-content .lr-ad-slot {
   position: absolute;
   top: 0; left: 0;
   z-index: 2;
-  overflow: visible;   /* ← KEY FIX: don't clip the scaled iframe */
+  overflow: hidden;
   width: 50px;
   height: 80px;
 }
 
-/* The scaled iframe wrapper — positioned by JS */
+/* iframe wrapper inside slot */
 .lr-ad-content .lr-ad-slot .lr-iframe-wrap {
   position: absolute;
+  top: 0; left: 0;
   transform-origin: top left;
 }
 
@@ -924,17 +880,8 @@ body {
       </svg>
 
       <p class="eid-label">Mubarak Ho</p>
-
-      <div class="name-wrapper">
-        <div class="name-deco">
-          <div class="name-deco-line"></div>
-          <div class="name-deco-dot"></div>
-          <div class="name-deco-line"></div>
-        </div>
-        <h1 class="eid-name" id="rName">—</h1>
-      </div>
-
-      <div class="eid-mubarak-text">🎉 Eid Mubarak! 🌙</div>
+      <h1 class="eid-name" id="rName">—</h1>
+      <div class="eid-mubarak-text">Eid Mubarak! 🌙</div>
 
       <span class="eid-pill">
         <span class="eid-pill-dot"></span>
@@ -1238,103 +1185,132 @@ document.getElementById('nameIn').addEventListener('keydown',e=>{
   if(e.key==='Enter'){ e.preventDefault(); go(); }
 });
 
-/* ── GO ── */
+/* ── GO — CINEMATIC SEQUENCE ── */
 function go(){
-  const n = document.getElementById('nameIn').value.trim() || 'Dost';
-  document.getElementById('rName').textContent = n;
+  const n       = document.getElementById('nameIn').value.trim() || 'Dost';
+  const nameEl  = document.getElementById('rName');
+  const mbEl    = document.querySelector('.eid-mubarak-text');
+
+  nameEl.textContent = n;
+  nameEl.className   = 'eid-name';          // reset all phase classes
+  mbEl.classList.remove('show-up');          // hide Eid Mubarak text
 
   document.getElementById('popup').style.display = 'none';
   window.scrollTo(0,0);
   document.documentElement.scrollTop = 0;
   document.body.scrollTop = 0;
-
   document.getElementById('result').classList.add('show');
   makeStars();
   showLine(false);
   if(rotTimer) clearInterval(rotTimer);
   rotTimer = setInterval(showLine, 60000);
 
-  // === CELEBRATION SEQUENCE ===
-  // 1. Confetti burst immediately
-  setTimeout(confetti, 100);
-  // 2. Heavy fireworks
-  setTimeout(fireworks, 200);
-  // 3. Second confetti wave
-  setTimeout(confetti, 800);
-  // 4. Second fireworks burst
-  setTimeout(fireworks, 1000);
-  // 5. Floating emojis around the name
-  setTimeout(spawnFloatEmojis, 400);
+  // ══════════════════════════════════════
+  // PHASE 1 — 0ms: ZOOM IN from far away
+  // ══════════════════════════════════════
+  setTimeout(()=>{
+    nameEl.className = 'eid-name name-phase-zoom';
+    confettiBurst(60);
+    fireworks();
+  }, 80);
+
+  // ══════════════════════════════════════
+  // PHASE 2 — 750ms: SHATTER — explode
+  // ══════════════════════════════════════
+  setTimeout(()=>{
+    nameEl.className = 'eid-name name-phase-shatter';
+    shatterParticles();
+  }, 750);
+
+  // ══════════════════════════════════════
+  // PHASE 3 — 1150ms: REJOIN colorfully
+  // ══════════════════════════════════════
+  setTimeout(()=>{
+    nameEl.className = 'eid-name name-phase-rejoin';
+    fireworks();
+    confettiBurst(100);
+  }, 1150);
+
+  // ══════════════════════════════════════
+  // PHASE 4 — 1750ms: FINAL float+color
+  // ══════════════════════════════════════
+  setTimeout(()=>{
+    nameEl.className = 'eid-name name-phase-final';
+  }, 1750);
+
+  // ══════════════════════════════════════
+  // PHASE 5 — 2300ms: Eid Mubarak ejects
+  // ══════════════════════════════════════
+  setTimeout(()=>{
+    mbEl.classList.add('show-up');
+    fireworks();
+    confettiBurst(80);
+  }, 2300);
 }
 
-/* ── CSS FESTIVAL DECORATIONS (no emoji) ── */
-function spawnFloatEmojis(){
-  const hero = document.getElementById('eidHero');
-  const old  = hero.querySelector('.eid-float-emojis');
-  if(old) old.remove();
+/* ── SHATTER PARTICLES flying from name ── */
+function shatterParticles(){
+  const nameEl = document.getElementById('rName');
+  const rect   = nameEl.getBoundingClientRect();
+  const cx_    = rect.left + rect.width  / 2;
+  const cy_    = rect.top  + rect.height / 2;
+  const colors = ['#FFD700','#FF6BCB','#A78BFA','#38BDF8','#fff','#FF6B6B','#4ADE80','#FB923C'];
 
-  const cont = document.createElement('div');
-  cont.className = 'eid-float-emojis';
+  for(let i = 0; i < 55; i++){
+    const p     = document.createElement('div');
+    const sz    = 4 + Math.random() * 9;
+    const angle = Math.random() * Math.PI * 2;
+    const dist  = 70 + Math.random() * 200;
+    const tx    = Math.cos(angle) * dist;
+    const ty    = Math.sin(angle) * dist - 30;
+    const col   = colors[~~(Math.random() * colors.length)];
+    const dur   = .35 + Math.random() * .45;
+    const isCircle = Math.random() > .45;
 
-  // 1. Gold rays shooting from center in all directions
-  const rayColors = ['#FFD700','#FFF176','#FFFFFF','#FFE566','#FFA500'];
-  const rayAngles = [0,30,60,90,120,150,180,210,240,270,300,330];
-  rayAngles.forEach((angle, i) => {
-    const ray = document.createElement('div');
-    ray.className = 'eid-ray';
-    const color = rayColors[i % rayColors.length];
-    ray.style.cssText =
-      `transform:rotate(${angle}deg);` +
-      `background:linear-gradient(to top, ${color}, transparent);` +
-      `animation-duration:${1.2 + (i%3)*0.2}s;` +
-      `animation-delay:${i*0.06}s;`;
-    cont.appendChild(ray);
-  });
+    p.style.cssText =
+      `position:fixed;z-index:1000;pointer-events:none;` +
+      `width:${sz}px;height:${isCircle ? sz : sz*.5}px;` +
+      `border-radius:${isCircle ? '50%' : '2px'};` +
+      `background:${col};` +
+      `box-shadow:0 0 8px ${col},0 0 16px ${col}88;` +
+      `left:${cx_}px;top:${cy_}px;` +
+      `transition:transform ${dur}s cubic-bezier(.1,.8,.3,1), opacity ${dur}s ease;` +
+      `will-change:transform,opacity;`;
 
-  // 2. Orbiting glowing dots — 3 orbits
-  const orbits = [
-    { r:'55px', count:4, size:4, dur:'4s' },
-    { r:'80px', count:5, size:3, dur:'6s' },
-    { r:'110px', count:6, size:2.5, dur:'9s', reverse:true },
-  ];
-  orbits.forEach(o => {
-    for(let i=0; i<o.count; i++){
-      const orbit = document.createElement('div');
-      orbit.className = 'eid-orbit';
-      orbit.style.cssText =
-        `animation-duration:${o.dur};` +
-        `animation-direction:${o.reverse?'reverse':'normal'};` +
-        `animation-delay:${-(i/o.count * parseFloat(o.dur)).toFixed(1)}s;`;
-
-      const dot = document.createElement('div');
-      dot.className = 'eid-orbit-dot';
-      dot.style.cssText =
-        `width:${o.size}px;height:${o.size}px;` +
-        `--r:${o.r};`;
-      orbit.appendChild(dot);
-      cont.appendChild(orbit);
-    }
-  });
-
-  // 3. Corner + edge gold diamonds
-  const dPositions = [
-    'top:12%;left:10%', 'top:12%;right:10%',
-    'top:35%;left:5%',  'top:35%;right:5%',
-    'bottom:20%;left:8%','bottom:20%;right:8%',
-    'top:60%;left:3%',  'top:60%;right:3%',
-  ];
-  dPositions.forEach((pos, i) => {
-    const d = document.createElement('div');
-    d.className = 'eid-diamond';
-    d.style.cssText =
-      `${pos};` +
-      `animation-duration:${1.8 + i*0.25}s;` +
-      `animation-delay:${i*0.12}s;`;
-    cont.appendChild(d);
-  });
-
-  hero.appendChild(cont);
+    document.body.appendChild(p);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      p.style.transform = `translate(${tx}px,${ty}px) rotate(${Math.random()*720}deg) scale(0)`;
+      p.style.opacity   = '0';
+    }));
+    setTimeout(()=>p.remove(), dur * 1000 + 50);
+  }
 }
+
+/* ── CONFETTI BURST ── */
+function confettiBurst(count){
+  const CC=['#FFD700','#FFF176','#5B4FE8','#7B6FF0','#2F80ED','#A99FFF','#60A5FA','#38BDF8','#FF6B9D','#4ADE80','#FB923C','#C4B5FD','#FFFFFF'];
+  for(let i=0;i<count;i++){
+    setTimeout(()=>{
+      const el=document.createElement('div');
+      el.className='cf';
+      const sz=4+Math.random()*10;
+      const shapes=['50%','3px','0'];
+      el.style.cssText=
+        `left:${Math.random()*100}vw;`+
+        `width:${sz}px;height:${sz*(0.4+Math.random()*.8)}px;`+
+        `background:${CC[~~(Math.random()*CC.length)]};`+
+        `border-radius:${shapes[~~(Math.random()*shapes.length)]};`+
+        `animation-duration:${2.2+Math.random()*2.5}s;`+
+        `animation-delay:${Math.random()*.5}s;`+
+        `opacity:.95;transform:rotate(${Math.random()*360}deg);`;
+      document.body.appendChild(el);
+      setTimeout(()=>el.remove(),6500);
+    },i*11);
+  }
+}
+
+/* ── FESTIVAL DECORATIONS (keep for compatibility) ── */
+function spawnFloatEmojis(){ /* removed — cinematic sequence handles it */ }
 
 /* ── FIREWORKS ── */
 const cv=document.getElementById('fwc');
@@ -1358,7 +1334,6 @@ class Spark{
 function fireworks(){
   let n=0;
   const iv=setInterval(()=>{
-    // 2 bursts per tick for density
     for(let b=0;b<2;b++){
       const x=cv.width*(.08+Math.random()*.84);
       const y=cv.height*(.04+Math.random()*.45);
@@ -1375,30 +1350,6 @@ function fireworks(){
     if(sparks.length>0) requestAnimationFrame(loop);
     else cx.clearRect(0,0,cv.width,cv.height);
   })();
-}
-
-/* ── CONFETTI ── */
-const CC=['#FFD700','#FFF176','#5B4FE8','#7B6FF0','#2F80ED','#A99FFF','#60A5FA','#38BDF8','#FF6B9D','#4ADE80','#FB923C','#C4B5FD','#FFFFFF'];
-function confetti(){
-  for(let i=0;i<160;i++){
-    setTimeout(()=>{
-      const el=document.createElement('div');
-      el.className='cf';
-      const sz=4+Math.random()*10;
-      const shapes=['50%','3px','0'];
-      const shape=shapes[~~(Math.random()*shapes.length)];
-      el.style.cssText=
-        `left:${Math.random()*100}vw;`+
-        `width:${sz}px;height:${sz*(0.4+Math.random()*.8)}px;`+
-        `background:${CC[~~(Math.random()*CC.length)]};`+
-        `border-radius:${shape};`+
-        `animation-duration:${2.5+Math.random()*3}s;`+
-        `animation-delay:${Math.random()*.8}s;`+
-        `opacity:.95;transform:rotate(${Math.random()*360}deg);`;
-      document.body.appendChild(el);
-      setTimeout(()=>el.remove(),7000);
-    },i*12);
-  }
 }
 
 /* ════════════════════════════════════════
@@ -1571,45 +1522,43 @@ function buildLRSlot(i, positions){
   return wrap;
 }
 
-// EK BAAR inject — persistent iframe, no re-injection ever
+// EK BAAR inject — iframe directly sized 50x80, no transform scaling
 function injectAd(slotIdx){
   const box = document.getElementById('lr-slot-' + slotIdx);
   if(!box || box.dataset.loaded) return;
   box.dataset.loaded = '1';
 
   const ad = LR_AD_KEYS[slotIdx % LR_AD_KEYS.length];
-  const VW = 50, VH = 80;
 
-  // Scale to fill WIDTH exactly (50px), then clip height via overflow:hidden
-  // 160 → 50px = scale 0.3125
-  // 160×300 → scaled: 50×93.75 → slightly taller than 80, tiny clip ✓
-  // 160×600 → scaled: 50×187.5 → tall, center it so middle shows
-  const scale = VW / ad.w;
-  const scaledH = ad.h * scale;
-  // Center vertically — show middle portion of tall ads
-  const topOffset = (VH - scaledH) / 2; // negative for tall ads = shows center
-
+  // Strategy: tell ad network the size is 160x300 or 160x600
+  // but render it in an iframe that we resize via CSS to 50x80
+  // The iframe will scale its content automatically
   const iwrap = document.createElement('div');
-  iwrap.className = 'lr-iframe-wrap';
   iwrap.style.cssText =
-    `width:${ad.w}px;` +
-    `height:${ad.h}px;` +
-    `transform:scale(${scale});` +
-    `transform-origin:top left;` +
-    `position:absolute;` +
-    `top:${(topOffset / scale).toFixed(1)}px;` +
-    `left:0px;`;
+    `position:absolute;top:0;left:0;` +
+    `width:50px;height:80px;overflow:hidden;`;
 
-  // atOptions MUST come before invoke.js in same scope
+  // Create iframe manually — set its size via CSS transform
+  // atOptions declares the ad size to the network
   const s1 = document.createElement('script');
   s1.text = `var atOptions={key:'${ad.key}',format:'iframe',height:${ad.h},width:${ad.w},params:{}};`;
+
+  // invoke.js injects an <iframe> into the DOM
+  // We use a wrapper that scales the injected iframe down
+  const innerWrap = document.createElement('div');
+  innerWrap.style.cssText =
+    `width:${ad.w}px;height:${ad.h}px;` +
+    `transform:scale(${(50/ad.w).toFixed(4)});` +
+    `transform-origin:top left;` +
+    `position:absolute;top:0;left:0;`;
 
   const s2 = document.createElement('script');
   s2.src   = `https://www.highperformanceformat.com/${ad.key}/invoke.js`;
   s2.async = true;
 
-  iwrap.appendChild(s1);
-  iwrap.appendChild(s2);
+  innerWrap.appendChild(s1);
+  innerWrap.appendChild(s2);
+  iwrap.appendChild(innerWrap);
   box.appendChild(iwrap);
 }
 
