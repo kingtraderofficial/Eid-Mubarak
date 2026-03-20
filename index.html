@@ -289,24 +289,33 @@ body {
 }
 
 .eid-name {
-  font-family: 'Fraunces', serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: clamp(2.4rem, 9vw, 3.5rem);
-  font-weight: 700;
+  font-weight: 800;
   line-height: 1.1;
   margin-bottom: 6px;
   color: #fff;
-  text-shadow: 0 2px 20px rgba(0,0,0,.2);
-  /* default state — JS triggers the cinematic sequence */
+  -webkit-text-fill-color: #fff;
+  /* Light stroke */
+  -webkit-text-stroke: 1px rgba(255,255,255,0.4);
+  /* Clean shadow — depth without heaviness */
+  text-shadow:
+    0 2px 0 rgba(0,0,0,0.25),
+    0 4px 12px rgba(0,0,0,0.2),
+    0 0 30px rgba(255,255,255,0.15);
 }
 
-/* ── PHASE 1: ZOOM IN big, then freeze ── */
+/* ── PHASE 1: ZOOM IN ── */
 .name-phase-zoom {
   animation: nameZoomIn .6s cubic-bezier(.22,1,.36,1) both !important;
   color: #fff !important;
   -webkit-text-fill-color: #fff !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
   text-shadow:
+    0 2px 0 rgba(0,0,0,.25),
     0 0 40px rgba(255,255,255,.9),
-    0 0 80px rgba(255,255,255,.5) !important;
+    0 0 80px rgba(255,255,255,.4) !important;
 }
 @keyframes nameZoomIn {
   0%   { opacity:0; transform:scale(8) translateY(-20px); filter:blur(12px); }
@@ -314,55 +323,54 @@ body {
   100% { opacity:1; transform:scale(1); }
 }
 
-/* ── PHASE 2: SHATTER — letters scatter ── */
+/* ── PHASE 2: SHATTER ── */
 .name-phase-shatter {
   animation: nameShatter .35s ease-in both !important;
   color: #fff !important;
   -webkit-text-fill-color: #fff !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
 }
 @keyframes nameShatter {
   0%  { opacity:1; transform:scale(1); filter:blur(0); }
   100%{ opacity:0; transform:scale(2.5) rotate(8deg); filter:blur(16px); letter-spacing:24px; }
 }
 
-/* ── PHASE 3: REJOIN — letters come back together ── */
+/* ── PHASE 3: REJOIN ── */
 .name-phase-rejoin {
   animation: nameRejoin .55s cubic-bezier(.34,1.56,.64,1) both !important;
-  background: linear-gradient(135deg, #FFD700 0%, #FF6BCB 35%, #A78BFA 65%, #38BDF8 100%) !important;
-  background-size: 300% 100% !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  filter: drop-shadow(0 0 12px rgba(255,215,0,.8))
-          drop-shadow(0 2px 0 rgba(0,0,0,.4)) !important;
-  paint-order: stroke fill !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-stroke: 1px rgba(255,255,255,0.4) !important;
+  text-shadow:
+    0 2px 0 rgba(0,0,0,.3),
+    0 4px 16px rgba(0,0,0,.2),
+    0 0 40px rgba(255,255,255,.3) !important;
 }
 @keyframes nameRejoin {
-  0%  { opacity:0; transform:scale(0.1); letter-spacing:32px; filter:blur(20px) drop-shadow(0 0 0 transparent); }
+  0%  { opacity:0; transform:scale(0.1); letter-spacing:32px; filter:blur(20px); }
   60% { opacity:1; transform:scale(1.08); letter-spacing:1px; }
   100%{ opacity:1; transform:scale(1); letter-spacing:0; }
 }
 
-/* ── PHASE 4: FLOAT + COLOR CYCLE + STROKE ── */
+/* ── PHASE 4: FINAL — float + glow ── */
 .name-phase-final {
-  background: linear-gradient(135deg, #FFD700 0%, #FF6BCB 35%, #A78BFA 65%, #38BDF8 100%) !important;
-  background-size: 300% 100% !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  filter: drop-shadow(0 0 16px rgba(255,215,0,.7))
-          drop-shadow(0 3px 0 rgba(0,0,0,.5)) !important;
-  animation:
-    nameFloat 2.2s ease-in-out infinite,
-    nameColorCycle 3s linear infinite !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-stroke: 1px rgba(255,255,255,0.35) !important;
+  text-shadow:
+    0 2px 0 rgba(0,0,0,.25),
+    0 4px 12px rgba(0,0,0,.2),
+    0 0 28px rgba(255,255,255,.18) !important;
+  animation: nameFloat 2.2s ease-in-out infinite !important;
 }
 @keyframes nameFloat {
   0%,100%{ transform: translateY(0) scale(1); }
-  50%    { transform: translateY(-10px) scale(1.03); }
-}
-@keyframes nameColorCycle {
-  0%  { background-position: 0% 0; }
-  100%{ background-position: 300% 0; }
+  50%    { transform: translateY(-10px) scale(1.02); }
 }
 
 /* Eid Mubarak text — slides up from name */
@@ -612,12 +620,12 @@ body {
 }
 
 /* ══════════════════════════════════════════
-   LEFT/RIGHT AD FRAMES — IMPRESSION-SAFE
-   50px wide × 80px tall — MRC viewability ok
+   SIDE AD COLUMNS — sticky left & right
+   Always visible, proper iframe rendering
    ══════════════════════════════════════════ */
 @keyframes lrFloat {
   0%,100%{ transform:translateY(0); }
-  50%    { transform:translateY(-4px); }
+  50%    { transform:translateY(-3px); }
 }
 @keyframes ribbonMove {
   0%  { background-position:0% 50%; }
@@ -628,22 +636,105 @@ body {
   100%{ background-position: 200% 0; }
 }
 @keyframes lrSpark {
-  0%,100%{ opacity:0; transform:scale(0); }
-  50%    { opacity:1; transform:scale(1); }
+  0%,100%{ opacity:0; transform:scale(0) rotate(0deg); }
+  50%    { opacity:1; transform:scale(1) rotate(180deg); }
 }
 @keyframes lrGlow {
-  0%,100%{ box-shadow:0 2px 10px rgba(0,0,0,0.2); }
-  50%    { box-shadow:0 4px 18px rgba(0,0,0,0.35); }
+  0%,100%{ box-shadow:0 2px 8px rgba(0,0,0,.15); }
+  50%    { box-shadow:0 4px 16px rgba(0,0,0,.28); }
 }
 
-/* ══════════════════════════════════════════
-   BALLOON FLY — 1 TIME ONLY, NO EMOJI
-   ══════════════════════════════════════════ */
+/* Side column containers */
+.lr-col {
+  position: fixed;
+  top: 0; bottom: 0;
+  width: 52px;
+  z-index: 950;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 8px 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .5s ease;
+}
+.lr-col.left  { left: 0; }
+.lr-col.right { right: 0; }
+.lr-col.visible { opacity: 1; }
+
+/* Each ad box inside column */
+.lr-box {
+  width: 50px;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  pointer-events: auto;
+  flex-shrink: 0;
+  animation: lrFloat 3.5s ease-in-out infinite, lrGlow 3.5s ease-in-out infinite;
+}
+
+/* Rainbow top ribbon */
+.lr-box::before {
+  content:'';
+  display:block; height:3px;
+  background:linear-gradient(90deg,#FFD700,#FF6B9D,#A78BFA,#38BDF8,#FFD700);
+  background-size:300% 100%;
+  animation:ribbonMove 2.2s linear infinite;
+  flex-shrink:0;
+}
+/* Rainbow bottom ribbon */
+.lr-box::after {
+  content:'';
+  display:block; height:3px;
+  background:linear-gradient(90deg,#38BDF8,#A78BFA,#FF6B9D,#FFD700,#38BDF8);
+  background-size:300% 100%;
+  animation:ribbonMove 2.2s linear infinite reverse;
+  flex-shrink:0;
+}
+
+/* Ad iframe viewport inside box */
+.lr-box-inner {
+  width: 50px;
+  height: 80px;
+  overflow: hidden;
+  position: relative;
+  background: rgba(255,255,255,.08);
+}
+
+/* Scaled iframe wrapper */
+.lr-iframe-host {
+  position: absolute;
+  top: 0; left: 0;
+  transform-origin: top left;
+  /* JS sets: width, height, transform:scale() */
+}
+
+/* Shimmer effect while loading */
+.lr-shimmer-bar {
+  position: absolute;
+  inset: 0; z-index: 5;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.5), transparent);
+  background-size: 200% 100%;
+  animation: shimLoad 1.1s ease-in-out 4;
+  pointer-events: none;
+}
+
+/* Corner sparkles */
+.lr-spark {
+  position: absolute;
+  font-size: 5px;
+  pointer-events: none;
+  z-index: 6;
+  animation: lrSpark 2.2s ease-in-out infinite;
+}
+
+/* ══ BALLOON FLY ══ */
 @keyframes flyUp {
-  0%  { transform:translateY(0) rotate(var(--rot)) scale(0.85); opacity:0; }
+  0%  { transform:translateY(0) rotate(var(--rot)) scale(.85); opacity:0; }
   6%  { opacity:1; }
   90% { opacity:1; }
-  100%{ transform:translateY(-110vh) rotate(calc(var(--rot) * -1)) scale(1); opacity:0; }
+  100%{ transform:translateY(-110vh) rotate(calc(var(--rot)*-1)) scale(1); opacity:0; }
 }
 @keyframes balSway {
   0%,100%{ transform:translateX(0); }
@@ -651,123 +742,12 @@ body {
   70%    { transform:translateX(-6px); }
 }
 .fly-balloon {
-  position:fixed;
-  bottom:-100px;
-  z-index:940;
-  pointer-events:none;
+  position:fixed; bottom:-100px; z-index:940; pointer-events:none;
   animation:
     flyUp var(--dur) ease-in var(--delay) forwards,
-    balSway calc(var(--dur) * 0.35) ease-in-out var(--delay) infinite;
+    balSway calc(var(--dur)*.35) ease-in-out var(--delay) infinite;
 }
-.fly-balloon svg {
-  width:44px; height:56px;
-  display:block;
-  filter:drop-shadow(0 4px 10px rgba(0,0,0,0.2));
-}
-
-/* Outer wrapper — fixed position on screen edge */
-.lr-ad-wrap {
-  position: fixed;
-  z-index: 950;
-  pointer-events: auto;
-  opacity: 0;
-  transition: opacity 0.35s ease;
-  /* Width = box width exactly */
-  width: 50px;
-}
-.lr-ad-wrap.lr-visible { opacity: 1; }
-.lr-ad-wrap.lr-hiding  { opacity: 0; }
-
-/* Floating animation on inner box */
-.lr-ad-inner {
-  width: 50px;
-  border-radius: 8px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  animation: lrFloat 3.5s ease-in-out infinite, lrGlow 3.5s ease-in-out infinite;
-}
-
-/* Rainbow ribbon top */
-.lr-ad-inner::before {
-  content: '';
-  display: block;
-  height: 3px;
-  border-radius: 8px 8px 0 0;
-  flex-shrink: 0;
-  background: linear-gradient(90deg,#FFD700,#FF6B9D,#A78BFA,#38BDF8,#FFD700,#FF6B9D,#A78BFA);
-  background-size: 300% 100%;
-  animation: ribbonMove 2s linear infinite;
-}
-/* Rainbow ribbon bottom */
-.lr-ad-inner::after {
-  content: '';
-  display: block;
-  height: 3px;
-  border-radius: 0 0 8px 8px;
-  flex-shrink: 0;
-  background: linear-gradient(90deg,#38BDF8,#A78BFA,#FF6B9D,#FFD700,#38BDF8,#A78BFA);
-  background-size: 300% 100%;
-  animation: ribbonMove 2s linear infinite reverse;
-}
-
-/* Ad content viewport */
-.lr-ad-content {
-  width: 50px;
-  height: 80px;
-  overflow: hidden;
-  position: relative;
-  flex-shrink: 0;
-  background: rgba(0,0,0,0.06);
-}
-
-/* Emoji background decoration */
-.lr-ad-content .lr-cel-bg {
-  position: absolute;
-  inset: 0; z-index: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  opacity: 0.3;
-}
-
-/* Shimmer loading effect — only plays 3 times then stops */
-.lr-ad-content .lr-shimmer {
-  position: absolute;
-  inset: 0; z-index: 4;
-  background: linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.55) 50%,transparent 100%);
-  background-size: 200% 100%;
-  animation: shimLoad 1.2s ease-in-out 3;
-  pointer-events: none;
-}
-
-/* Ad slot — overflow hidden clips at box boundary */
-.lr-ad-content .lr-ad-slot {
-  position: absolute;
-  top: 0; left: 0;
-  z-index: 2;
-  overflow: hidden;
-  width: 50px;
-  height: 80px;
-}
-
-/* iframe wrapper inside slot */
-.lr-ad-content .lr-ad-slot .lr-iframe-wrap {
-  position: absolute;
-  top: 0; left: 0;
-  transform-origin: top left;
-}
-
-/* Sparkle corners */
-.lr-spark {
-  position: absolute;
-  font-size: 5px;
-  pointer-events: none;
-  z-index: 6;
-  animation: lrSpark 2s ease-in-out infinite;
-}
+.fly-balloon svg { width:44px; height:56px; display:block; filter:drop-shadow(0 4px 10px rgba(0,0,0,.2)); }
 </style>
 </head>
 <body>
@@ -1432,180 +1412,146 @@ function reset(){
    — Har 5 sec mein ad rotate
    ════════════════════════════════════════════ */
 
+/* ═══════════════════════════════════════════════════
+   SIDE AD COLUMNS — 7 boxes left + 7 boxes right
+   Uses proper inline script injection per box
+   ═══════════════════════════════════════════════════ */
+
 const LR_COLORS = [
-  { bg:'linear-gradient(160deg,#FF6B6B,#FF8E53)', border:'#FF6B6B', em:'🌙' },
-  { bg:'linear-gradient(160deg,#A78BFA,#EC4899)', border:'#A78BFA', em:'⭐' },
-  { bg:'linear-gradient(160deg,#34D399,#059669)', border:'#34D399', em:'🎁' },
-  { bg:'linear-gradient(160deg,#FBBF24,#F59E0B)', border:'#FBBF24', em:'✨' },
-  { bg:'linear-gradient(160deg,#38BDF8,#818CF8)', border:'#38BDF8', em:'🪔' },
-  { bg:'linear-gradient(160deg,#F472B6,#FB7185)', border:'#F472B6', em:'🌟' },
-  { bg:'linear-gradient(160deg,#FB923C,#FBBF24)', border:'#FB923C', em:'🎀' },
-  { bg:'linear-gradient(160deg,#C084FC,#38BDF8)', border:'#C084FC', em:'💫' },
-  { bg:'linear-gradient(160deg,#4ADE80,#34D399)', border:'#4ADE80', em:'🕌' },
-  { bg:'linear-gradient(160deg,#F87171,#C084FC)', border:'#F87171', em:'🎊' },
-  { bg:'linear-gradient(160deg,#60A5FA,#A78BFA)', border:'#60A5FA', em:'🌸' },
-  { bg:'linear-gradient(160deg,#FCD34D,#F472B6)', border:'#FCD34D', em:'🎆' },
-  { bg:'linear-gradient(160deg,#6EE7B7,#3B82F6)', border:'#6EE7B7', em:'🎇' },
-  { bg:'linear-gradient(160deg,#FCA5A5,#FBBF24)', border:'#FCA5A5', em:'🌺' },
+  { bg:'linear-gradient(160deg,#FF6B6B,#FF8E53)', border:'#FF6B6B' },
+  { bg:'linear-gradient(160deg,#A78BFA,#EC4899)', border:'#A78BFA' },
+  { bg:'linear-gradient(160deg,#34D399,#059669)', border:'#34D399' },
+  { bg:'linear-gradient(160deg,#FBBF24,#F59E0B)', border:'#FBBF24' },
+  { bg:'linear-gradient(160deg,#38BDF8,#818CF8)', border:'#38BDF8' },
+  { bg:'linear-gradient(160deg,#F472B6,#FB7185)', border:'#F472B6' },
+  { bg:'linear-gradient(160deg,#FB923C,#FBBF24)', border:'#FB923C' },
+  { bg:'linear-gradient(160deg,#C084FC,#38BDF8)', border:'#C084FC' },
+  { bg:'linear-gradient(160deg,#4ADE80,#34D399)', border:'#4ADE80' },
+  { bg:'linear-gradient(160deg,#F87171,#C084FC)', border:'#F87171' },
+  { bg:'linear-gradient(160deg,#60A5FA,#A78BFA)', border:'#60A5FA' },
+  { bg:'linear-gradient(160deg,#FCD34D,#F472B6)', border:'#FCD34D' },
+  { bg:'linear-gradient(160deg,#6EE7B7,#3B82F6)', border:'#6EE7B7' },
+  { bg:'linear-gradient(160deg,#FCA5A5,#FBBF24)', border:'#FCA5A5' },
 ];
 
-// ONLY 160px-wide ads — yeh 50px wide box mein scale=0.3125
-// Browser inhe visible maanta hai — impression count hoga
-// Alternating 160x300 aur 160x600
-const LR_AD_KEYS = [
-  { key:'429cefeb3637e3ee06cdac632b55d6f0', w:160, h:300 },
-  { key:'5eb43a7cd09c34bf77353a2c8b638efc', w:160, h:600 },
-  { key:'429cefeb3637e3ee06cdac632b55d6f0', w:160, h:300 },
-  { key:'5eb43a7cd09c34bf77353a2c8b638efc', w:160, h:600 },
-  { key:'429cefeb3637e3ee06cdac632b55d6f0', w:160, h:300 },
-  { key:'5eb43a7cd09c34bf77353a2c8b638efc', w:160, h:600 },
-  { key:'429cefeb3637e3ee06cdac632b55d6f0', w:160, h:300 },
-  { key:'5eb43a7cd09c34bf77353a2c8b638efc', w:160, h:600 },
-  { key:'429cefeb3637e3ee06cdac632b55d6f0', w:160, h:300 },
-  { key:'5eb43a7cd09c34bf77353a2c8b638efc', w:160, h:600 },
-  { key:'429cefeb3637e3ee06cdac632b55d6f0', w:160, h:300 },
-  { key:'5eb43a7cd09c34bf77353a2c8b638efc', w:160, h:600 },
+// Ad keys — only 160px wide (reliable scale factor)
+const LR_ADS = [
   { key:'429cefeb3637e3ee06cdac632b55d6f0', w:160, h:300 },
   { key:'5eb43a7cd09c34bf77353a2c8b638efc', w:160, h:600 },
 ];
 
-let lrSlots=[], lrActive=false;
+let lrColLeft=null, lrColRight=null, lrActive=false;
 
-function getLRPositions(){
-  const H     = window.innerHeight;
-  const BOX   = 86;
-  const SLOTS = 7;
-  const gap   = Math.max(10, Math.floor((H - (SLOTS * BOX)) / (SLOTS + 1)));
-  const pos   = [];
-  for(let i = 0; i < SLOTS; i++){
-    const top = gap + i * (BOX + gap);
-    pos.push({ top: top + 'px', left:  '0px' });
-    pos.push({ top: top + 'px', right: '0px' });
-  }
-  return pos;
-}
+function buildLRBox(boxIdx, adIdx){
+  const ad = LR_ADS[adIdx % LR_ADS.length];
+  const c  = LR_COLORS[boxIdx % LR_COLORS.length];
+  const spd = (3.2 + boxIdx * 0.1).toFixed(1);
+  const dly = (boxIdx * 0.22).toFixed(1);
 
-function buildLRSlot(i, positions){
-  const wrap = document.createElement('div');
-  wrap.className = 'lr-ad-wrap';
-  const pos = positions[i];
-  Object.keys(pos).forEach(k => wrap.style[k] = pos[k]);
+  const box = document.createElement('div');
+  box.className = 'lr-box';
+  box.style.cssText = `animation-duration:${spd}s;animation-delay:-${dly}s;`;
 
-  const c   = LR_COLORS[i % LR_COLORS.length];
-  const spd = (3.0 + i * 0.12).toFixed(1);
-  const dly = (i * 0.18).toFixed(1);
+  // Inner viewport — clips the scaled ad
+  const inner = document.createElement('div');
+  inner.className = 'lr-box-inner';
+  inner.style.background = c.bg;
 
-  const sparks = [
-    {t:'-3px', l:'-3px', d:'0s'},
-    {t:'-3px', r:'-3px', d:'0.7s'},
-    {b:'-3px', l:'-3px', d:'1.3s'},
-    {b:'-3px', r:'-3px', d:'1.9s'},
-  ].map(s => {
-    let st = s.t ? `top:${s.t};` : `bottom:${s.b};`;
-    st    += s.l ? `left:${s.l};` : `right:${s.r};`;
-    st    += `animation-delay:${s.d};color:${c.border};`;
-    return `<span class="lr-spark" style="${st}">✦</span>`;
-  }).join('');
+  // Shimmer bar
+  const shimmer = document.createElement('div');
+  shimmer.className = 'lr-shimmer-bar';
+  inner.appendChild(shimmer);
 
-  // NO close button — user band nahi kar sakta
-  wrap.innerHTML = `
-    <div class="lr-ad-inner" style="animation-duration:${spd}s;animation-delay:${dly}s;">
-      ${sparks}
-      <div class="lr-ad-content" style="background:${c.bg};">
-        <div class="lr-cel-bg">${c.em}</div>
-        <div class="lr-ad-slot" id="lr-slot-${i}"></div>
-        <div class="lr-shimmer"></div>
-      </div>
-    </div>`;
-
-  document.body.appendChild(wrap);
-  return wrap;
-}
-
-// EK BAAR inject — iframe directly sized 50x80, no transform scaling
-function injectAd(slotIdx){
-  const box = document.getElementById('lr-slot-' + slotIdx);
-  if(!box || box.dataset.loaded) return;
-  box.dataset.loaded = '1';
-
-  const ad = LR_AD_KEYS[slotIdx % LR_AD_KEYS.length];
-
-  // Strategy: tell ad network the size is 160x300 or 160x600
-  // but render it in an iframe that we resize via CSS to 50x80
-  // The iframe will scale its content automatically
-  const iwrap = document.createElement('div');
-  iwrap.style.cssText =
-    `position:absolute;top:0;left:0;` +
-    `width:50px;height:80px;overflow:hidden;`;
-
-  // Create iframe manually — set its size via CSS transform
-  // atOptions declares the ad size to the network
-  const s1 = document.createElement('script');
-  s1.text = `var atOptions={key:'${ad.key}',format:'iframe',height:${ad.h},width:${ad.w},params:{}};`;
-
-  // invoke.js injects an <iframe> into the DOM
-  // We use a wrapper that scales the injected iframe down
-  const innerWrap = document.createElement('div');
-  innerWrap.style.cssText =
+  // Scaled iframe host
+  const scale = (50 / ad.w).toFixed(5); // 50/160 = 0.3125
+  const host  = document.createElement('div');
+  host.className  = 'lr-iframe-host';
+  host.style.cssText =
     `width:${ad.w}px;height:${ad.h}px;` +
-    `transform:scale(${(50/ad.w).toFixed(4)});` +
-    `transform-origin:top left;` +
-    `position:absolute;top:0;left:0;`;
+    `transform:scale(${scale});transform-origin:top left;`;
 
-  const s2 = document.createElement('script');
-  s2.src   = `https://www.highperformanceformat.com/${ad.key}/invoke.js`;
-  s2.async = true;
+  // atOptions + invoke — MUST be in same inline context
+  const s1   = document.createElement('script');
+  s1.text    = `atOptions={key:'${ad.key}',format:'iframe',height:${ad.h},width:${ad.w},params:{}};`;
+  const s2   = document.createElement('script');
+  s2.src     = `https://www.highperformanceformat.com/${ad.key}/invoke.js`;
+  s2.async   = true;
 
-  innerWrap.appendChild(s1);
-  innerWrap.appendChild(s2);
-  iwrap.appendChild(innerWrap);
-  box.appendChild(iwrap);
+  host.appendChild(s1);
+  host.appendChild(s2);
+  inner.appendChild(host);
+  box.appendChild(inner);
+
+  // Corner sparkles
+  [
+    {top:'-3px',left:'-3px',delay:'0s'},
+    {top:'-3px',right:'-3px',delay:'.8s'},
+    {bottom:'-3px',left:'-3px',delay:'1.4s'},
+    {bottom:'-3px',right:'-3px',delay:'2s'},
+  ].forEach(sp => {
+    const s = document.createElement('span');
+    s.className = 'lr-spark';
+    s.textContent = '✦';
+    s.style.cssText = Object.entries(sp).map(([k,v])=>`${k}:${v}`).join(';') + `;color:${c.border};`;
+    box.appendChild(s);
+  });
+
+  return box;
 }
 
 function startLRAds(){
   if(lrActive) return;
   lrActive = true;
-  const positions = getLRPositions();
 
-  for(let i = 0; i < 14; i++){
-    lrSlots[i] = buildLRSlot(i, positions);
-    // Staggered fade-in + inject — ek baar, hamesha visible
-    setTimeout(()=>{
-      injectAd(i);
-      lrSlots[i].classList.add('lr-visible');
-    }, 120 + i * 130);
+  // Create left column
+  lrColLeft = document.createElement('div');
+  lrColLeft.className = 'lr-col left';
+  document.body.appendChild(lrColLeft);
+
+  // Create right column
+  lrColRight = document.createElement('div');
+  lrColRight.className = 'lr-col right';
+  document.body.appendChild(lrColRight);
+
+  // Build 7 boxes per column — staggered
+  for(let i = 0; i < 7; i++){
+    const leftBox  = buildLRBox(i,     i);
+    const rightBox = buildLRBox(i + 7, i + 1);
+
+    lrColLeft.appendChild(leftBox);
+    lrColRight.appendChild(rightBox);
   }
+
+  // Fade in after small delay so ads have time to request
+  setTimeout(()=>{
+    lrColLeft.classList.add('visible');
+    lrColRight.classList.add('visible');
+  }, 1200);
 }
 
 function stopFloatingAds(){
   lrActive = false;
-  lrSlots.forEach(w=>{ if(w) w.remove(); });
-  lrSlots = [];
+  if(lrColLeft)  { lrColLeft.remove();  lrColLeft  = null; }
+  if(lrColRight) { lrColRight.remove(); lrColRight = null; }
 }
 
-// go() override
+// go() override — start ads + balloons after name reveal
 const _origGo = go;
 window.go = function(){
   _origGo();
-  setTimeout(startLRAds, 800);
-  setTimeout(launchBalloonsOnce, 600); // sirf 1 baar
+  setTimeout(startLRAds, 1000);
+  setTimeout(launchBalloonsOnce, 700);
 };
 
 /* ════════════════════════════════════
-   BALLOON FLY — 1 TIME, NO EMOJI
-   10 balloons, neeche se upar, staggered
+   BALLOON FLY — 1 TIME, SVG balloons
    ════════════════════════════════════ */
 const BAL_SVG_COLORS = [
-  {main:'#FF6B6B',dark:'#CC4444',shine:'rgba(255,255,255,0.45)'},
-  {main:'#A78BFA',dark:'#6D4FC2',shine:'rgba(255,255,255,0.4)'},
-  {main:'#34D399',dark:'#059669',shine:'rgba(255,255,255,0.45)'},
-  {main:'#FBBF24',dark:'#D97706',shine:'rgba(255,255,255,0.5)'},
-  {main:'#38BDF8',dark:'#0284C7',shine:'rgba(255,255,255,0.45)'},
-  {main:'#F472B6',dark:'#BE185D',shine:'rgba(255,255,255,0.4)'},
-  {main:'#FB923C',dark:'#C2410C',shine:'rgba(255,255,255,0.45)'},
-  {main:'#C084FC',dark:'#7E22CE',shine:'rgba(255,255,255,0.4)'},
-  {main:'#4ADE80',dark:'#16A34A',shine:'rgba(255,255,255,0.45)'},
-  {main:'#F87171',dark:'#B91C1C',shine:'rgba(255,255,255,0.45)'},
+  {main:'#FF6B6B',dark:'#CC4444'},{main:'#A78BFA',dark:'#6D4FC2'},
+  {main:'#34D399',dark:'#059669'},{main:'#FBBF24',dark:'#D97706'},
+  {main:'#38BDF8',dark:'#0284C7'},{main:'#F472B6',dark:'#BE185D'},
+  {main:'#FB923C',dark:'#C2410C'},{main:'#C084FC',dark:'#7E22CE'},
+  {main:'#4ADE80',dark:'#16A34A'},{main:'#F87171',dark:'#B91C1C'},
 ];
 
 function makeBalloonSVG(c){
@@ -1620,37 +1566,22 @@ function makeBalloonSVG(c){
     <ellipse cx="22" cy="24" rx="17" ry="20" fill="${c.main}"/>
     <ellipse cx="22" cy="24" rx="17" ry="20" fill="url(#${id})"/>
     <path d="M19.5 43.5 Q22 49 24.5 43.5 Q23 46.5 22 47 Q21 46.5 19.5 43.5Z" fill="${c.dark}"/>
-    <line x1="22" y1="47" x2="22" y2="55"
-      stroke="${c.main}" stroke-width="1.2"
-      stroke-linecap="round" opacity="0.65"/>
+    <line x1="22" y1="47" x2="22" y2="55" stroke="${c.main}" stroke-width="1.2" stroke-linecap="round" opacity=".65"/>
   </svg>`;
 }
 
 function launchBalloonsOnce(){
-  const W = window.innerWidth;
-  const margin = 70; // LR ads se door
-  const usable = W - margin * 2;
-  const count  = 10;
-
-  for(let i=0;i<count;i++){
-    const c   = BAL_SVG_COLORS[i % BAL_SVG_COLORS.length];
-    const el  = document.createElement('div');
-    el.className = 'fly-balloon';
-
-    const left  = margin + Math.random() * usable;
-    const dur   = (5.5 + Math.random() * 2.5).toFixed(1); // 5.5–8s
-    const delay = (i * 0.35).toFixed(1);                   // staggered
-    const rot   = ((-6) + Math.random() * 12).toFixed(1)+'deg';
-
-    el.style.cssText =
-      `left:${left}px;--dur:${dur}s;--delay:${delay}s;--rot:${rot};`;
-
-    el.innerHTML = makeBalloonSVG(c);
+  const W=window.innerWidth, margin=70, usable=W-margin*2;
+  for(let i=0;i<10;i++){
+    const c=BAL_SVG_COLORS[i%BAL_SVG_COLORS.length];
+    const el=document.createElement('div');
+    el.className='fly-balloon';
+    const dur=(5.5+Math.random()*2.5).toFixed(1);
+    const delay=(i*.35).toFixed(1);
+    el.style.cssText=`left:${margin+Math.random()*usable}px;--dur:${dur}s;--delay:${delay}s;--rot:${((-6)+Math.random()*12).toFixed(1)}deg;`;
+    el.innerHTML=makeBalloonSVG(c);
     document.body.appendChild(el);
-
-    // Auto remove karo jab animation khatam ho
-    const removeAfter = (parseFloat(dur) + parseFloat(delay)) * 1000 + 400;
-    setTimeout(()=>{ if(el.parentNode) el.remove(); }, removeAfter);
+    setTimeout(()=>{ if(el.parentNode) el.remove(); },(parseFloat(dur)+parseFloat(delay))*1000+400);
   }
 }
 </script>
