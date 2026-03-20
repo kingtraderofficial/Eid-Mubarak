@@ -1434,19 +1434,66 @@ const LR_COLORS = [
   { bg:'linear-gradient(160deg,#FCA5A5,#FBBF24)', border:'#FCA5A5' },
 ];
 
-// Ad keys — only 160px wide ads
+// ═══════════════════════════════════════════════
+// ALL available ad keys — rotate karte rahein
+// ═══════════════════════════════════════════════
 const LR_ADS = [
   { key:'429cefeb3637e3ee06cdac632b55d6f0', w:160, h:300 },
   { key:'5eb43a7cd09c34bf77353a2c8b638efc', w:160, h:600 },
+  { key:'67c38abd8c480ddae3650164b24e73a5', w:300, h:250 },
+  { key:'6f544652133ff2804e6ee984429addb8', w:320, h:50  },
+  { key:'7e9bc2066805e8a5ac72b38d41bb663c', w:468, h:60  },
+  { key:'429cefeb3637e3ee06cdac632b55d6f0', w:160, h:300 },
+  { key:'5eb43a7cd09c34bf77353a2c8b638efc', w:160, h:600 },
+  { key:'67c38abd8c480ddae3650164b24e73a5', w:300, h:250 },
+  { key:'6f544652133ff2804e6ee984429addb8', w:320, h:50  },
+  { key:'429cefeb3637e3ee06cdac632b55d6f0', w:160, h:300 },
 ];
 
 let lrColLeft=null, lrColRight=null, lrActive=false;
+const lrTimers = []; // rotation timers
 
-function buildLRBox(boxIdx, adIdx){
-  const ad  = LR_ADS[adIdx % LR_ADS.length];
+// iframe HTML banao — srcdoc method (guaranteed working)
+function makeAdIframeHTML(key, w, h){
+  const scale = Math.min(50/w, 80/h).toFixed(5);
+  return (
+    `<!DOCTYPE html><html><head>` +
+    `<style>*{margin:0;padding:0;overflow:hidden;body{background:transparent}}</style>` +
+    `</head><body>` +
+    `<div style="width:${w}px;height:${h}px;transform:scale(${scale});transform-origin:top left;">` +
+    `<script>var atOptions={key:'${key}',format:'iframe',height:${h},width:${w},params:{}};<\/script>` +
+    `<script src="https://www.highperformanceformat.com/${key}/invoke.js"><\/script>` +
+    `</div></body></html>`
+  );
+}
+
+// Ek box ke iframe ko naya ad se reload karo
+function rotateBoxAd(inner, adIdx){
+  // Purana iframe hata do
+  const old = inner.querySelector('iframe.lr-iframe');
+  if(old) old.remove();
+
+  const ad = LR_ADS[adIdx % LR_ADS.length];
+
+  const iframe = document.createElement('iframe');
+  iframe.className   = 'lr-iframe';
+  iframe.scrolling   = 'no';
+  iframe.frameBorder = '0';
+  iframe.style.cssText =
+    `width:50px;height:80px;border:none;display:block;` +
+    `position:absolute;top:0;left:0;z-index:2;background:transparent;` +
+    `opacity:0;transition:opacity .4s ease;`;
+  iframe.srcdoc = makeAdIframeHTML(ad.key, ad.w, ad.h);
+
+  // Fade in after load
+  iframe.onload = () => { iframe.style.opacity = '1'; };
+  inner.appendChild(iframe);
+}
+
+function buildLRBox(boxIdx){
   const c   = LR_COLORS[boxIdx % LR_COLORS.length];
-  const spd = (3.2 + boxIdx * 0.1).toFixed(1);
-  const dly = (boxIdx * 0.22).toFixed(1);
+  const spd = (3.2 + (boxIdx % 7) * 0.1).toFixed(1);
+  const dly = ((boxIdx % 7) * 0.22).toFixed(1);
 
   const box = document.createElement('div');
   box.className = 'lr-box';
@@ -1457,44 +1504,18 @@ function buildLRBox(boxIdx, adIdx){
   inner.className = 'lr-box-inner';
   inner.style.background = c.bg;
 
-  // Shimmer
+  // Shimmer while loading
   const shimmer = document.createElement('div');
   shimmer.className = 'lr-shimmer-bar';
   inner.appendChild(shimmer);
 
-  // ─────────────────────────────────────────────────
-  // GUARANTEED METHOD: srcdoc iframe
-  // atOptions + invoke.js INSIDE the iframe's own HTML
-  // No scope issues — everything runs in iframe context
-  // ─────────────────────────────────────────────────
-  const scale = (50 / ad.w).toFixed(5); // 50/160 = 0.3125
-
-  const iframeHTML =
-    `<!DOCTYPE html><html><head>` +
-    `<style>*{margin:0;padding:0;overflow:hidden;}</style>` +
-    `</head><body>` +
-    `<div style="width:${ad.w}px;height:${ad.h}px;transform:scale(${scale});transform-origin:top left;">` +
-    `<script>var atOptions={key:'${ad.key}',format:'iframe',height:${ad.h},width:${ad.w},params:{}};<\/script>` +
-    `<script src="https://www.highperformanceformat.com/${ad.key}/invoke.js"><\/script>` +
-    `</div></body></html>`;
-
-  const iframe = document.createElement('iframe');
-  iframe.scrolling   = 'no';
-  iframe.frameBorder = '0';
-  iframe.style.cssText =
-    `width:50px;height:80px;border:none;display:block;` +
-    `position:absolute;top:0;left:0;z-index:2;background:transparent;`;
-  iframe.srcdoc = iframeHTML;
-
-  inner.appendChild(iframe);
   box.appendChild(inner);
 
   // Corner sparkles
-  [
-    {top:'-3px',left:'-3px',delay:'0s'},
-    {top:'-3px',right:'-3px',delay:'.8s'},
-    {bottom:'-3px',left:'-3px',delay:'1.4s'},
-    {bottom:'-3px',right:'-3px',delay:'2s'},
+  [{top:'-3px',left:'-3px',delay:'0s'},
+   {top:'-3px',right:'-3px',delay:'.8s'},
+   {bottom:'-3px',left:'-3px',delay:'1.4s'},
+   {bottom:'-3px',right:'-3px',delay:'2s'},
   ].forEach(sp => {
     const s = document.createElement('span');
     s.className   = 'lr-spark';
@@ -1503,41 +1524,79 @@ function buildLRBox(boxIdx, adIdx){
     box.appendChild(s);
   });
 
-  return box;
+  return { box, inner };
 }
 
 function startLRAds(){
   if(lrActive) return;
   lrActive = true;
 
-  // Create left column
-  lrColLeft = document.createElement('div');
-  lrColLeft.className = 'lr-col left';
+  lrColLeft  = document.createElement('div');
+  lrColLeft.className  = 'lr-col left';
   document.body.appendChild(lrColLeft);
 
-  // Create right column
   lrColRight = document.createElement('div');
   lrColRight.className = 'lr-col right';
   document.body.appendChild(lrColRight);
 
-  // Build 7 boxes per column — staggered
-  for(let i = 0; i < 7; i++){
-    const leftBox  = buildLRBox(i,     i);
-    const rightBox = buildLRBox(i + 7, i + 1);
+  const allInners = []; // [inner, startAdIdx]
 
-    lrColLeft.appendChild(leftBox);
-    lrColRight.appendChild(rightBox);
+  for(let i = 0; i < 7; i++){
+    const L = buildLRBox(i);
+    const R = buildLRBox(i + 7);
+
+    lrColLeft.appendChild(L.box);
+    lrColRight.appendChild(R.box);
+
+    allInners.push({ inner: L.inner, adIdx: i         });
+    allInners.push({ inner: R.inner, adIdx: i + 1     });
   }
 
-  // Fade in after small delay so ads have time to request
-  setTimeout(()=>{
+  // Load first ads staggered
+  allInners.forEach((item, i) => {
+    setTimeout(() => {
+      rotateBoxAd(item.inner, item.adIdx);
+    }, 200 + i * 80); // stagger: 200ms, 280ms, 360ms...
+  });
+
+  // Fade columns in
+  setTimeout(() => {
     lrColLeft.classList.add('visible');
     lrColRight.classList.add('visible');
-  }, 1200);
+  }, 800);
+
+  // ═══════════════════════════════════════════════
+  // ROTATION — har 5 sec baad naya ad
+  // Each box gets unique offset so they don't all
+  // rotate at the same time (better for impressions)
+  // ═══════════════════════════════════════════════
+  allInners.forEach((item, i) => {
+    let cur = item.adIdx;
+    // Stagger rotation start: box 0=5s, box1=5.3s, box2=5.6s...
+    const offset = 5000 + i * 300;
+
+    const t = setTimeout(function rotate(){
+      cur++;
+      // Fade out, swap, fade in
+      const iframe = item.inner.querySelector('iframe.lr-iframe');
+      if(iframe) iframe.style.opacity = '0';
+      setTimeout(() => {
+        rotateBoxAd(item.inner, cur);
+      }, 400);
+
+      // Schedule next rotation
+      const next = setTimeout(rotate, 5000);
+      lrTimers.push(next);
+    }, offset);
+
+    lrTimers.push(t);
+  });
 }
 
 function stopFloatingAds(){
   lrActive = false;
+  lrTimers.forEach(t => clearTimeout(t));
+  lrTimers.length = 0;
   if(lrColLeft)  { lrColLeft.remove();  lrColLeft  = null; }
   if(lrColRight) { lrColRight.remove(); lrColRight = null; }
 }
